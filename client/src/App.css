@@ -1,0 +1,29 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.entry-page {
+  width: 50%;
+  margin: auto;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background-color: rgb(196, 194, 194);
+  display: flex;
+  flex-direction: column;
+}
+
+.entry-page img {
+  width: 50%;
+  margin: auto;
+}
+
+.buttons {
+  width: 30%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
