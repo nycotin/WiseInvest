@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { Outlet } from 'react-router-dom';
+import { UserContextProvider } from './contexts/UserContext';
 
 import './App.css'
 
 function App() {
-
   return (
-    <>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <UserContextProvider>
+      <div id="app">
+        <Outlet />
+      </div>
+    </UserContextProvider>
   )
 }
 

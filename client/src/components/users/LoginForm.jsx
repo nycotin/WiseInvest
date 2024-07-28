@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
+import { UserContext } from '../../contexts/UserContext';
 
 
 function LoginForm() {
-  const [validated, setValidated] = useState(false);
-  const [msg, setMsg] = useState('');
+  let [validated, setValidated] = useState(false);
+  let [msg, setMsg] = useState('');
   const navigate = useNavigate();
+  const context = useContext(UserContext);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -24,11 +26,17 @@ function LoginForm() {
     const username = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
       
-    axios.post('http://127.0.0.1:8000/api/users/login', {
-      'username': username,
-      'password': password
+    axios.post('/users/login', {
+        'username': username,
+        'password': password
     })
-    .then(() => {
+    .then(response => {
+      console.log(response)
+      context.setUserId(response.data.user_id);
+      context.setUsername(response.data.username);
+      context.setIsLoggedIn(true);
+      context.setCsrfToken(response.data.csrftoken);
+
       return navigate('/fork');
     })
     .catch(error => {

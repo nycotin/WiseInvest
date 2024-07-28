@@ -1,9 +1,14 @@
+import { Outlet } from "react-router-dom";
+
 import '../App.css';
 
 function InvestPage () {
     return (
     <>
-        <h1>Invest</h1>
+        <h1>Investments Manager</h1>
+        <div id="container">
+          <Outlet />
+        </div>
     </>
   )
 }

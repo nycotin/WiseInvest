@@ -6,6 +6,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.middleware.csrf import get_token
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -19,10 +20,15 @@ def login_view(request):
     if request.method == "POST":
         data = json.loads(request.body)
 
+        print(request.headers)
+        # print(get_token(request))
+
         user = authenticate(request, username=data["username"], password=data["password"])
+
         if user is not None:
             login(request, user)
-            return JsonResponse({ "user_id": user.id, "username": user.username }, status=200)
+            return JsonResponse({ "user_id": user.id, "username": user.username, "csrftoken": get_token(request)
+            }, status=200)
         else:
             return JsonResponse({ "message": "Invalid credentials." }, status=403)
 
@@ -30,7 +36,6 @@ def login_view(request):
         return JsonResponse({ "message": "Invalid request method." }, status=401)
 
 
-@csrf_exempt
 def logout_view(request):
     logout(request)
     return JsonResponse({ "message": "Logged out." }, status=200)
@@ -51,7 +56,8 @@ def register_view(request):
             user.save()
             login(request, user)
 
-            return JsonResponse({ "user_id": user.id, "username": user.username }, status=200)
+            return JsonResponse({ "user_id": user.id, "username": user.username, "csrftoken": get_token(request)
+            }, status=200)
         except IntegrityError:
             return JsonResponse({ "message": "Invalid username." }, status=400)
 

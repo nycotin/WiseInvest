@@ -55,8 +55,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'wiseinvest.urls'
 
-CORS_ORIGIN_ALLOW_ALL = True
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -86,7 +84,11 @@ DATABASES = {
     }
 }
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 AUTH_USER_MODEL = 'users.User'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -127,17 +129,29 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CSRF_TRUSTED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
+# CORS
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
 ALLOWED_HOSTS = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221', '127.0.0.1']
+# CORS_EXPOSE_HEADERS = ['Set-Cookie']
 
-# SESSION_COOKIE_SAMESITE = 'None'
-# CSRF_COOKIE_SAMESITE = 'None'
-# CSRF_COOKIE_HTTPONLY = False
-# CSRF_USE_SESSIONS = False
-# CSRF_COOKIE_NAME = 'XSRF-TOKEN'
-# CSRF_HEADER_NAME = 'HTTP_X_XSRF_TOKEN'
-# CORS_ALLOW_CREDENTIALS = True
-# CSRF_COOKIE_SECURE = False
+# Session and CSRF
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
+
+SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'
+
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_USE_SESSIONS = False
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
+
+
+LOGOUT_REDIRECT_URL = '/login'
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/login'

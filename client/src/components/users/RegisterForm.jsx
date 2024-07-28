@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../../axiosConfig';
+import { UserContext } from '../../contexts/UserContext';
 
 
 function RegisterForm() {
   const [validated, setValidated] = useState(false);
   const [msg, setMsg] = useState('');
   const navigate = useNavigate();
+  const context = useContext(UserContext);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -29,7 +31,7 @@ function RegisterForm() {
     const password = document.querySelector('#password').value;
     const confirmation = document.querySelector('#confirmation').value;
         
-    axios.post('http://127.0.0.1:8000/api/users/register', {
+    axios.post('/users/register', {
         'first_name': fname,
         'last_name': lname,
         'email': email,
@@ -37,7 +39,12 @@ function RegisterForm() {
         'password': password,
         'confirmation': confirmation
     })
-    .then(() => {
+    .then(response => {
+      context.setUserId(response.data.user_id);
+      context.setUsername(response.data.username);
+      context.setIsLoggedIn(true);
+      context.setCsrfToken(response.data.csrftoken);
+
       return navigate('/fork');
     })
     .catch(error => {

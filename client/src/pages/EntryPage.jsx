@@ -4,7 +4,6 @@ import '../App.css';
 
 function EntryPage () {
     return (
-    <>
         <div className="entry-page">
             <h1>WiseInvest</h1>
             <img src={AppLogo} alt="Logo" />
@@ -13,8 +12,7 @@ function EntryPage () {
                 <Button variant="secondary" href="/register">Register</Button>
             </div>
         </div>
-    </>
-  )
+    )
 }
 
 export default EntryPage
