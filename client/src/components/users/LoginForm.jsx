@@ -31,11 +31,9 @@ function LoginForm() {
         'password': password
     })
     .then(response => {
-      console.log(response)
       context.setUserId(response.data.user_id);
       context.setUsername(response.data.username);
       context.setIsLoggedIn(true);
-      context.setCsrfToken(response.data.csrftoken);
 
       return navigate('/fork');
     })
@@ -64,6 +62,7 @@ function LoginForm() {
             Please insert a password.
           </Form.Control.Feedback>
         </Form.Group>
+        <input type="text" name="csrfmiddlewaretoken" hidden/>
         <Button variant="primary" type="submit">Log In</Button>
       </Form>
 

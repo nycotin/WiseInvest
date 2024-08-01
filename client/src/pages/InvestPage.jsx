@@ -1,14 +1,16 @@
-import { Outlet } from "react-router-dom";
+import NavBar from "../components/NavBar"
 
 import '../App.css';
+import '../index.css';
+import { Outlet } from "react-router-dom";
 
-function InvestPage () {
+function InvestPage() {
+  const title = { "title": "Investments Manager"}
+
     return (
     <>
-        <h1>Investments Manager</h1>
-        <div id="container">
-          <Outlet />
-        </div>
+        <NavBar { ...title } />
+        <Outlet />
     </>
   )
 }

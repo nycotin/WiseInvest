@@ -20,15 +20,11 @@ def login_view(request):
     if request.method == "POST":
         data = json.loads(request.body)
 
-        print(request.headers)
-        # print(get_token(request))
-
         user = authenticate(request, username=data["username"], password=data["password"])
 
         if user is not None:
             login(request, user)
-            return JsonResponse({ "user_id": user.id, "username": user.username, "csrftoken": get_token(request)
-            }, status=200)
+            return JsonResponse({ "user_id": user.id, "username": user.username, "csrftoken": get_token(request) }, status=200)
         else:
             return JsonResponse({ "message": "Invalid credentials." }, status=403)
 
@@ -36,6 +32,7 @@ def login_view(request):
         return JsonResponse({ "message": "Invalid request method." }, status=401)
 
 
+@csrf_exempt
 def logout_view(request):
     logout(request)
     return JsonResponse({ "message": "Logged out." }, status=200)
@@ -63,3 +60,12 @@ def register_view(request):
 
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=401)
+
+
+@csrf_exempt
+def user_profile(request, user_id):
+    user_info = User.objects.get(pk=user_id)
+
+    user = { "firstname": user_info.first_name, "lastname": user_info.last_name, "email": user_info.email, "username" : user_info.username, "date_joined": user_info.date_joined, "last_login": user_info.last_login }
+
+    return JsonResponse({ "user": user }, status=200)

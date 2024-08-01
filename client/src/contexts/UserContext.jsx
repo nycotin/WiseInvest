@@ -7,8 +7,6 @@ export const UserContextProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [sessionId, setSessionId] = useState(null);
-  const [csrfToken, setCsrfToken] = useState(null);
 
   const value = {
     userId,
@@ -16,11 +14,7 @@ export const UserContextProvider = ({ children }) => {
     username,
     setUsername,
     isLoggedIn,
-    setIsLoggedIn,
-    sessionId,
-    setSessionId,
-    csrfToken,
-    setCsrfToken
+    setIsLoggedIn
   };
 
   return (

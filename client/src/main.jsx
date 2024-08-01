@@ -12,6 +12,7 @@ import RegisterPage from './pages/RegisterPage.jsx';
 import ForkPage from './pages/ForkPage.jsx';
 import EducationPage from './pages/EducationPage.jsx';
 import InvestPage from './pages/InvestPage.jsx';
+import UserProfile from './components/users/UserProfile.jsx';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -43,13 +44,25 @@ export const router = createBrowserRouter(
           <Route
               element={<EducationPage />}
               path='/education'
-              errorElement={<ErrorPage />} 
+              errorElement={<ErrorPage />}
+          >
+            <Route
+              element={<UserProfile />}
+              path='/education/userprofile/:userId'
+              errorElement={<ErrorPage />}
             />
+          </Route>
           <Route
             element={<InvestPage />}
             path='/invest'
-            errorElement={<ErrorPage />} 
-          />
+            errorElement={<ErrorPage />}
+          >
+            <Route
+              element={<UserProfile />}
+              path='/invest/userprofile/:userId'
+              errorElement={<ErrorPage />}
+            />
+          </Route>
     </Route>
   )
 );

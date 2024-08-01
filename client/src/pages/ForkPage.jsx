@@ -9,7 +9,7 @@ function ForkPage () {
             <h1>Choose the area you want to access</h1>
                 <div className="buttons">
                 <Button variant='secondary' onClick={() => navigate('/education')}>Education Center</Button>
-                <Button variant='secondary' onClick={() => navigate('/education')}>Investments Manager</Button>
+                <Button variant='secondary' onClick={() => navigate('/invest')}>Investments Manager</Button>
             </div>
         </div>
     )

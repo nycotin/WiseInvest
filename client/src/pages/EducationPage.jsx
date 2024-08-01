@@ -1,14 +1,16 @@
-import { Outlet } from "react-router-dom";
+import NavBar from "../components/NavBar"
 
 import '../App.css';
+import '../index.css';
+import { Outlet } from "react-router-dom";
 
-function EducationPage () {
-    return (
+function EducationPage() {
+  const title = { "title": "Education Center"}
+
+  return (
     <>
-        <h1>Education Center</h1>
-        <div id="container">
-          <Outlet />
-        </div>
+        <NavBar { ...title } />
+        <Outlet />
     </>
   )
 }

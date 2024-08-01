@@ -134,19 +134,19 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
 CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
-ALLOWED_HOSTS = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221', '127.0.0.1']
-# CORS_EXPOSE_HEADERS = ['Set-Cookie']
+ALLOWED_HOSTS = ['http://127.0.0.1:8000', 'http://localhost:8000', '127.0.0.1', 'localhost']
+CORS_EXPOSE_HEADERS = ['Set-Cookie']
 
 # Session and CSRF
-CSRF_TRUSTED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
 
 SESSION_COOKIE_HTTPONLY = False
 SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'Lax'
 
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_USE_SESSIONS = False
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
