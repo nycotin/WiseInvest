@@ -5,8 +5,8 @@ from django.db import models
 
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    firstname = models.CharField(max_length=30)
+    lastname = models.CharField(max_length=30)
     email = models.EmailField(max_length=64)
     username = models.CharField(unique=True, max_length=64)
     password = models.CharField(max_length=20)

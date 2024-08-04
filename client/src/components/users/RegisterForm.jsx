@@ -24,16 +24,16 @@ function RegisterForm() {
   };
 
   function RegisterUser() {
-    const fname = document.querySelector('#first_name').value;
-    const lname = document.querySelector('#last_name').value;
+    const fname = document.querySelector('#firstname').value;
+    const lname = document.querySelector('#lastname').value;
     const email = document.querySelector('#email').value;
     const username = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
     const confirmation = document.querySelector('#confirmation').value;
         
     axios.post('/users/register', {
-        'first_name': fname,
-        'last_name': lname,
+        'firstname': fname,
+        'lastname': lname,
         'email': email,
         'username': username,
         'password': password,
@@ -57,13 +57,13 @@ function RegisterForm() {
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label>First name:</Form.Label>
-            <Form.Control type="text" id="first_name" placeholder="First name" required />
+            <Form.Control type="text" id="firstname" placeholder="First name" required />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Last name:</Form.Label>
-            <Form.Control type="text" id="last_name" placeholder="Last name" required />
+            <Form.Control type="text" id="lastname" placeholder="Last name" required />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 

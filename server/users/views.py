@@ -7,6 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.middleware.csrf import get_token
+import datetime
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -48,8 +49,8 @@ def register_view(request):
 
         try:
             user = User.objects.create_user(data["username"], data["email"], data["password"])
-            user.first_name = data["first_name"]
-            user.last_name = data["last_name"]
+            user.firstname = data["firstname"]
+            user.lastname = data["lastname"]
             user.save()
             login(request, user)
 
@@ -63,9 +64,41 @@ def register_view(request):
 
 
 @csrf_exempt
-def user_profile(request, user_id):
-    user_info = User.objects.get(pk=user_id)
+def user_profile(request):
+    user_info = User.objects.get(pk=request.user.id)
 
-    user = { "firstname": user_info.first_name, "lastname": user_info.last_name, "email": user_info.email, "username" : user_info.username, "date_joined": user_info.date_joined, "last_login": user_info.last_login }
+    date = datetime.datetime.strftime(user_info.date_joined, '%d/%m/%y')
+    login = datetime.datetime.strftime(user_info.date_joined, '%d/%m/%y at %H:%M')
+
+    user = { "firstname": user_info.firstname, "lastname": user_info.lastname, "email": user_info.email, "username" : user_info.username, "date_joined": date, "last_login": login }
 
     return JsonResponse({ "user": user }, status=200)
+
+
+@csrf_exempt
+def update_user_profile(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        field_id = data["field_id"]
+        new_value = data["new_value"].strip()
+
+        user_info = User.objects.filter(pk=request.user.id).values(field_id)
+        
+        if new_value != user_info[0][field_id] and new_value != '':
+            user = User.objects.get(pk=request.user.id)
+
+            if field_id == "firstname":
+                user.firstname = new_value
+            elif field_id == "laststname":
+                user.lastname = new_value
+            else:
+                user.email = new_value
+            
+            user.save()
+
+            return JsonResponse({ "message": "User profile successfully updated" }, status=200)        
+        else:
+            return JsonResponse({ "message": "No changes." }, status=200)
+        
+    else:
+        return JsonResponse({ "message": "Invalid request method." }, status=401)
