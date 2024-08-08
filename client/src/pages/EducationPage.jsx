@@ -1,4 +1,5 @@
 import NavBar from "../components/NavBar"
+import Dashboard from "../components/education/Dashboard"
 
 import '../App.css';
 import '../index.css';
@@ -10,6 +11,7 @@ function EducationPage() {
   return (
     <>
         <NavBar { ...title } />
+        <Dashboard />
         <Outlet />
     </>
   )

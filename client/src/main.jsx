@@ -13,6 +13,8 @@ import ForkPage from './pages/ForkPage.jsx';
 import EducationPage from './pages/EducationPage.jsx';
 import InvestPage from './pages/InvestPage.jsx';
 import UserProfile from './components/users/UserProfile.jsx';
+import CourseListPage from './pages/CourseListPage.jsx';
+import CoursePage from './pages/CoursePage.jsx';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,6 +48,17 @@ export const router = createBrowserRouter(
               path='/education'
               errorElement={<ErrorPage />}
           >
+            <Route
+              element={<CourseListPage />}
+              path='/education/courses'
+              errorElement={<ErrorPage />}
+            >
+              <Route
+                element={<CoursePage />}
+                path='/education/courses/:courseId'
+                errorElement={<ErrorPage />}
+              />
+            </Route>
             <Route
               element={<UserProfile />}
               path='/education/userprofile/:userId'
