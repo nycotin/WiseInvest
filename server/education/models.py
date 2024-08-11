@@ -10,7 +10,7 @@ class Course(models.Model):
     description = models.CharField(max_length=500, blank=True, null=True)
     itemCount = models.IntegerField()
     url = models.URLField(max_length=150)
-    player = models.CharField(max_length=300)
+    player = models.CharField(max_length=500)
     cover =  models.URLField(max_length=50)
 
 

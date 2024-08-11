@@ -44,7 +44,7 @@ function NavBar({ title }) {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="menu">
-                        <Nav.Link href="">Browse Courses</Nav.Link>
+                        <Nav.Link onClick={() => navigate('/education/courses')}>Browse Courses</Nav.Link>
                         <Nav.Link href="">My Learning</Nav.Link>
                         <Nav.Link href="">Favorites</Nav.Link>
                         <NavDropdown title={username} id="nav-dropdown">

@@ -8,8 +8,8 @@ function UserProfile() {
     const [userProfile, setUserProfile] = useState([])
 
     useEffect(() => {
-        axios.get(`/users/userprofile`)
-        .then((response) => {
+        axios.get('/users/userprofile')
+        .then(response => {
             setUserProfile(response.data.user);
         });
     }, []);
