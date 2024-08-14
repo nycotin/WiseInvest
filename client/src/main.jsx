@@ -52,13 +52,12 @@ export const router = createBrowserRouter(
               element={<CourseListPage />}
               path='/education/courses'
               errorElement={<ErrorPage />}
-            >
-              <Route
-                element={<CoursePage />}
-                path='/education/courses/:courseId'
-                errorElement={<ErrorPage />}
-              />
-            </Route>
+            />
+            <Route
+              element={<CoursePage />}
+              path='/education/courses/:courseId'
+              errorElement={<ErrorPage />}
+            />
             <Route
               element={<UserProfile />}
               path='/education/userprofile/:userId'

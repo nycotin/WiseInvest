@@ -17,6 +17,25 @@ def index(request):
     return render(request, 'education/index.html')
 
 
+def get_courses(request):
+    if request.method == "GET":
+        data = Course.objects.all()
+        courses = list(Course.objects.values())
+
+        return JsonResponse({'courses': courses }, status=200)
+    else:
+        return JsonResponse({'message': 'Invalid request method.' }, status=400)
+
+
+def get_course_details(request, courseId):
+    if request.method == "GET":
+        course = list(Course.objects.filter(pk=courseId).values())
+        courseItems = list(CourseItem.objects.filter(courseId=courseId).values())
+        # Return thumbnails!
+
+        return JsonResponse({'course': course, "courseItems": courseItems }, status=200)
+    else:
+        return JsonResponse({'message': 'Invalid request method.' }, status=400)
 
 
 
@@ -42,7 +61,7 @@ def seed_db(request):
                 "itemCount": 5,
                 "url": "https://www.youtube.com/playlist?list=PLpOAgnrYfQqFcWd5FNHWw5BX-CgZAWrwk",
                 "player": "\u003ciframe width=\"640\" height=\"360\" src=\"http://www.youtube.com/embed/videoseries?list=PLpOAgnrYfQqFcWd5FNHWw5BX-CgZAWrwk\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen\u003e\u003c/iframe\u003e",
-                "cover": "https://i.ytimg.com/vi/Jbp3-AU9v_g/sddefault.jpg"
+                "cover": "https://i.ytimg.com/vi/-WsxbeOzNR0/sddefault.jpg"
             }
         ]
     }
