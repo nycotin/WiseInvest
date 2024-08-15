@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Course, Thumbnail, CourseItem, Favorite, Learning
+from .models import Course, CourseItem, Favorite, Learning
 
 # Register your models here.
 
@@ -12,6 +12,5 @@ class CourseItemAdmin(admin.ModelAdmin):
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseItem, CourseItemAdmin)
-admin.site.register(Thumbnail)
 admin.site.register(Favorite)
 admin.site.register(Learning)

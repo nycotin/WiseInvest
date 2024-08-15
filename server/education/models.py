@@ -14,13 +14,6 @@ class Course(models.Model):
     cover =  models.URLField(max_length=50)
 
 
-class Thumbnail(models.Model):
-    id = models.AutoField(primary_key=True)
-    url = models.CharField(max_length=150)
-    width = models.IntegerField()
-    height = models.IntegerField()
-
-
 class CourseItem(models.Model):
     id = models.AutoField(primary_key=True)
     courseId = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -28,7 +21,7 @@ class CourseItem(models.Model):
     title = models.CharField(max_length=50)
     description = models.CharField(max_length=500, blank=True, null=True)
     position = models.IntegerField()
-    thumbnail = models.ForeignKey(Thumbnail, on_delete=models.CASCADE, related_name='thumbnail')
+    thumbnail = models.URLField(max_length=50)
     publishedAt = models.DateTimeField()
 
 
