@@ -2,11 +2,16 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axiosConfig';
 
+import NavBar from '../components/NavBar';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 import '../App.css';
 import '../index.css';
-import NavBar from '../components/NavBar';
 
 
 function CourseListPage() {
@@ -30,7 +35,8 @@ function CourseListPage() {
 
 
   const courseList = courses.map(course => {
-    return <Card key={course.id} className="mb-4" style={{ width: '50rem' }}>
+    return <Col key={courses.indexOf(course)}>
+            <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}}>
               <Card.Img variant="top" src={course.cover}/>
               <Card.Body>
                 <Card.Title>{course.title}</Card.Title>
@@ -39,17 +45,17 @@ function CourseListPage() {
                 <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
               </Card.Body>
             </Card>
-    })
+          </Col>     
+  })
   
 
   return (
-    <>
-      <NavBar { ...title } />
-      <div className="course-list">
-          <h2>Browse Courses</h2>
+    <Container className="course-list" fluid="md">
+      <h3>Browse Courses</h3>
+        <Row>
           {courseList}
-      </div>
-    </>
+        </Row>
+    </Container>
   )
 }
 
