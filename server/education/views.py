@@ -3,11 +3,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Course, CourseItem, Favorite, Learning
+from users.models import User
 
 # Create your views here.
 
@@ -30,11 +33,79 @@ def get_course_details(request, courseId):
     if request.method == "GET":
         course = list(Course.objects.filter(pk=courseId).values())
         courseItems = list(CourseItem.objects.filter(courseId=courseId).values())
-        # Return thumbnails!
 
         return JsonResponse({'course': course, "courseItems": courseItems }, status=200)
     else:
         return JsonResponse({'message': 'Invalid request method.' }, status=400)
+
+
+@csrf_exempt
+def toggle_favorite(request, courseId):
+    if request.method == "POST":
+        course = Course.objects.get(pk=courseId)
+        user = User.objects.get(pk=request.user.id)
+
+        try:
+            favorite = Favorite.objects.get(userId=user)
+            
+            if Favorite.objects.filter(userId=user).filter(favorite_courses=course):
+                favorite.favorite_courses.remove(course)
+                return JsonResponse({"message": "Course removed from Favorites." }, status=200)
+            else:
+                favorite.favorite_courses.add(course)
+                return JsonResponse({"message": "Course added to Favorites." }, status=200)
+        except ObjectDoesNotExist:
+            favorite = Favorite(userId=user)
+            favorite.save()
+            favorite.favorite_courses.add(course)
+
+        favorite.save()
+        return JsonResponse({"message": "Course added to favorite." }, status=200)
+    else:
+        return JsonResponse({"message": "Invalid request method." }, status=400)
+
+
+@csrf_exempt
+def toggle_enroll(request, courseId):
+    if request.method == "POST":
+        course = Course.objects.get(pk=courseId)
+        user = User.objects.get(pk=request.user.id)
+
+        try:
+            is_enrolled = Learning.objects.get(uid=user, enrolled_course=course)
+
+            if is_enrolled:
+                is_enrolled.delete()
+                return JsonResponse({"message": "Course removed from Learning." }, status=200)
+        except ObjectDoesNotExist:
+            enroll_to_course = Learning(uid=user, enrolled_course=course, status='Enrolled')
+            enroll_to_course.save()
+            return JsonResponse({"message": "Course added to Learning." }, status=200)
+    else:
+        return JsonResponse({"message": "Invalid request method." }, status=400)
+
+
+def get_user_courses(request, userId):
+    if request.method == "GET":
+        user = User.objects.get(pk=request.user.id)
+
+        user_courses = list(Learning.objects.filter(uid=user).values())
+        user_favs = list(Favorite.objects.filter(userId=user).values())
+
+        return JsonResponse({"userCourses": user_courses, "userFavs": user_favs }, status=200)
+    else:
+        return JsonResponse({"message": "Invalid request method." }, status=400)
+
+
+
+
+
+
+
+
+
+
+
 
 
 

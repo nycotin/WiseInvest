@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import User
 
 # Create your models here.
 
@@ -32,8 +33,8 @@ class CourseItem(models.Model):
 
 class Favorite(models.Model):
     id = models.AutoField(primary_key=True)
-    userId = models.ForeignKey('users.User', on_delete=models.DO_NOTHING),
-    courses = models.ManyToManyField(Course, related_name='fav_courses')
+    userId = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    favorite_courses = models.ManyToManyField(Course, related_name='fav_courses')
 
 
 class Learning(models.Model):
@@ -44,6 +45,6 @@ class Learning(models.Model):
     }
 
     id = models.AutoField(primary_key=True)
-    userId = models.ForeignKey('users.User', on_delete=models.DO_NOTHING),
-    courses = models.ManyToManyField(Course, related_name='user_courses')
+    uid = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    enrolled_course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
     status = models.CharField(max_length=15, choices=STATUSES)

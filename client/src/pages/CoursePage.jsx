@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import axios from '../axiosConfig';
 import ReactPlayer from 'react-player'
 
-import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -13,7 +12,6 @@ import '../index.css';
 
 
 function CoursePage() {
-  const title = { "title": "Education Center"};
   const { courseId } = useParams();
   const [course, setCourse] = useState([]);
   const [courseItems, setCourseItems] = useState([]);
