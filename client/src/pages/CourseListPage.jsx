@@ -15,7 +15,6 @@ import '../index.css';
 
 
 function CourseListPage({ page }) {
-  console.log(page)
   const [courses, setCourses] = useState([]);
   const [userCourses, setUserCourses] = useState([]);
   const [userFavs, setUserFavs] = useState([]);
@@ -118,11 +117,11 @@ function CourseListPage({ page }) {
               <Card.Title>{course.title}</Card.Title>
               <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
               <Card.Text>Course items: {course.itemCount}</Card.Text>
-              <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
-              <Button variant="secondary" onClick={() => toggleFavorite(course)}>
+              <Button variant="primary" size="sm" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
+              <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
                 { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
               </Button>
-              <Button variant="warning" onClick={() => toggleEnroll(course)}>
+              <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
                 { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
               </Button>
             </Card.Body>
@@ -138,11 +137,11 @@ function CourseListPage({ page }) {
               <Card.Title>{course.title}</Card.Title>
               <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
               <Card.Text>Course items: {course.itemCount}</Card.Text>
-              <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
-              <Button variant="secondary" onClick={() => toggleFavorite(course)}>
+              <Button variant="primary" size="sm" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
+              <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
                 { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
               </Button>
-              <Button variant="warning" onClick={() => toggleEnroll(course)}>
+              <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
                 { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
               </Button>
             </Card.Body>
@@ -158,11 +157,11 @@ function CourseListPage({ page }) {
           <Card.Title>{course.title}</Card.Title>
           <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
           <Card.Text>Course items: {course.itemCount}</Card.Text>
-          <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
-          <Button variant="secondary" onClick={() => toggleFavorite(course)}>
+          <Button variant="primary" size="sm" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
+          <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
             { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
           </Button>
-          <Button variant="warning" onClick={() => toggleEnroll(course)}>
+          <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
             { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
           </Button>
           </Card.Body>
