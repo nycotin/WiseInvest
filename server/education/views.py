@@ -16,7 +16,7 @@ from users.models import User
 
 def index(request):
     
-    return render(request, 'education/index.html')
+    return render(request, "education/index.html")
 
 
 def get_courses(request):
@@ -24,9 +24,9 @@ def get_courses(request):
         data = Course.objects.all()
         courses = list(Course.objects.values())
 
-        return JsonResponse({'courses': courses }, status=200)
+        return JsonResponse({ "courses": courses }, status=200)
     else:
-        return JsonResponse({'message': 'Invalid request method.' }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
 def get_course_details(request, courseId):
@@ -34,9 +34,9 @@ def get_course_details(request, courseId):
         course = list(Course.objects.filter(pk=courseId).values())
         courseItems = list(CourseItem.objects.filter(courseId=courseId).values())
 
-        return JsonResponse({'course': course, "courseItems": courseItems }, status=200)
+        return JsonResponse({ "course": course, "courseItems": courseItems }, status=200)
     else:
-        return JsonResponse({'message': 'Invalid request method.' }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
 @csrf_exempt
@@ -47,22 +47,27 @@ def toggle_favorite(request, courseId):
 
         try:
             favorite = Favorite.objects.get(userId=user)
-            
+
             if Favorite.objects.filter(userId=user).filter(favorite_courses=course):
                 favorite.favorite_courses.remove(course)
-                return JsonResponse({"message": "Course removed from Favorites." }, status=200)
+                favorite.save()
+
+                if not favorite.favorite_courses:
+                    favorite.delete()
+                
+                return JsonResponse({ "message": "Course removed from Favorites.", "action": "Remove" }, status=200)
             else:
                 favorite.favorite_courses.add(course)
-                return JsonResponse({"message": "Course added to Favorites." }, status=200)
+                favorite.save()
+                return JsonResponse({ "message": "Course added to Favorites.", "action": "Add" }, status=200)
         except ObjectDoesNotExist:
             favorite = Favorite(userId=user)
             favorite.save()
             favorite.favorite_courses.add(course)
-
-        favorite.save()
-        return JsonResponse({"message": "Course added to favorite." }, status=200)
+        
+        return JsonResponse({ "message": "Course added to favorite.", "action": "Add" }, status=200)
     else:
-        return JsonResponse({"message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
 @csrf_exempt
@@ -76,25 +81,32 @@ def toggle_enroll(request, courseId):
 
             if is_enrolled:
                 is_enrolled.delete()
-                return JsonResponse({"message": "Course removed from Learning." }, status=200)
+                return JsonResponse({"message": "Course removed from Learning.", "action": "Remove" }, status=200)
         except ObjectDoesNotExist:
-            enroll_to_course = Learning(uid=user, enrolled_course=course, status='Enrolled')
+            enroll_to_course = Learning(uid=user, enrolled_course=course, status="Enrolled")
             enroll_to_course.save()
-            return JsonResponse({"message": "Course added to Learning." }, status=200)
+            return JsonResponse({ "message": "Course added to Learning.", "action": "Add" }, status=200)
     else:
-        return JsonResponse({"message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
 def get_user_courses(request, userId):
     if request.method == "GET":
-        user = User.objects.get(pk=request.user.id)
+        user = User.objects.get(pk=userId)
 
-        user_courses = list(Learning.objects.filter(uid=user).values())
-        user_favs = list(Favorite.objects.filter(userId=user).values())
+        user_courses = list(Learning.objects.filter(uid=user).values("enrolled_course", "status"))
+        
+        try:
+            user_favs = list(Favorite.objects.get(userId=user).favorite_courses.all().values("id"))
+        except ObjectDoesNotExist:
+            user_favs = list(Favorite.objects.filter(userId=user).values("favorite_courses"))
+            
+        print(user_courses)
+        print(user_favs)
 
-        return JsonResponse({"userCourses": user_courses, "userFavs": user_favs }, status=200)
+        return JsonResponse({ "userCourses": user_courses, "userFavs": user_favs }, status=200)
     else:
-        return JsonResponse({"message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
 
@@ -228,7 +240,6 @@ def seed_db(request):
                 "position": 9,
                 "thumbnail": "https://i.ytimg.com/vi/o4_GwR_6jR4/default.jpg",
                 "publishedAt": "2020-09-03T21:54:08Z"
-
             },
             {
                 "itemId": "ZXXF-rSaE9E",

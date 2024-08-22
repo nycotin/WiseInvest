@@ -30,7 +30,6 @@ function CourseListPage() {
       .then(response => {
         setUserCourses(response.data.userCourses);
         setUserFavs(response.data.userFavs);
-        // console.log(response.data);
       });
     }
 
@@ -48,45 +47,52 @@ function CourseListPage() {
     getCourses();
   }, [])
 
-  // console.log(userCourses)
-  // console.log(userFavs)
-
   function toggleFavorite(course){
     axios.post(`/education/courses/${course.id}/toggle-favorite`)
     .then(response => {
-      console.log(response.data.message)
-      // Modify userFavs to re-render component
+      console.log(response.data.message);
 
-      if(course.id == i.id){
-        setUserFavs(oldUserFavs => {
-          return oldUserFavs.filter(f => f.favorite_course_id !== course.id);
-        })
-        console.log(userFavs)
+      if(response.data.action === 'Remove'){
+        setUserFavs(userFavs.filter(i => i.id !== course.id));
       } else {
-        setUserCourses(oldUserFavs => [...oldUserFavs, course]);
-        console.log(userFavs)
+        setUserFavs([...userFavs, course]);
       }
-      
-    })
+    });
   }
 
   function toggleEnroll(course){
     axios.post(`/education/courses/${course.id}/toggle-enroll`)
     .then(response => {
-      console.log(response.data.message)
-      // Modify userCourses to re-render component
-      if(course.id === i.enrolled_course_id){
-        setUserCourses(oldUserCourses => {
-          return oldUserCourses.filter(f => f.enrolled_course_id !== course.id);
-        })
-        console.log(userCourses)
-      } else {
-        setUserCourses(oldUserCourses => [...oldUserCourses, course]);
-        console.log(userCourses)
-      }
+      console.log(response.data.message);
       
-    })
+      if(response.data.action === 'Remove'){
+        setUserCourses(userCourses.filter(i => i.enrolled_course !== course.id));
+      } else {
+        setUserCourses([...userCourses, {"enrolled_course": course.id, "status": "Enrolled"}]);
+      }
+    });
   }
+
+
+function isFav(course){
+  const fav = userFavs.find(f => { return f.id === course.id })
+
+  if(fav){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function isEnrolled(course){
+  const enrolled = userCourses.find(c => { return c.enrolled_course === course.id })
+
+  if(enrolled){
+    return true;
+  } else {
+    return false;
+  }
+}
 
 
   const courseList = courses.map(course => {
@@ -99,10 +105,10 @@ function CourseListPage() {
                 <Card.Text>Course items: {course.itemCount}</Card.Text>
                 <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
                 <Button variant="secondary" onClick={() => toggleFavorite(course)}>
-                  { course.id in userFavs ? 'Add to Favorites' : 'Remove from Favorites' }
+                  { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
                 </Button>
                 <Button variant="warning" onClick={() => toggleEnroll(course)}>
-                  { course.id in userCourses ? 'Unenroll' : 'Enroll' }
+                  { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
                 </Button>
               </Card.Body>
             </Card>
