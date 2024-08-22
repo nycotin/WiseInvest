@@ -90,23 +90,6 @@ def toggle_enroll(request, courseId):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
-def get_user_courses(request, userId):
-    if request.method == "GET":
-        user = User.objects.get(pk=userId)
-
-        user_courses = list(Learning.objects.filter(uid=user).values("enrolled_course", "status"))
-        
-        try:
-            user_favs = list(Favorite.objects.get(userId=user).favorite_courses.all().values("id"))
-        except ObjectDoesNotExist:
-            user_favs = list(Favorite.objects.filter(userId=user).values("favorite_courses"))
-            
-
-        return JsonResponse({ "userCourses": user_courses, "userFavs": user_favs }, status=200)
-    else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
-
-
 def get_user_favorites(request):
     if request.method == "GET":
         user = User.objects.get(pk=request.user.id)
