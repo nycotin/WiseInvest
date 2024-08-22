@@ -101,17 +101,40 @@ def get_user_courses(request, userId):
         except ObjectDoesNotExist:
             user_favs = list(Favorite.objects.filter(userId=user).values("favorite_courses"))
             
-        print(user_courses)
-        print(user_favs)
 
         return JsonResponse({ "userCourses": user_courses, "userFavs": user_favs }, status=200)
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
+def get_user_favorites(request):
+    if request.method == "GET":
+        user = User.objects.get(pk=request.user.id)
+        
+        user_favs = list(Favorite.objects.get(userId=user).favorite_courses.all().values())
+
+        return JsonResponse({ "userFavs": user_favs }, status=200)
+    else:
+        return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
+def get_user_learning(request):
+    if request.method == "GET":
+        user = User.objects.get(pk=request.user.id)
+        
+        user_learning = Learning.objects.filter(uid=user).values("enrolled_course", "status")
 
+        courses = []
+
+        for i in user_learning:
+            get_course = list(Course.objects.filter(pk=i["enrolled_course"]).values())
+            course = get_course[0]
+            course["status"] = i["status"]
+            courses.append(course)
+
+        return JsonResponse({ "userLearning": courses }, status=200)
+    else:
+        return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
 

@@ -49,8 +49,18 @@ export const router = createBrowserRouter(
               errorElement={<ErrorPage />}
           >
             <Route
-              element={<CourseListPage />}
+              element={<CourseListPage {...{'page': 'browse-courses'}} />}
               path='/education/courses'
+              errorElement={<ErrorPage />}
+            />
+            <Route
+              element={<CourseListPage {...{'page': 'favorites'}} />}
+              path='/education/courses/favorites'
+              errorElement={<ErrorPage />}
+            />
+            <Route
+              element={<CourseListPage {...{ 'page':'learning' }} />}
+              path='/education/courses/learning'
               errorElement={<ErrorPage />}
             />
             <Route

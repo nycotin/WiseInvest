@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../contexts/UserContext';
 import axios from '../axiosConfig';
+import PropTypes from 'prop-types';
 
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -14,11 +14,12 @@ import '../App.css';
 import '../index.css';
 
 
-function CourseListPage() {
+function CourseListPage({ page }) {
+  console.log(page)
   const [courses, setCourses] = useState([]);
   const [userCourses, setUserCourses] = useState([]);
   const [userFavs, setUserFavs] = useState([]);
-  const { userId } = useContext(UserContext);
+
   const navigate = useNavigate();
 
   const dashboard = document.querySelector('.dashboard')
@@ -26,17 +27,27 @@ function CourseListPage() {
 
   useEffect(() => {  
     function getUserCourses(){
-      axios.get(`/education/courses/user-${userId}`)
+        axios.get('/education/courses/learning')
+        .then(response => {
+          if(response.data.userLearning){
+            setUserCourses(response.data.userLearning);
+          } else {
+            setUserCourses([]);
+          }
+        });
+      }
+
+    function getUserFavs(){
+      axios.get('/education/courses/favorites')
       .then(response => {
-        setUserCourses(response.data.userCourses);
-        setUserFavs(response.data.userFavs);
+        if(response.data.userFavs){
+          setUserFavs(response.data.userFavs);
+        } else {
+          setUserCourses([]);
+        }
       });
     }
 
-    getUserCourses();
-  }, [userId])
-
-  useEffect(() => {  
     function getCourses(){
       axios.get('/education/courses')
       .then(response => {
@@ -44,6 +55,8 @@ function CourseListPage() {
       });
     }
 
+    getUserCourses();
+    getUserFavs();
     getCourses();
   }, [])
 
@@ -66,59 +79,100 @@ function CourseListPage() {
       console.log(response.data.message);
       
       if(response.data.action === 'Remove'){
-        setUserCourses(userCourses.filter(i => i.enrolled_course !== course.id));
+        setUserCourses(userCourses.filter(i => i.id !== course.id));
       } else {
-        setUserCourses([...userCourses, {"enrolled_course": course.id, "status": "Enrolled"}]);
+        course.status = "Enrolled";
+        setUserCourses([...userCourses, course]);
       }
     });
   }
 
+  function isFav(course){
+    const fav = userFavs.find(f => { return f.id === course.id })
 
-function isFav(course){
-  const fav = userFavs.find(f => { return f.id === course.id })
-
-  if(fav){
-    return true;
-  } else {
-    return false;
+    if(fav){
+      return true;
+    } else {
+      return false;
+    }
   }
-}
 
-function isEnrolled(course){
-  const enrolled = userCourses.find(c => { return c.enrolled_course === course.id })
+  function isEnrolled(course){
+    const enrolled = userCourses.find(c => { return c.id === course.id })
 
-  if(enrolled){
-    return true;
-  } else {
-    return false;
+    if(enrolled){
+      return true;
+    } else {
+      return false;
+    }
   }
-}
 
+  let courseList = []
 
-  const courseList = courses.map(course => {
-    return <Col key={courses.indexOf(course)}>
-            <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}}>
-              <Card.Img variant="top" src={course.cover}/>
-              <Card.Body>
-                <Card.Title>{course.title}</Card.Title>
-                <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
-                <Card.Text>Course items: {course.itemCount}</Card.Text>
-                <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
-                <Button variant="secondary" onClick={() => toggleFavorite(course)}>
-                  { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
-                </Button>
-                <Button variant="warning" onClick={() => toggleEnroll(course)}>
-                  { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>     
-  })
-  
+  if(page === 'browse-courses'){
+    courseList = courses.map(course => {
+        return <Col key={courses.indexOf(course)}>
+          <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}}>
+            <Card.Img variant="top" src={course.cover}/>
+            <Card.Body>
+              <Card.Title>{course.title}</Card.Title>
+              <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
+              <Card.Text>Course items: {course.itemCount}</Card.Text>
+              <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
+              <Button variant="secondary" onClick={() => toggleFavorite(course)}>
+                { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
+              </Button>
+              <Button variant="warning" onClick={() => toggleEnroll(course)}>
+                { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+    })
+  } else if (page === 'favorites'){
+    courseList = userFavs.map(course => {
+        return <Col key={userFavs.indexOf(course)}>
+          <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}}>
+          <Card.Img variant="top" src={course.cover}/>
+            <Card.Body>
+              <Card.Title>{course.title}</Card.Title>
+              <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
+              <Card.Text>Course items: {course.itemCount}</Card.Text>
+              <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
+              <Button variant="secondary" onClick={() => toggleFavorite(course)}>
+                { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
+              </Button>
+              <Button variant="warning" onClick={() => toggleEnroll(course)}>
+                { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>     
+    })
+  } else {
+    courseList = userCourses.map(course => {
+      return <Col key={userCourses.indexOf(course)}>
+        <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}}>
+          <Card.Img variant="top" src={course.cover}/>
+          <Card.Body>
+          <Card.Title>{course.title}</Card.Title>
+          <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
+          <Card.Text>Course items: {course.itemCount}</Card.Text>
+          <Button variant="primary" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
+          <Button variant="secondary" onClick={() => toggleFavorite(course)}>
+            { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
+          </Button>
+          <Button variant="warning" onClick={() => toggleEnroll(course)}>
+            { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
+          </Button>
+          </Card.Body>
+        </Card>
+      </Col>
+    })
+  }
 
   return (
     <Container className="course-list" fluid="md">
-      <h3>Browse Courses</h3>
         <Row>
           {courseList}
         </Row>
@@ -127,3 +181,7 @@ function isEnrolled(course){
 }
 
 export default CourseListPage
+
+CourseListPage.propTypes = {
+  page: PropTypes.string.isRequired
+};

@@ -58,6 +58,12 @@ nav {
   width: 30%;
 }
 
+.course-list.container-md,
+.favorite-list.container-md,
+.enrolled.list.container.md {
+  margin-top: 5rem;
+}
+
 .course-details {
   width: 100%;
   margin-top: 8rem;

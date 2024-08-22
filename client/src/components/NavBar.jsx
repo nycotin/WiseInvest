@@ -30,8 +30,8 @@ function NavBar({ title }) {
             navigate('/login');
         })
     }
-        
-    if (title === "Education Center"){
+
+    if(title === "Education Center"){
         return (
             <Navbar fixed="top" expand="lg" className="bg-body-tertiary">
                 <Container className="brand">
@@ -45,8 +45,8 @@ function NavBar({ title }) {
                     <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="menu">
                         <Nav.Link onClick={() => navigate('/education/courses')}>Browse Courses</Nav.Link>
-                        <Nav.Link href="">My Learning</Nav.Link>
-                        <Nav.Link href="">Favorites</Nav.Link>
+                        <Nav.Link onClick={() => navigate('/education/courses/learning')}>My Learning</Nav.Link>
+                        <Nav.Link onClick={() => navigate('/education/courses/favorites')}>Favorites</Nav.Link>
                         <NavDropdown title={username} id="nav-dropdown">
                         <NavDropdown.Item onClick={() => navigate(`/education/userprofile/${userId}`)}>Profile</NavDropdown.Item>
                         <NavDropdown.Item onClick={() => navigate('/invest')}>
