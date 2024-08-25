@@ -1,16 +1,14 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../axiosConfig';
-import { UserContext } from '../../contexts/UserContext';
 
 
 function LoginForm() {
   let [validated, setValidated] = useState(false);
   let [msg, setMsg] = useState('');
   const navigate = useNavigate();
-  const context = useContext(UserContext);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -31,9 +29,8 @@ function LoginForm() {
         'password': password
     })
     .then(response => {
-      context.setUserId(response.data.user_id);
-      context.setUsername(response.data.username);
-      context.setIsLoggedIn(true);
+      sessionStorage.setItem('userId', response.data.user_id)
+      sessionStorage.setItem('username', response.data.username)
 
       return navigate('/fork');
     })

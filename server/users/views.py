@@ -25,7 +25,7 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return JsonResponse({ "user_id": user.id, "username": user.username, "csrftoken": get_token(request) }, status=200)
+            return JsonResponse({ "user_id": user.id, "username": user.username }, status=200)
         else:
             return JsonResponse({ "message": "Invalid credentials." }, status=403)
 
@@ -33,7 +33,6 @@ def login_view(request):
         return JsonResponse({ "message": "Invalid request method." }, status=401)
 
 
-@csrf_exempt
 def logout_view(request):
     logout(request)
     return JsonResponse({ "message": "Logged out." }, status=200)
@@ -54,8 +53,7 @@ def register_view(request):
             user.save()
             login(request, user)
 
-            return JsonResponse({ "user_id": user.id, "username": user.username, "csrftoken": get_token(request)
-            }, status=200)
+            return JsonResponse({ "user_id": user.id, "username": user.username }, status=200)
         except IntegrityError:
             return JsonResponse({ "message": "Invalid username." }, status=400)
 
@@ -63,7 +61,6 @@ def register_view(request):
         return JsonResponse({ "message": "Invalid request method." }, status=401)
 
 
-@csrf_exempt
 def user_profile(request):
     user_info = User.objects.get(pk=request.user.id)
 

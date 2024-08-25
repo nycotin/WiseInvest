@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,12 +43,12 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -133,18 +134,18 @@ STATIC_URL = 'static/'
 # CORS
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://127.0.0.1:8000', 'http://127.0.0.1:49221']
+CORS_ORIGIN_WHITELIST = ['http://localhost:5173']
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
 ALLOWED_HOSTS = ['http://127.0.0.1:8000', 'http://localhost:8000', '127.0.0.1', 'localhost']
-CORS_EXPOSE_HEADERS = ['Set-Cookie']
+CORS_EXPOSE_HEADERS = ['x-csrftoken']
+CORS_ALLOW_HEADERS = [*default_headers, 'access-control-allow-headers','access-control-expose-headers']
 
 # Session and CSRF
-CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
-
 SESSION_COOKIE_HTTPONLY = False
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Lax'
 
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173', 'http://localhost:5173/']
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'Lax'

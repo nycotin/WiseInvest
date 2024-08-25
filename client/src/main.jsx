@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
+import { getSessionId } from './utility';
 
 import './index.css'
 
@@ -39,12 +40,12 @@ export const router = createBrowserRouter(
         errorElement={<ErrorPage />} 
       />
         <Route
-          element={<ForkPage />}
+          element={getSessionId() !== '' ? <ForkPage /> : <LoginPage />}
           path='/fork'
           errorElement={<ErrorPage />} 
         />
           <Route
-              element={<EducationPage />}
+              element={getSessionId() !== '' ? <EducationPage /> : <LoginPage />}
               path='/education'
               errorElement={<ErrorPage />}
           >
@@ -75,7 +76,7 @@ export const router = createBrowserRouter(
             />
           </Route>
           <Route
-            element={<InvestPage />}
+            element={getSessionId() !== '' ? <InvestPage /> : <LoginPage />}
             path='/invest'
             errorElement={<ErrorPage />}
           >

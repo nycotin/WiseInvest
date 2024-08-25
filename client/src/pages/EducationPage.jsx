@@ -8,7 +8,7 @@ import '../index.css';
 
 
 function EducationPage() {
-  const title = { "title": "Education Center"}
+  const title = { "title": "Education Center" };
 
   return (
     <>
@@ -17,6 +17,7 @@ function EducationPage() {
         <Outlet />
     </>
   )
+  
 }
 
 export default EducationPage

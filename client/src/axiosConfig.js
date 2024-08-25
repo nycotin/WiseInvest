@@ -1,18 +1,21 @@
 import axios from 'axios';
+import { getCsrfToken } from './utility';
 
 const instance = axios.create({
-    // baseURL: 'http://127.0.0.1:8000/api',
     baseURL: 'http://localhost:8000/api',
-    headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-    },
     origin: true,
     withCredentials: true,
+    xsrfHeaderName: 'x-csrftoken',
     xsrfCookieName: 'csrftoken',
-    xsrfHeaderName: 'Cookie',
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization, x-csrftoken, Access-Control-Expose-Headers',
+        'Access-Control-Expose-Headers': 'x-csrftoken',
+        'x-csrftoken': getCsrfToken()
+    },
     proxy: {
         protocol: 'http',
-        host: '127.0.0.1',
+        host: 'localhost',
         port: 8000
     },
 });

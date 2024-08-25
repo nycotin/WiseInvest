@@ -7,25 +7,26 @@ import AppLogo from '../assets/logo-no-bg.png';
 import '../assets/logo-no-bg.png';
 import '../App.css';
 
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../axiosConfig';
-import { UserContext } from '../contexts/UserContext';
+import { getCsrfToken } from '../utility';
 import PropTypes from 'prop-types';
 
 
 function NavBar({ title }) {
     const navigate = useNavigate();
-    const { userId, username, isLoggedIn, setUserId, setUsername, setIsLoggedIn} = useContext(UserContext);
+    const username = sessionStorage.getItem('username');
+    const userId = sessionStorage.getItem('userId');
 
     function logout(){
-        axios.post('/users/logout')
+        axios.post('/users/logout', {
+            headers: {
+                'x-csrftoken': getCsrfToken()
+            }
+        })
         .then((response) => { 
             console.log(response.data.message)
-
-            setUserId(null)
-            setUsername(null)
-            setIsLoggedIn(false)
+            sessionStorage.clear();
 
             navigate('/login');
         })
