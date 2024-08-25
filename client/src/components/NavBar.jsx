@@ -9,7 +9,6 @@ import '../App.css';
 
 import { useNavigate } from 'react-router-dom';
 import axios from '../axiosConfig';
-import { getCsrfToken } from '../utility';
 import PropTypes from 'prop-types';
 
 
@@ -19,11 +18,7 @@ function NavBar({ title }) {
     const userId = sessionStorage.getItem('userId');
 
     function logout(){
-        axios.post('/users/logout', {
-            headers: {
-                'x-csrftoken': getCsrfToken()
-            }
-        })
+        axios.post('/users/logout')
         .then((response) => { 
             console.log(response.data.message)
             sessionStorage.clear();

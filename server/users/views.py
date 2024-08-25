@@ -61,6 +61,7 @@ def register_view(request):
         return JsonResponse({ "message": "Invalid request method." }, status=401)
 
 
+@login_required
 def user_profile(request):
     user_info = User.objects.get(pk=request.user.id)
 
@@ -72,7 +73,7 @@ def user_profile(request):
     return JsonResponse({ "user": user }, status=200)
 
 
-@csrf_exempt
+@login_required
 def update_user_profile(request):
     if request.method == "PUT":
         data = json.loads(request.body)

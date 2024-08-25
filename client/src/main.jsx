@@ -40,7 +40,7 @@ export const router = createBrowserRouter(
         errorElement={<ErrorPage />} 
       />
         <Route
-          element={getSessionId() !== '' ? <ForkPage /> : <LoginPage />}
+          element={<ForkPage />}
           path='/fork'
           errorElement={<ErrorPage />} 
         />

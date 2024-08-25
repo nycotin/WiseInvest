@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -19,6 +19,7 @@ def index(request):
     return render(request, "education/index.html")
 
 
+@login_required
 def get_courses(request):
     if request.method == "GET":
         data = Course.objects.all()
@@ -29,6 +30,7 @@ def get_courses(request):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
+@login_required
 def get_course_details(request, courseId):
     if request.method == "GET":
         course = list(Course.objects.filter(pk=courseId).values())
@@ -39,7 +41,7 @@ def get_course_details(request, courseId):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
-@csrf_exempt
+@login_required
 def toggle_favorite(request, courseId):
     if request.method == "POST":
         course = Course.objects.get(pk=courseId)
@@ -70,7 +72,7 @@ def toggle_favorite(request, courseId):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
-@csrf_exempt
+@login_required
 def toggle_enroll(request, courseId):
     if request.method == "POST":
         course = Course.objects.get(pk=courseId)
@@ -90,6 +92,7 @@ def toggle_enroll(request, courseId):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
+@login_required
 def get_user_favorites(request):
     if request.method == "GET":
         user = User.objects.get(pk=request.user.id)
@@ -101,6 +104,7 @@ def get_user_favorites(request):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
+@login_required
 def get_user_learning(request):
     if request.method == "GET":
         user = User.objects.get(pk=request.user.id)
