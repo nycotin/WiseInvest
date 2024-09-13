@@ -1,7 +1,6 @@
 export function getSessionId(){
     try {
         const sessionId = document.cookie.split('; ').find(c => c.startsWith('sessionid=')).split("=")[1]
-
         return sessionId;
     } catch(error) {
         return ''

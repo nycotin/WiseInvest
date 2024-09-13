@@ -21,10 +21,10 @@ function CourseListPage({ page }) {
 
   const navigate = useNavigate();
 
-  const dashboard = document.querySelector('.dashboard')
-  dashboard.style.display = 'none';
-
   useEffect(() => {  
+    const dashboard = document.querySelector('.dashboard');
+    dashboard.style.display = 'none';
+
     function getUserCourses(){
         axios.get('/education/courses/learning')
         .then(response => {
