@@ -31,6 +31,7 @@ function CoursePage() {
       .then(response => {
         setCourse(response.data.course);
         setCourseItems(response.data.courseItems);
+        setLearningStatus(response.data.status);
       });
     }
 
@@ -59,22 +60,7 @@ function CoursePage() {
     getCourseDetails();
     getUserCourses();
     getUserFavs();
-
-    // const learning = userCourses.filter(c => c.courseId === course.id)
-    // if(learning[0]){
-    //   setLearningStatus(learning[0].status)
-    //   console.log(learningStatus)
-    // }
-  }, [courseId, userCourses, course, learningStatus])
-
-  // useEffect(() => {
-  //   let learning = userCourses.filter(c => c.courseId === course.id)
-  //   console.log(learning[0])
-  //   if(learning[0]){
-  //     setLearningStatus(learning[0].status)
-  //     console.log(learningStatus)
-  //   }
-  // }, [courseId, userCourses, course, learningStatus])
+  }, [courseId])
 
   function toggleFavorite(course){
     axios.post(`/education/courses/${course.id}/toggle-favorite`)
@@ -96,7 +82,7 @@ function CoursePage() {
       
       if(response.data.action === 'Remove'){
         setUserCourses(userCourses.filter(i => i.id !== course.id));
-        setLearningStatus('');
+        setLearningStatus(null);
       } else {
         setUserCourses([...userCourses, course]);
         setLearningStatus('Enrolled');
@@ -126,20 +112,50 @@ function CoursePage() {
 
   function playVideo(pos){
     setCurrentItem(pos);
-    return true;
   }
 
-  // function changeCourseStatus(course){
-  //   if(learningStatus === 'Enrolled'){
-  //     axios.put()
-  //     .then
-  //   } else {
+  function editCourseStatus(){
+    axios.put(`/education/courses/${courseId}/edit-status`)
+    .then(response => {
+      console.log(response.data.message)
+      setLearningStatus(response.data.status)
+    })
+  }
 
-  //   }
-  // }
+  function createStatusButton(){
+    if (learningStatus === 'Enrolled'){
+      return (
+        <Button variant="info" size="sm" onClick={editCourseStatus}>Start Course</Button>
+      )
+    } else if (learningStatus === 'In Progress'){
+      return (
+        <Button variant="success" size="sm" onClick={editCourseStatus}>Completed?</Button>
+      )
+    } else {
+      return null
+    }
+  }
+
+  function createBadge(){
+    if (learningStatus === 'Enrolled'){
+      return (
+        <sub><Badge bg="secondary">{learningStatus}</Badge></sub>
+      )
+    } else if (learningStatus === 'In Progress'){
+      return (
+        <sub><Badge bg="primary">{learningStatus}</Badge></sub>
+      )
+    } else if (learningStatus === 'Completed'){
+      return (
+        <sub><Badge bg="success">{learningStatus}</Badge></sub>
+      )
+    } else {
+      return null
+    }
+  }
 
   const playlist = courseItems.map(item => {
-    if(item.position === currentItem){
+    if (item.position === currentItem){
       return <Card key={item.id} className="mb-2" style={{ width: '20rem', backgroundColor: 'lightgray' }} onClick={() => playVideo(item.position)}>
               <Card.Img className="thumbnail" variant="top" src={item.thumbnail}/>
               <Card.Body>
@@ -159,7 +175,7 @@ function CoursePage() {
   const courseDetails = course.map(course => {
     return <Card key={courseId} className="course-details" style={{ width: '100%'}} md={8}>
           <Card.Title>{course.title}
-            { learningStatus !== '' ? <sub><Badge>{learningStatus}</Badge></sub> : null }
+            { createBadge() !== null ? createBadge() : null }
           </Card.Title>
           <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
           <Card.Subtitle>Course items: {course.itemCount}</Card.Subtitle>
@@ -173,12 +189,13 @@ function CoursePage() {
           </Card.Subtitle>
           <Card.Text>{course.description}</Card.Text>
           <Card.Subtitle>
-            { learningStatus === 'Enrolled' ? <Button variant="success" size="sm" onClick={() => changeCourseStatus(course)}>Start Course</Button> : <Button variant="primary" size="sm" onClick={() => changeCourseStatus(course)}>Completed?</Button> }
+            { createStatusButton() !== null ? createStatusButton() : null }
           </Card.Subtitle>
       </Card>
   })
   
   const item = courseItems.filter(i => i.position === currentItem);
+  console.log(item)
 
   const itemDetails = item.map(item => {
     const { playlistId } = course[0];

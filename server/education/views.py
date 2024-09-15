@@ -33,10 +33,18 @@ def get_courses(request):
 @login_required
 def get_course_details(request, courseId):
     if request.method == "GET":
+        user = User.objects.get(pk=request.user.id)
         course = list(Course.objects.filter(pk=courseId).values())
         courseItems = list(CourseItem.objects.filter(courseId=courseId).values())
+        
+        learning = Learning.objects.filter(uid=user, enrolled_course__pk=courseId)
+        status = ""
+        if(learning):
+            status = learning[0].status
+        else:
+            status = None
 
-        return JsonResponse({ "course": course, "courseItems": courseItems }, status=200)
+        return JsonResponse({ "course": course, "courseItems": courseItems, "status": status }, status=200)
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
@@ -97,7 +105,10 @@ def get_user_favorites(request):
     if request.method == "GET":
         user = User.objects.get(pk=request.user.id)
         
-        user_favs = list(Favorite.objects.get(userId=user).favorite_courses.all().values())
+        try:
+            user_favs = list(Favorite.objects.get(userId=user).favorite_courses.all().values())
+        except ObjectDoesNotExist:
+            return JsonResponse({ "message": "No favorites." }, status=200)
 
         return JsonResponse({ "userFavs": user_favs }, status=200)
     else:
@@ -125,7 +136,24 @@ def get_user_learning(request):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
+@login_required
+def edit_course_status(request, courseId):
+    if request.method == "PUT":
+        user = User.objects.get(pk=request.user.id)
 
+        learning = Learning.objects.filter(uid=user, enrolled_course__pk=courseId)[0]
+        
+        if learning.status == "Enrolled":
+            learning.status = "In Progress"
+        elif learning.status == "In Progress":
+            learning.status = "Completed"
+        
+        learning.save()
+
+        return JsonResponse({ "message": f"Course status changed to {learning.status}.", "status": f"{learning.status}" }, status=200)
+        
+    else:
+       return JsonResponse({ "message": "Invalid request method." }, status=400) 
 
 
 

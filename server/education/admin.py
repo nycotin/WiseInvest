@@ -9,8 +9,11 @@ class CourseAdmin(admin.ModelAdmin):
 
 class CourseItemAdmin(admin.ModelAdmin):
     list_display = ("id", "itemId", "courseId", "title")
+    
+class LearningAdmin(admin.ModelAdmin):
+    list_display = ("id", "status")
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseItem, CourseItemAdmin)
 admin.site.register(Favorite)
-admin.site.register(Learning)
+admin.site.register(Learning, LearningAdmin)
