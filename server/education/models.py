@@ -39,12 +39,12 @@ class Favorite(models.Model):
 
 class Learning(models.Model):
     STATUSES = {
-        "E": "Enrolled",
-        "P": "In Progress",
-        "C": "Completed"
+        "Enrolled": "Enrolled",
+        "In Progress": "In Progress",
+        "Completed": "Completed"
     }
 
     id = models.AutoField(primary_key=True)
     uid = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     enrolled_course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
-    status = models.CharField(max_length=15, choices=STATUSES)
+    status = models.CharField(max_length=15, choices=STATUSES, default=STATUSES["Enrolled"])
