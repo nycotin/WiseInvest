@@ -66,25 +66,29 @@ nav {
   width: 100%;
   margin-top: 8rem;
   margin-bottom: 8rem;
-  padding: 2rem;
+  padding: 1.5rem;
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
 }
 
 .course-details {
   width: 100%;
-  /* margin-bottom: 8rem; */
-  padding: 2rem;
+  margin-bottom: 1rem;
+  padding: 0.8rem;
 }
 
 .item-details {
   width: 100%;
-  padding: 2rem;
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .thumbnail {
   width: 120px;
   height: 90px;
+}
+
+.playlist div:hover {
+  cursor: pointer;
 }

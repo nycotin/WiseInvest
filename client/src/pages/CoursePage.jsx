@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Badge from 'react-bootstrap/Badge';
 
 import '../App.css';
 import '../index.css';
@@ -16,10 +17,10 @@ function CoursePage() {
   const { courseId } = useParams();
   const [course, setCourse] = useState([]);
   const [courseItems, setCourseItems] = useState([]);
-  const [currentItem, setCurrentItems] = useState(0);
+  const [currentItem, setCurrentItem] = useState(0);
+  const [learningStatus, setLearningStatus] = useState('');
   const [userCourses, setUserCourses] = useState([]);
   const [userFavs, setUserFavs] = useState([]);
-
 
   useEffect(() => {
     const dashboard = document.querySelector('.dashboard')
@@ -58,7 +59,22 @@ function CoursePage() {
     getCourseDetails();
     getUserCourses();
     getUserFavs();
-  }, [courseId])
+
+    // const learning = userCourses.filter(c => c.courseId === course.id)
+    // if(learning[0]){
+    //   setLearningStatus(learning[0].status)
+    //   console.log(learningStatus)
+    // }
+  }, [courseId, userCourses, course, learningStatus])
+
+  // useEffect(() => {
+  //   let learning = userCourses.filter(c => c.courseId === course.id)
+  //   console.log(learning[0])
+  //   if(learning[0]){
+  //     setLearningStatus(learning[0].status)
+  //     console.log(learningStatus)
+  //   }
+  // }, [courseId, userCourses, course, learningStatus])
 
   function toggleFavorite(course){
     axios.post(`/education/courses/${course.id}/toggle-favorite`)
@@ -80,9 +96,10 @@ function CoursePage() {
       
       if(response.data.action === 'Remove'){
         setUserCourses(userCourses.filter(i => i.id !== course.id));
+        setLearningStatus('');
       } else {
-        course.status = "Enrolled";
         setUserCourses([...userCourses, course]);
+        setLearningStatus('Enrolled');
       }
     });
   }
@@ -107,19 +124,45 @@ function CoursePage() {
     }
   }
 
+  function playVideo(pos){
+    setCurrentItem(pos);
+    return true;
+  }
+
+  // function changeCourseStatus(course){
+  //   if(learningStatus === 'Enrolled'){
+  //     axios.put()
+  //     .then
+  //   } else {
+
+  //   }
+  // }
+
   const playlist = courseItems.map(item => {
-    return <Card key={item.id} className="mb-2" style={{ width: '20rem' }}>
+    if(item.position === currentItem){
+      return <Card key={item.id} className="mb-2" style={{ width: '20rem', backgroundColor: 'lightgray' }} onClick={() => playVideo(item.position)}>
               <Card.Img className="thumbnail" variant="top" src={item.thumbnail}/>
               <Card.Body>
                 <Card.Text>{item.position + 1}. {item.title}</Card.Text>
               </Card.Body>
             </Card>
+    } else {
+      return <Card key={item.id} className="mb-2" style={{ width: '20rem', backgroundColor: 'white' }} onClick={() => playVideo(item.position)}>
+                <Card.Img className="thumbnail" variant="top" src={item.thumbnail}/>
+                <Card.Body>
+                  <Card.Text>{item.position + 1}. {item.title}</Card.Text>
+                </Card.Body>
+              </Card>
+      }
     })
-
+  
   const courseDetails = course.map(course => {
-      return <Card key={courseId} className="course-details" style={{ width: '100%'}}md={8}>
-          <Card.Title>{course.title}</Card.Title>
+    return <Card key={courseId} className="course-details" style={{ width: '100%'}} md={8}>
+          <Card.Title>{course.title}
+            { learningStatus !== '' ? <sub><Badge>{learningStatus}</Badge></sub> : null }
+          </Card.Title>
           <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
+          <Card.Subtitle>Course items: {course.itemCount}</Card.Subtitle>
           <Card.Subtitle className="mt-2">
             <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
               { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
@@ -128,22 +171,21 @@ function CoursePage() {
               { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
             </Button>
           </Card.Subtitle>
-          <Card.Text>Course items: {course.itemCount}</Card.Text>
           <Card.Text>{course.description}</Card.Text>
+          <Card.Subtitle>
+            { learningStatus === 'Enrolled' ? <Button variant="success" size="sm" onClick={() => changeCourseStatus(course)}>Start Course</Button> : <Button variant="primary" size="sm" onClick={() => changeCourseStatus(course)}>Completed?</Button> }
+          </Card.Subtitle>
       </Card>
   })
-
-  console.log(course[0])
   
   const item = courseItems.filter(i => i.position === currentItem);
-  console.log(item[0])
-  const playlistId = course[0].playlistId;
-  const { id, title, itemId, description, position } = item[0];
-  const url = `https://www.youtube.com/watch?v=${itemId}&list=${playlistId}&index=${position}`
 
-  const itemDetails = item.map(() => {
+  const itemDetails = item.map(item => {
+    const { playlistId } = course[0];
+    const { id, title, itemId, description, position } = item;
+    const url = `https://www.youtube.com/watch?v=${itemId}&list=${playlistId}&index=${position}`;
 
-    return <Col key={id} md={8}>
+    return <Col key={id} className="item" md={8}>
       <Row className="player mb-4">
         <ReactPlayer url={url} width='100%' />
       </Row>
@@ -164,7 +206,7 @@ function CoursePage() {
           </Row>
           <Row className="item-details">
             {itemDetails}
-            <Col className="playlist mx-5" md={4}>
+            <Col className="playlist ml-1" md={4}>
               <h4>Playlist items</h4>
               {playlist}
             </Col>

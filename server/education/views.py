@@ -117,6 +117,7 @@ def get_user_learning(request):
             get_course = list(Course.objects.filter(pk=i["enrolled_course"]).values())
             course = get_course[0]
             course["status"] = i["status"]
+            course["courseId"] = i["enrolled_course"]
             courses.append(course)
 
         return JsonResponse({ "userLearning": courses }, status=200)
