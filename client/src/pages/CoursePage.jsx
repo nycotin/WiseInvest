@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../axiosConfig';
-import ReactPlayer from 'react-player'
+import ReactPlayer from 'react-player/lazy'
 
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
@@ -199,8 +199,8 @@ function CoursePage() {
 
   const itemDetails = item.map(item => {
     const { playlistId } = course[0];
-    const { id, title, itemId, description, position } = item;
-    const url = `https://www.youtube.com/watch?v=${itemId}&list=${playlistId}&index=${position}`;
+    const { id, title, itemId, description } = item;
+    let url = `https://www.youtube.com/watch?v=${itemId}`;
 
     return <Col key={id} className="item" md={8}>
       <Row className="player mb-4">
