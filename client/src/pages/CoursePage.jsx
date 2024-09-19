@@ -198,7 +198,6 @@ function CoursePage() {
   console.log(item)
 
   const itemDetails = item.map(item => {
-    const { playlistId } = course[0];
     const { id, title, itemId, description } = item;
     let url = `https://www.youtube.com/watch?v=${itemId}`;
 
