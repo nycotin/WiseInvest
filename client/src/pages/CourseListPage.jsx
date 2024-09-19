@@ -19,6 +19,9 @@ function CourseListPage({ page }) {
   const [userCourses, setUserCourses] = useState([]);
   const [userFavs, setUserFavs] = useState([]);
 
+  const title = `${page[0].toUpperCase()}${page.substring(1)}`
+  const formatTitle = title.replace('-', ' ')
+
   const navigate = useNavigate();
 
   useEffect(() => {  
@@ -172,6 +175,7 @@ function CourseListPage({ page }) {
 
   return (
     <Container className="course-list" fluid="md">
+      <h2>{formatTitle}</h2>
         <Row>
           {courseList}
         </Row>
