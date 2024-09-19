@@ -68,7 +68,6 @@ nav {
   margin-bottom: 8rem;
   padding: 1.5rem;
   display: flex;
-  /* flex-direction: row; */
 }
 
 .course-details {
@@ -91,4 +90,50 @@ nav {
 
 .playlist div:hover {
   cursor: pointer;
+}
+
+.dashboard {
+  margin-top: 4rem;
+}
+
+.dashboard h2 {
+  text-align: center;
+}
+
+.dashboard-cards {
+  margin-top: 3rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.dashboard-cards .card {
+  padding: 1rem;
+  margin: 1rem;
+  width: 25rem;
+  height: 10rem;
+}
+
+.dashboard-cards .card-title.h5:hover {
+  cursor: pointer;
+}
+
+.dashboard li:hover {
+  cursor: pointer;
+  border: solid 2px rgb(134, 134, 134);
+}
+
+.dashboard li {
+  list-style-type: none;
+  border: solid 1px rgb(180, 179, 179);
+  border-radius: 0.375rem;
+  padding: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.course-list h2 {
+  text-align: center;
+  margin-top: 8rem;
+  margin-bottom: 3rem;
 }
