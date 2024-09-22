@@ -6,10 +6,11 @@ import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
+import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from "react-icons/bs";
+
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 import '../App.css';
 import '../index.css';
 
@@ -114,18 +115,17 @@ function CourseListPage({ page }) {
   if(page === 'browse-courses'){
     courseList = courses.map(course => {
         return <Col key={courses.indexOf(course)}>
-          <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}}>
+          <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}} onClick={() => navigate(`/education/courses/${course.id}`)}>
             <Card.Img variant="top" src={course.cover}/>
             <Card.Body>
               <Card.Title>{course.title}</Card.Title>
               <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
               <Card.Text>Course items: {course.itemCount}</Card.Text>
-              <Button variant="primary" size="sm" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
               <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
-                { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
+                { isFav(course) ? <BsBookmarkFill /> : <BsBookmark /> }
               </Button>
               <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
-                { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
+                { isEnrolled(course) ? <BsClipboard2Fill /> : <BsClipboard2 /> }
               </Button>
             </Card.Body>
           </Card>
@@ -140,12 +140,11 @@ function CourseListPage({ page }) {
               <Card.Title>{course.title}</Card.Title>
               <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
               <Card.Text>Course items: {course.itemCount}</Card.Text>
-              <Button variant="primary" size="sm" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
               <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
-                { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
+                { isFav(course) ? <BsBookmarkFill /> : <BsBookmark /> }
               </Button>
               <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
-                { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
+                { isEnrolled(course) ? <BsClipboard2Fill /> : <BsClipboard2 /> }
               </Button>
             </Card.Body>
           </Card>
@@ -160,12 +159,11 @@ function CourseListPage({ page }) {
           <Card.Title>{course.title}</Card.Title>
           <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
           <Card.Text>Course items: {course.itemCount}</Card.Text>
-          <Button variant="primary" size="sm" onClick={() => navigate(`/education/courses/${course.id}`)}>Open Course</Button>
           <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
-            { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
+            { isFav(course) ? <BsBookmarkFill /> : <BsBookmark /> }
           </Button>
           <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
-            { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
+            { isEnrolled(course) ? <BsClipboard2Fill /> : <BsClipboard2 /> }
           </Button>
           </Card.Body>
         </Card>
@@ -174,12 +172,13 @@ function CourseListPage({ page }) {
   }
 
   return (
-    <Container className="course-list" fluid="md">
-      <h2>{formatTitle}</h2>
-        <Row>
-          {courseList}
-        </Row>
-    </Container>
+      <Container className="course-list" fluid="md">
+        <h2>{ formatTitle }</h2>
+          <Row>
+            {courseList.length !== 0 ? courseList : <Container>No courses.</Container> }
+          </Row>
+          <Button variant="primary" size="sm" onClick={() => navigate('/education')}>Back to Dashboard</Button>
+      </Container>
   )
 }
 

@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useNavigate } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../axiosConfig';
 import ReactPlayer from 'react-player/lazy'
 
+import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from "react-icons/bs";
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -21,6 +22,8 @@ function CoursePage() {
   const [learningStatus, setLearningStatus] = useState('');
   const [userCourses, setUserCourses] = useState([]);
   const [userFavs, setUserFavs] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const dashboard = document.querySelector('.dashboard')
@@ -181,10 +184,10 @@ function CoursePage() {
           <Card.Subtitle>Course items: {course.itemCount}</Card.Subtitle>
           <Card.Subtitle className="mt-2">
             <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
-              { isFav(course) ? 'Remove from Favorites' : 'Add to favorites' }
+              { isFav(course) ? <BsBookmarkFill /> : <BsBookmark /> }
             </Button>
             <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
-              { isEnrolled(course) ? 'Unenroll' : 'Enroll' }
+              { isEnrolled(course) ? <BsClipboard2Fill /> : <BsClipboard2 /> }
             </Button>
           </Card.Subtitle>
           <Card.Text>{course.description}</Card.Text>
@@ -195,7 +198,6 @@ function CoursePage() {
   })
   
   const item = courseItems.filter(i => i.position === currentItem);
-  console.log(item)
 
   const itemDetails = item.map(item => {
     const { id, title, itemId, description } = item;
@@ -213,6 +215,7 @@ function CoursePage() {
   })
 
   return (
+    <>
       <Card key={courseId} className="course" style={{ width: '100%'}}>
         <Col>
           <Row>
@@ -229,6 +232,9 @@ function CoursePage() {
           </Row>
        </Col>          
       </Card>
+      //! Navigates to url, but does not render dashboard
+      <Button variant="primary" size="sm" onClick={() => navigate('/education')}>Back to Dashboard</Button>
+    </>
   )
 }
 

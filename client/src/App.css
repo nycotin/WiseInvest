@@ -62,10 +62,14 @@ nav {
   margin-top: 5rem;
 }
 
+.course-list .mb-4.card {
+  padding: 1rem;
+}
+
 .course {
   width: 100%;
   margin-top: 8rem;
-  margin-bottom: 8rem;
+  margin-bottom: 3rem;
   padding: 1.5rem;
   display: flex;
 }
@@ -136,4 +140,15 @@ nav {
   text-align: center;
   margin-top: 8rem;
   margin-bottom: 3rem;
+}
+
+button {
+  margin: 0.2rem;
+}
+
+.course-list .card:hover,
+.favorites .card:hover,
+.browse-courses .card:hover {
+  cursor: pointer;
+  border: solid 2px rgb(134, 134, 134);
 }
