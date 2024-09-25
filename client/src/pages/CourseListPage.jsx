@@ -110,6 +110,12 @@ function CourseListPage({ page }) {
     }
   }
 
+  function navigateToDashboard(){
+    navigate('/education')
+    const dashboard = document.querySelector('.dashboard');
+    dashboard.style.display = 'block';
+  }
+
   let courseList = []
 
   if(page === 'browse-courses'){
@@ -177,7 +183,7 @@ function CourseListPage({ page }) {
           <Row>
             {courseList.length !== 0 ? courseList : <Container>No courses.</Container> }
           </Row>
-          <Button variant="primary" size="sm" onClick={() => navigate('/education')}>Back to Dashboard</Button>
+          <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
       </Container>
   )
 }

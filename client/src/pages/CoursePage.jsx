@@ -1,5 +1,5 @@
-import { useState, useEffect, useNavigate } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from '../axiosConfig';
 import ReactPlayer from 'react-player/lazy'
 
@@ -111,6 +111,12 @@ function CoursePage() {
     } else {
       return false;
     }
+  }
+
+  function navigateToDashboard(){
+    navigate('/education')
+    const dashboard = document.querySelector('.dashboard');
+    dashboard.style.display = 'block';
   }
 
   function playVideo(pos){
@@ -232,8 +238,7 @@ function CoursePage() {
           </Row>
        </Col>          
       </Card>
-      //! Navigates to url, but does not render dashboard
-      <Button variant="primary" size="sm" onClick={() => navigate('/education')}>Back to Dashboard</Button>
+      <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
     </>
   )
 }
