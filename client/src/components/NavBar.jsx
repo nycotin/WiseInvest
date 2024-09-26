@@ -22,73 +22,60 @@ function NavBar({ title }) {
         .then((response) => { 
             console.log(response.data.message)
             sessionStorage.clear();
+            document.cookie = '';
 
             navigate('/login');
         })
     }
 
-    if(title === "Education Center"){
-        return (
-            <Navbar fixed="top" expand="lg" className="bg-body-tertiary">
-                <Container className="brand">
-                    <Navbar.Brand><img src={AppLogo} alt="Logo" /> <br/> WiseInvest</Navbar.Brand>
-                </Container>
-                <Container className="title">
-                    <h2>{title}</h2>
-                </Container>
-                <Container className="menu">
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="menu">
-                        <Nav.Link onClick={() => navigate('/education/courses')}>Browse Courses</Nav.Link>
-                        <Nav.Link onClick={() => navigate('/education/courses/learning')}>My Learning</Nav.Link>
-                        <Nav.Link onClick={() => navigate('/education/courses/favorites')}>Favorites</Nav.Link>
-                        <NavDropdown title={username} id="nav-dropdown">
-                        <NavDropdown.Item onClick={() => navigate(`/education/userprofile/${userId}`)}>Profile</NavDropdown.Item>
-                        <NavDropdown.Item onClick={() => navigate('/invest')}>
-                            Investments Manager
-                        </NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={logout}>
-                            Logout
-                        </NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-        );
-    } else {
-        return (
-            <Navbar fixed="top" expand="lg" className="bg-body-tertiary">
-                <Container className="brand">
-                    <Navbar.Brand><img src={AppLogo} alt="Logo" /> <br/> WiseInvest</Navbar.Brand>
-                </Container>
-                <Container className="title">
-                    <h2>{title}</h2>
-                </Container>
-                <Container className="menu">
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="menu">
-                        <Nav.Link href="#home">Dashboard</Nav.Link>
-                        <Nav.Link href="#link">My Investments</Nav.Link>
-                        <NavDropdown title={username} id="nav-dropdown">
-                        <NavDropdown.Item onClick={() => navigate(`/invest/userprofile/${userId}`)}>Profile</NavDropdown.Item>
-                        <NavDropdown.Item onClick={() => navigate('/education')}>
-                            Education Center
-                        </NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={logout}>
-                            Logout
-                        </NavDropdown.Item>
-                        </NavDropdown>
-                    </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-        );
-    }
+    return (
+        <Navbar fixed="top" expand="lg" className="bg-body-tertiary">
+            <Container className="brand">
+                <Navbar.Brand><img src={AppLogo} alt="Logo" /> <br/> WiseInvest</Navbar.Brand>
+            </Container>
+            <Container className="title">
+                <h2>{title}</h2>
+            </Container>
+            { title === 'Education Center' ? <Container className="menu">
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="menu">
+                    <Nav.Link onClick={() => navigate('/education/courses')}>Browse Courses</Nav.Link>
+                    <Nav.Link onClick={() => navigate('/education/courses/learning')}>My Learning</Nav.Link>
+                    <Nav.Link onClick={() => navigate('/education/courses/favorites')}>Favorites</Nav.Link>
+                    <NavDropdown title={username} id="nav-dropdown">
+                    <NavDropdown.Item onClick={() => navigate(`/education/userprofile/${userId}`)}>Profile</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => navigate('/invest')}>
+                        Investments Manager
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item onClick={logout}>
+                        Logout
+                    </NavDropdown.Item>
+                    </NavDropdown>
+                </Nav>
+                </Navbar.Collapse>
+            </Container> : <Container className="menu">
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                <Nav className="menu">
+                    <Nav.Link>Browse Stocks</Nav.Link>
+                    <Nav.Link>My Portfolio</Nav.Link>
+                    <NavDropdown title={username} id="nav-dropdown">
+                    <NavDropdown.Item onClick={() => navigate(`/invest/userprofile/${userId}`)}>Profile</NavDropdown.Item>
+                    <NavDropdown.Item onClick={() => navigate('/education')}>
+                        Education Center
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item onClick={logout}>
+                        Logout
+                    </NavDropdown.Item>
+                    </NavDropdown>
+                </Nav>
+                </Navbar.Collapse>
+            </Container> }
+        </Navbar>
+    );
     
 }
 
