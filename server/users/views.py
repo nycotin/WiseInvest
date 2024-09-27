@@ -34,6 +34,7 @@ def login_view(request):
 
 
 def logout_view(request):
+    print(request.headers)
     logout(request)
     return JsonResponse({ "message": "Logged out." }, status=200)
 
