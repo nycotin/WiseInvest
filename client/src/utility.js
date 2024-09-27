@@ -10,6 +10,7 @@ export function getSessionId(){
 export function getCsrfToken(){
     try {
         const csrftoken = document.cookie.split('; ').find(c => c.startsWith('csrftoken=')).split("=")[1];
+        console.log(csrftoken)
         return csrftoken;
     } catch(error) {
         return ''
