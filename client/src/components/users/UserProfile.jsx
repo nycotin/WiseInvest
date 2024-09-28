@@ -8,6 +8,9 @@ function UserProfile() {
     const [userProfile, setUserProfile] = useState([])
 
     useEffect(() => {
+        const dashboard = document.querySelector('.dashboard');
+        dashboard.style.display = 'none';
+
         axios.get('/users/userprofile')
         .then(response => {
             setUserProfile(response.data.user);
