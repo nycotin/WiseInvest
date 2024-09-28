@@ -20,7 +20,8 @@ class Stock(models.Model):
 class UserStock(models.Model):
 
     id = models.AutoField(primary_key=True)
-    userId = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    stock = models.ManyToManyField(Stock) # "stock" symbol from serapiApi
-    priceOnPurchase = models.IntegerField()
+    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    stock_id = models.ForeignKey(Stock, on_delete=models.DO_NOTHING)
+    price_on_purchase = models.DecimalField(decimal_places=2, max_digits=10)
     quantity = models.IntegerField()
+    purchased_on = models.DateTimeField()

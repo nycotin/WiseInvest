@@ -7,7 +7,7 @@ class StockAdmin(admin.ModelAdmin):
     list_display = ("id", "symbol", "name", "market", "link")
 
 class UserStockAdmin(admin.ModelAdmin):
-    list_display = ("id", "userId")
+    list_display = ("id", "user_id", "stock_id", "price_on_purchase", "quantity")
     
 
 admin.site.register(Stock, StockAdmin)

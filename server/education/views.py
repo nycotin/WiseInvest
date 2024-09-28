@@ -16,7 +16,7 @@ from users.models import User
 
 def index(request):
     
-    return render(request, "education/index.html")
+    return HttpResponse(200)
 
 
 @login_required
