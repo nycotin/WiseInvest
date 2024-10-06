@@ -59,8 +59,8 @@ function NavBar({ title }) {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="menu">
-                    <Nav.Link>Browse Stocks</Nav.Link>
-                    <Nav.Link>My Portfolio</Nav.Link>
+                    <Nav.Link onClick={() => navigate('/invest/stocks')}>Browse Stocks</Nav.Link>
+                    <Nav.Link onClick={() => navigate('/invest/portfolio')}>My Portfolio</Nav.Link>
                     <NavDropdown title={username} id="nav-dropdown">
                     <NavDropdown.Item onClick={() => navigate(`/invest/userprofile/${userId}`)}>Profile</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => navigate('/education')}>

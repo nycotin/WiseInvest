@@ -16,6 +16,8 @@ import InvestPage from './pages/InvestPage.jsx';
 import UserProfile from './components/users/UserProfile.jsx';
 import CourseListPage from './pages/CourseListPage.jsx';
 import CoursePage from './pages/CoursePage.jsx';
+import StockListPage from './pages/StockListPage.jsx';
+import PortfolioPage from './pages/PortfolioPage.jsx';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -80,6 +82,16 @@ export const router = createBrowserRouter(
             path='/invest'
             errorElement={<ErrorPage />}
           >
+            <Route
+              element={<StockListPage />}
+              path='/invest/stocks'
+              errorElement={<ErrorPage />}
+            />
+            <Route
+              element={<PortfolioPage />}
+              path='/invest/portfolio'
+              errorElement={<ErrorPage />}
+            />
             <Route
               element={<UserProfile />}
               path='/invest/userprofile/:userId'

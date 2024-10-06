@@ -10,16 +10,6 @@ function LoginForm() {
   let [msg, setMsg] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    event.stopPropagation();
-    if (form.checkValidity() === true) {
-      setValidated(true);
-      LoginUser();
-    }
-  };
-
   function LoginUser() {
     const username = document.querySelector('#username').value;
     const password = document.querySelector('#password').value;
@@ -35,9 +25,23 @@ function LoginForm() {
       return navigate('/fork');
     })
     .catch(error => {
-      setMsg(error.response.data.message);
+      if (error.response){
+        setMsg(error.response.data.message);
+      } else if (error.request){
+        setMsg(error.message);
+      }
     });
   }
+
+  const handleSubmit = (event) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    event.stopPropagation();
+    if (form.checkValidity() === true) {
+      setValidated(true);
+      LoginUser();
+    }
+  };
 
   return (
     <>
