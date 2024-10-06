@@ -1,14 +1,18 @@
 from django.contrib import admin
-from .models import Stock, UserStock
+from .models import StockExchange, Stock, Transaction
 
 # Register your models here.
 
-class StockAdmin(admin.ModelAdmin):
-    list_display = ("id", "symbol", "name", "market", "link")
+class StockExchangeAdmin(admin.ModelAdmin):
+    list_display = ("mic", "exchange_name", "city", "region")
 
-class UserStockAdmin(admin.ModelAdmin):
-    list_display = ("id", "user_id", "stock_id", "price_on_purchase", "quantity")
+class StockAdmin(admin.ModelAdmin):
+    list_display = ("symbol", "company_name", "market_area", "exchange", "currency", "link")
+
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ("user", "stock", "price_on_purchase", "quantity", "purchased_on")
     
 
+admin.site.register(StockExchange, StockExchangeAdmin)
+admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(Stock, StockAdmin)
-admin.site.register(UserStock, UserStockAdmin)
