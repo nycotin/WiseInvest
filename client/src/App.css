@@ -160,3 +160,31 @@ button {
   cursor: pointer;
   border: solid 2px rgb(134, 134, 134);
 }
+
+.invest-dashboard {
+  width: 120%;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-stocks,
+.transactions {
+  padding: 1rem;
+}
+
+.stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.stats .card {
+  width: 30%;
+  padding: 1rem;
+}
+
+.stock-list {
+  padding: 1rem;
+}
