@@ -25,4 +25,9 @@ class Transaction(models.Model):
     stock = models.ForeignKey(Stock, on_delete=models.DO_NOTHING)
     price_on_purchase = models.DecimalField(decimal_places=2, max_digits=10)
     quantity = models.IntegerField()
-    purchased_on = models.DateTimeField()
+    total_expense = models.DecimalField(decimal_places=2, max_digits=10)
+    purchased_on = models.DateTimeField(auto_now_add=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.total_expense = float(self.price_on_purchase) * float(self.quantity)
+        super(Transaction, self).save(*args, **kwargs)
