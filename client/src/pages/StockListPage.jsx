@@ -5,8 +5,11 @@ import axios from '../axiosConfig';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Toast from 'react-bootstrap/Toast';
+import ToastContainer from 'react-bootstrap/ToastContainer';
 
-// import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from "react-icons/bs";
+import { BsCart } from "react-icons/bs";
 
 import Container from 'react-bootstrap/Container';
 import '../App.css';
@@ -16,12 +19,15 @@ import '../index.css';
 function StockListPage() {
   const [stocks, setStocks] = useState([]);
   const [filteredStocks, setFilteredStocks] = useState([]);
+  const [toastMessage, setToastMessage] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {  
     const dashboard = document.querySelector('.dashboard');
     dashboard.style.display = 'none';
+
+    setToastMessage("");
 
     function getStocks(){
         axios.get('/invest/get-stocks')
@@ -94,6 +100,19 @@ function StockListPage() {
   //   }
   // }
 
+  function createToast() {
+    return (
+      <ToastContainer position='middle-end'>
+        <Toast onClose={() => setToastMessage('')}>
+        <Toast.Header>
+        <strong className="me-auto">Purchase successful!</strong>
+        </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+    );
+  }
+
   function navigateToDashboard(){
     navigate('/invest')
     const dashboard = document.querySelector('.dashboard');
@@ -108,9 +127,41 @@ function StockListPage() {
     }
   }
 
+  function makePurchasable(id){
+    const cartButton = document.querySelector(`#${id}.make-purchase`);
+    cartButton.setAttribute('hidden', 'true');
+
+    const purchaseInputs = document.querySelector(`#${id}.purchase-inputs`);
+    purchaseInputs.removeAttribute('hidden');
+  }
+
+  function toggleInputs(id){
+    const cartButton = document.querySelector(`#${id}.make-purchase`);
+    cartButton.removeAttribute('hidden');
+
+    const inputs = document.querySelector(`#${id}.purchase-inputs`);
+    inputs.setAttribute('hidden', 'true');
+  }
+
+  function purchaseStocks(id){
+    const purchaseInputs = document.querySelector(`#${id}.purchase-inputs`);
+    purchaseInputs.setAttribute('hidden', 'true');
+
+    const cartButton = document.querySelector('.make-purchase');
+    cartButton.removeAttribute('hidden');
+
+    const quantity = purchaseInputs.querySelector('#quantity').value;
+
+    axios.post(`/invest/purchase-stocks/${id}/${quantity}`)
+    .then(response => {
+      setToastMessage(response.data.message)
+    })
+  }
+
   return (
       <Container className="stock-list" fluid="md">
         <h2>Browse Stocks</h2>
+        { toastMessage !== '' ? createToast() : null}
         <div className="filter-buttons">
           <Button variant="secondary" size="sm" onClick={() => filterStocks('North America')}>North America</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('South America')}>South America</Button>
@@ -138,9 +189,22 @@ function StockListPage() {
                         <td>{i.exchange_id}</td>
                         <td>{i.symbol}</td>
                         <td><Link to={i.link} target="_blank">{i.company_name}</Link></td>
-                        <td>{i.currency_symbol} {i.current_price}</td>
+                        <td className="current-price">{i.currency_symbol} {i.current_price}</td>
                         <td>{i.currency}</td>
                         <td>{i.market_area}</td>
+                        <td><Button id={i.symbol} className="make-purchase" variant="secondary" size="sm" onClick={() => makePurchasable(i.symbol)}><BsCart /></Button>
+                            <InputGroup id={i.symbol} className="purchase-inputs" hidden={true}>
+                              <div className="mb-2">
+                                <label htmlFor="quantity">Quantity:</label>
+                                <input type="number" id="quantity" className="form-control" min={1} max={100} defaultValue={1} />
+                              </div>
+                              <p className="mb-2">
+                                Total: {i.currency_symbol} {i.current_price}
+                              </p>
+                              <Button id={i.symbol} className="purchase-stocks" variant="warning" size="sm" onClick={() => purchaseStocks(i.symbol)}>Purchase</Button>
+                              <Button id={i.symbol} className="purchase-stocks" variant="secondary" size="sm" onClick={() => toggleInputs(i.symbol)}>Close</Button>
+                            </InputGroup>
+                        </td>
                       </tr>) }
                     </tbody>
                   </Table>

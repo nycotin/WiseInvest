@@ -69,16 +69,17 @@ def get_portfolio(request):
         user = User.objects.get(pk=2)
         all_data = Transaction.objects.filter(user=user).values("stock_id", "price_on_purchase", "quantity")
 
-        grouped_stocks = all_data.values("stock").annotate(quantity=Sum("quantity"))
+        grouped_stocks = all_data.values("stock").annotate(quantity=Sum("quantity"), total_investment=Sum("total_expense"))
+
+        print(grouped_stocks)
 
         portfolio_data = []
 
         for i in grouped_stocks:
-            filtered_trans = all_data.filter(stock_id=i["stock"])
-
             new_data = {}
             new_data["stock_symbol"] = i["stock"]
             new_data["quantity"] = i["quantity"]
+            new_data["total_investment"] = float("{:.2f}".format(i["total_investment"]))
 
             current_stock_data = yf.Ticker(i["stock"]).info
             current_stock_price = current_stock_data.get("currentPrice")
@@ -86,14 +87,6 @@ def get_portfolio(request):
             tot_value = current_stock_price * i["quantity"]
             new_data["total_value"] = float("{:.2f}".format(tot_value))
             new_data["currency"] = current_stock_data.get("financialCurrency")
-
-            tot_invest = 0
-
-            for f in filtered_trans:
-                trans_total = f["price_on_purchase"] * f["quantity"]
-                tot_invest = tot_invest + trans_total
-            
-            new_data["total_investment"] = float("{:.2f}".format(tot_invest))
 
             portfolio_data.append(new_data)
 
@@ -108,6 +101,23 @@ def get_current_price(request, stock_symbol):
     stock_price = stock.info.get("currentPrice")
 
     return JsonResponse({ "current_price": float("{:.2f}".format(stock_price)) }, status=200)
+
+
+def purchase_stocks(request, stock_symbol, qty):
+    if request.method == "POST":
+        # user = User.objects.get(pk=request.user.id)
+        user = User.objects.get(pk=2)
+
+        stock = Stock.objects.get(symbol=stock_symbol)
+        stock_price = yf.Ticker(stock_symbol).info.get("currentPrice")
+
+        new_transaction = Transaction(user=user, stock=stock, price_on_purchase=stock_price, quantity=qty)
+        new_transaction.save()
+
+        return JsonResponse({ "message": f"Successfully purchased {qty} stock(s) for {stock_symbol}."}, status=200)
+    else:
+        return JsonResponse({ "message": "Invalid request method." }, status=400)
+
 
 
 

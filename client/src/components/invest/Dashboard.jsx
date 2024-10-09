@@ -89,7 +89,7 @@ function Dashboard() {
 
     return current_stock;
   }
-  console.log(transactions)
+
   return (
     <>
         <div className="dashboard" style={{ display: 'block' }}>
@@ -140,6 +140,7 @@ function Dashboard() {
                     <th>Company name</th>
                     <th>Price on purchase</th>
                     <th>Quantity</th>
+                    <th>Total expense</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -147,8 +148,9 @@ function Dashboard() {
                     <td>{i.purchased_on}</td>
                     <td>{i.stock_id}</td>
                     <td>{getStock(i.stock_id).company_name}</td>
-                    <td>{i.price_on_purchase}</td>
+                    <td>{getStock(i.stock_id).currency_symbol} {i.price_on_purchase}</td>
                     <td>{i.quantity}</td>
+                    <td>{getStock(i.stock_id).currency_symbol} {i.total_expense}</td>
                   </tr>) }
                 </tbody>
               </Table>

@@ -227,7 +227,7 @@ function PortfolioPage() {
                         <td>{i.currency}</td>
                         <td>{getMarketArea(i.stock_symbol)}</td>
                         <td>{calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge> : <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge>}</td>
-                        <td>{calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).percent}{getCurrencySymbol(i.stock_symbol)}</Badge> : <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).percent}{getCurrencySymbol(i.stock_symbol)}</Badge>}</td>
+                        <td>{calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge> : <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge>}</td>
                       </tr>) }
                     </tbody>
                   </Table>
