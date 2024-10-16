@@ -8,8 +8,11 @@ import Table from 'react-bootstrap/Table';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
 import { BsCart } from "react-icons/bs";
+import { IoIosInformationCircleOutline } from "react-icons/io";
 
 import Container from 'react-bootstrap/Container';
 import '../App.css';
@@ -20,6 +23,7 @@ function StockListPage() {
   const [stocks, setStocks] = useState([]);
   const [filteredStocks, setFilteredStocks] = useState([]);
   const [toastMessage, setToastMessage] = useState("");
+  const [total, setTotal] = useState(0);
 
   const navigate = useNavigate();
 
@@ -141,6 +145,8 @@ function StockListPage() {
 
     const inputs = document.querySelector(`#${id}.purchase-inputs`);
     inputs.setAttribute('hidden', 'true');
+
+    setTotal(0);
   }
 
   function purchaseStocks(id){
@@ -156,6 +162,15 @@ function StockListPage() {
     .then(response => {
       setToastMessage(response.data.message)
     })
+  }
+
+  function makeTotal(sym){
+    const num = document.querySelector('#quantity').value;
+    const currentPrice = stocks.filter(i => sym === i.symbol)[0].current_price;
+    const span = document.querySelector('#total');
+
+    setTotal(currentPrice * num)
+    span.innerHTML = total;
   }
 
   return (
@@ -196,10 +211,16 @@ function StockListPage() {
                             <InputGroup id={i.symbol} className="purchase-inputs" hidden={true}>
                               <div className="mb-2">
                                 <label htmlFor="quantity">Quantity:</label>
-                                <input type="number" id="quantity" className="form-control" min={1} max={100} defaultValue={1} />
+                                <input type="number" id="quantity" className="form-control" min={1} max={100} defaultValue={1} onChange={() => makeTotal(i.symbol)} />
                               </div>
-                              <p className="mb-2">
-                                Total: {i.currency_symbol} {i.current_price}
+                              <p id="total-expense" className="mb-2">
+                                Total: {i.currency_symbol} <span id="total">{total !== 0 ? total : i.current_price}</span>
+                                <OverlayTrigger key="overlay" placement="right" overlay={
+                                  <Tooltip id='tooltip-right'>
+                                    Actual amount taken for transaction may vary slightly.
+                                  </Tooltip> }>
+                                  <sup><IoIosInformationCircleOutline /></sup>
+                                </OverlayTrigger>
                               </p>
                               <Button id={i.symbol} className="purchase-stocks" variant="warning" size="sm" onClick={() => purchaseStocks(i.symbol)}>Purchase</Button>
                               <Button id={i.symbol} className="purchase-stocks" variant="secondary" size="sm" onClick={() => toggleInputs(i.symbol)}>Close</Button>
