@@ -109,7 +109,7 @@ function Dashboard() {
                     <tbody>
                       { portfolio.map(i => <tr key={i.stock_symbol}>
                         <td>{i.stock_symbol}</td>
-                        <td><Link to={getStock(i.stock_symbol).symbol} target="_blank">{getStock(i.stock_symbol).company_name}</Link></td>
+                        <td><Link to={`https://finance.yahoo.com/quote/${getStock(i.stock_symbol).symbol}`} target="_blank">{getStock(i.stock_symbol).company_name}</Link></td>
                         <td>{i.quantity}</td>
                       </tr>) }
                     </tbody>
