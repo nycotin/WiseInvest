@@ -90,6 +90,12 @@ function Dashboard() {
     return current_stock;
   }
 
+  function formatDate(date){
+    const formattedDay = date.split("T")[0];
+    const formattedTime = date.split("T")[1].split(".")[0];
+    return `${formattedDay} ${formattedTime}`
+  }
+
   return (
     <>
         <div className="dashboard" style={{ display: 'block' }}>
@@ -118,11 +124,11 @@ function Dashboard() {
               </Card>
               <div className="stats">
                 <Card className="increased-since-purchase">
-                  <Card.Title>Increased <sub><Badge bg="primary">{ filterStocks('up').length }</Badge></sub></Card.Title>
+                  <Card.Title>Increased <sub><Badge bg="success">{ filterStocks('up').length }</Badge></sub></Card.Title>
                   { filterStocks('up').length !== 0 ? filterStocks('up').map(i => <li key={i.stock_symbol}>{getStock(i.stock_symbol).company_name}</li>) : 'No stocks.' }
                 </Card>
                 <Card className="decreased-since-purchase">
-                  <Card.Title>Decreased <sub><Badge bg="success">{ filterStocks('down').length }</Badge></sub></Card.Title>
+                  <Card.Title>Decreased <sub><Badge bg="danger">{ filterStocks('down').length }</Badge></sub></Card.Title>
                   { filterStocks('down').length !== 0 ? filterStocks('down').map(i => <li key={i.stock_symbol}>{getStock(i.stock_symbol).company_name}</li>) : 'No stocks.' }
                 </Card>
                 <Card className="stable-since-purchase">
@@ -145,7 +151,7 @@ function Dashboard() {
                 </thead>
                 <tbody>
                   { transactions.map(i => <tr key={i.id}>
-                    <td>{i.purchased_on}</td>
+                    <td>{formatDate(i.purchased_on)}</td>
                     <td>{i.stock_id}</td>
                     <td>{getStock(i.stock_id).company_name}</td>
                     <td>{getStock(i.stock_id).currency_symbol} {i.price_on_purchase}</td>
