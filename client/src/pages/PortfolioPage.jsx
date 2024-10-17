@@ -7,8 +7,6 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
 
-// import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from "react-icons/bs";
-
 import Container from 'react-bootstrap/Container';
 import '../App.css';
 import '../index.css';
@@ -48,56 +46,6 @@ function PortfolioPage() {
     getPortfolio();
   }, [])
 
-
-  //? TBD structure toggle watchlist as favorites courses
-  // function toggleWatchlist(course){
-  //   axios.post()
-  //   .then(response => {
-  //     console.log(response.data.message);
-
-  //     if(response.data.action === 'Remove'){
-  //       setUserFavs(userFavs.filter(i => i.id !== course.id));
-  //     } else {
-  //       setUserFavs([...userFavs, course]);
-  //     }
-  //   });
-  // }
-
-  // function togglePurchase(stock){
-  //   axios.post(`/invest/stocks/${stock.stock}/toggle-purchase`)
-  //   .then(response => {
-  //     console.log(response.data.message);
-      
-  //     if(response.data.action === 'Sell'){
-  //       setUserStocks(userStocks.filter(i => i.stock_name !== stock.symbol));
-  //     } else {
-  //       stock.status = 'Purchase';
-  //       setUserStocks([...userStocks, stock]);
-  //     }
-  //   });
-  // }
-
-  //? TBD if watchlist is added
-  // function isWatched(stock){
-  //   const fav = userFavs.find(f => { return f.id === course.id })
-
-  //   if(fav){
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // function isUserStock(stock){
-  //   const isStock = userStocks.find(s => { return s.stock_name === stock.symbol })
-
-  //   if(isStock){
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   function navigateToDashboard(){
     navigate('/invest')
     const dashboard = document.querySelector('.dashboard');
@@ -118,24 +66,6 @@ function PortfolioPage() {
     } else {
       setFilteredStocks(portfolio)
     }
-
-    // if (str === 'North America'){
-    //   setFilteredStocks(portfolio.filter(i => i.stock_symbol === filtered.symbol));
-    // } else if (str === 'sa') {
-    //   setFilteredStocks(portfolio.filter(i => i.market_area === 'South America'));   
-    // } else if (str === 'eu'){
-    //   setFilteredStocks(portfolio.filter(i => i.market_area === 'Europe'));
-    // } else if (str === 'as'){
-    //   setFilteredStocks(portfolio.filter(i => i.market_area === 'Asia'));
-    // } else if (str === 'oc'){
-    //   setFilteredStocks(portfolio.filter(i => i.market_area === 'Oceania'));
-    // } else if (str === 'af'){
-    //   setFilteredStocks(portfolio.filter(i => i.market_area === 'Africa'));
-    // } else if (str === 'me'){
-    //   setFilteredStocks(portfolio.filter(i => i.market_area === 'Middle East'));
-    // } else {
-    //   setFilteredStocks(portfolio)
-    // }
   }
 
   function getLink(symbol){
@@ -167,7 +97,8 @@ function PortfolioPage() {
     const data = {
       "movement": 0,
       "percent": 0,
-      "dir": ""
+      "dir": "",
+      "color": ""
     }
 
     if (val > inv) {
@@ -181,7 +112,7 @@ function PortfolioPage() {
     } else {
       data["movement"] = 0;
       data["dir"] = "stable";
-      data["percent"] = 0;
+      data["percent"] = "0%";
     }
 
     return data;
@@ -190,6 +121,7 @@ function PortfolioPage() {
   return (
       <Container className="portfolio" fluid="md">
         <h2>My Portfolio</h2>
+        <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
         <div className="filter-buttons">
           <Button variant="secondary" size="sm" onClick={() => filterStocks('North America')}>North America</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('South America')}>South America</Button>
@@ -226,13 +158,20 @@ function PortfolioPage() {
                         <td>{getCurrencySymbol(i.stock_symbol)} {i.total_value}</td>
                         <td>{i.currency}</td>
                         <td>{getMarketArea(i.stock_symbol)}</td>
-                        <td>{calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge> : <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge>}</td>
-                        <td>{calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge> : <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge>}</td>
+                        <td>
+                          {calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge> : null}
+                          {calculateGrowth(i.total_investment, i.total_value).dir === "down" ? <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge> : null}
+                          {calculateGrowth(i.total_investment, i.total_value).dir === "stable" ? <Badge bg="warning">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge> : null}
+                        </td>
+                        <td>
+                          {calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge> : null}
+                          {calculateGrowth(i.total_investment, i.total_value).dir === "down" ? <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge> : null}
+                          {calculateGrowth(i.total_investment, i.total_value).dir === "stable" ? <Badge bg="warning">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge> : null}
+                        </td>
                       </tr>) }
                     </tbody>
                   </Table>
               </Card> : 'No stocks available.'}
-          <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
       </Container>
   )
 }
