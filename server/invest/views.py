@@ -42,7 +42,7 @@ def get_stocks(request):
 
         #     all_stocks.append(stock)
 
-        return JsonResponse({ "message": "Request was Successful", "stocks": all_stocks }, status=200)
+        return JsonResponse({ "message": "Request was successful", "stocks": all_stocks }, status=200)
         
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
@@ -51,11 +51,10 @@ def get_stocks(request):
 # @login_required
 def get_transactions(request):
     if request.method == "GET":
-        # user = User.objects.get(pk=request.user.id)
-        user = User.objects.get(pk=2)
-        transactions_history = list(Transaction.objects.filter(user=user).values())
+        user = User.objects.get(pk=request.user.id)
+        transactions_history = list(Transaction.objects.filter(user=user).values().order_by("-purchased_on"))
 
-        return JsonResponse({ "message": "Request was Successful", "transactions_history": transactions_history }, status=200)
+        return JsonResponse({ "message": "Request was successful", "transactions_history": transactions_history }, status=200)
 
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
@@ -65,13 +64,10 @@ def get_transactions(request):
 def get_portfolio(request):
     if request.method == "GET":
         # Get user stocks via grouping transactions based on stock symbol
-        # user = User.objects.get(pk=request.user.id)
-        user = User.objects.get(pk=2)
+        user = User.objects.get(pk=request.user.id)
         all_data = Transaction.objects.filter(user=user).values("stock_id", "price_on_purchase", "quantity")
 
         grouped_stocks = all_data.values("stock").annotate(quantity=Sum("quantity"), total_investment=Sum("total_expense"))
-
-        print(grouped_stocks)
 
         portfolio_data = []
 
@@ -90,7 +86,7 @@ def get_portfolio(request):
 
             portfolio_data.append(new_data)
 
-        return JsonResponse({ "message": "Request was Successful", "portfolio_data": portfolio_data }, status=200)
+        return JsonResponse({ "message": "Request was successful", "portfolio_data": portfolio_data }, status=200)
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
@@ -105,8 +101,7 @@ def get_current_price(request, stock_symbol):
 
 def purchase_stocks(request, stock_symbol, qty):
     if request.method == "POST":
-        # user = User.objects.get(pk=request.user.id)
-        user = User.objects.get(pk=2)
+        user = User.objects.get(pk=request.user.id)
 
         stock = Stock.objects.get(symbol=stock_symbol)
         stock_price = yf.Ticker(stock_symbol).info.get("currentPrice")
@@ -117,6 +112,15 @@ def purchase_stocks(request, stock_symbol, qty):
         return JsonResponse({ "message": f"Successfully purchased {qty} stock(s) for {stock_symbol}."}, status=200)
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
+
+
+
+
+
+
+
+
+
 
 
 
