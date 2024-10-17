@@ -142,6 +142,7 @@ nav {
   margin-top: 0.2rem;
 }
 
+.user-profile h2,
 .course-list h2,
 .stock-list h2,
 .portfolio h2 {
@@ -199,7 +200,7 @@ button {
   flex-direction: column;
 }
 
-#total-expense {
+p[id$=total-expense] {
   font-size: 0.7rem;
   font-style: italic;
 }

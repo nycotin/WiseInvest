@@ -21,6 +21,8 @@ def login_view(request):
     if request.method == "POST":
         data = json.loads(request.body)
 
+        print(get_token(request))
+
         user = authenticate(request, username=data["username"], password=data["password"])
 
         if user is not None:
@@ -35,6 +37,7 @@ def login_view(request):
 
 def logout_view(request):
     print(request.headers)
+    print(get_token(request))
     logout(request)
     return JsonResponse({ "message": "Logged out." }, status=200)
 
