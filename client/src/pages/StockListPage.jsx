@@ -49,7 +49,7 @@ function StockListPage() {
       stocks.forEach(item => {
         axios.get(`/invest/get-current-price/${item.symbol}`)
         .then(response => {
-          item["current_price"] = response.data.current_price
+          item["current_price"] = response.data.current_price;
         })
       })
     }
