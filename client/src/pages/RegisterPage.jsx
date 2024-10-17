@@ -1,12 +1,17 @@
 import RegisterForm from '../components/users/RegisterForm.jsx';
 
+import Container from 'react-bootstrap/esm/Container';
+
+import '../index.css';
+import '../users.css';
+
 function RegisterPage () {
     return (
-        <div className="register-page">
+        <Container id="register-page">
             <h2>Register</h2>
             <RegisterForm />
-        </div>
+        </Container>
     )
 }
 
-export default RegisterPage
+export default RegisterPage;

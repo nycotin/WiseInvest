@@ -5,7 +5,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import AppLogo from '../assets/logo-no-bg.png';
 
 import '../assets/logo-no-bg.png';
-import '../App.css';
+import '../index.css';
 
 import { useNavigate } from 'react-router-dom';
 import axios from '../axiosConfig';

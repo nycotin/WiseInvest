@@ -1,9 +1,14 @@
 import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
+
 import axios from '../../axiosConfig';
 
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Container from 'react-bootstrap/esm/Container';
+
+import '../../index.css';
+import '../../users.css';
 
 function LoginForm() {
   let [validated, setValidated] = useState(false);
@@ -22,7 +27,7 @@ function LoginForm() {
       sessionStorage.setItem('userId', response.data.user_id)
       sessionStorage.setItem('username', response.data.username)
 
-      return navigate('/fork');
+      navigate('/fork');
     })
     .catch(error => {
       if (error.response){
@@ -44,7 +49,7 @@ function LoginForm() {
   };
 
   return (
-    <>
+    <Container className="mt-2">
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Username:</Form.Label>
@@ -67,15 +72,15 @@ function LoginForm() {
         <Button variant="primary" type="submit">Log In</Button>
       </Form>
 
-      <div className="msg">
+      <Container className="msg mt-2">
         {msg ? msg : null}
-      </div>
+      </Container>
 
-      <div className="link">
-        Need an account? <Link to="/register">Register here!</Link>
-      </div>
-    </>
+      <Container className="link mt-2">
+        Need an account? <Link to='/register'>Register here!</Link>
+      </Container>
+    </Container>
   )
 }
 
-export default LoginForm
+export default LoginForm;

@@ -1,12 +1,17 @@
 import LoginForm from '../components/users/LoginForm.jsx';
 
+import Container from 'react-bootstrap/esm/Container';
+
+import '../index.css';
+import '../users.css';
+
 function LoginPage () {
     return (
-        <div className="login-page">
+        <Container id="login-page">
             <h2>Login</h2>
             <LoginForm />
-        </div>
+        </Container>
     )
 }
 
-export default LoginPage
+export default LoginPage;
