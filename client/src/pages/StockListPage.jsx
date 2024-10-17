@@ -34,75 +34,30 @@ function StockListPage() {
     setToastMessage("");
 
     function getStocks(){
-        axios.get('/invest/get-stocks')
-        .then(response => {
-            setStocks(response.data.stocks);
-            setFilteredStocks(response.data.stocks);
-        });
+      axios.get('/invest/get-stocks')
+      .then(response => {
+          setStocks(response.data.stocks);
+          setFilteredStocks(response.data.stocks);
+      });
     }
 
     getStocks();
   }, [])
 
-  function getCurrentPrice(){
-    stocks.forEach(item => {
-      axios.get(`/invest/get-current-price/${item.symbol}`)
-      .then(response => {
-        item["current_price"] = response.data.current_price
+  useEffect(() => {
+    function getCurrentPrice(){
+      stocks.forEach(item => {
+        axios.get(`/invest/get-current-price/${item.symbol}`)
+        .then(response => {
+          item["current_price"] = response.data.current_price
+        })
       })
-    })
-  }
+    }
 
-  getCurrentPrice();
+    getCurrentPrice();
 
-  //? TBD structure toggle watchlist as favorites courses
-  // function toggleWatchlist(course){
-  //   axios.post()
-  //   .then(response => {
-  //     console.log(response.data.message);
-
-  //     if(response.data.action === 'Remove'){
-  //       setUserFavs(userFavs.filter(i => i.id !== course.id));
-  //     } else {
-  //       setUserFavs([...userFavs, course]);
-  //     }
-  //   });
-  // }
-
-  // function togglePurchase(stock){
-  //   axios.post(`/invest/stocks/${stock.stock}/toggle-purchase`)
-  //   .then(response => {
-  //     console.log(response.data.message);
-      
-  //     if(response.data.action === 'Sell'){
-  //       setUserStocks(userStocks.filter(i => i.stock_name !== stock.symbol));
-  //     } else {
-  //       stock.status = 'Purchase';
-  //       setUserStocks([...userStocks, stock]);
-  //     }
-  //   });
-  // }
-
-  //? TBD if watchlist is added
-  // function isWatched(stock){
-  //   const fav = userFavs.find(f => { return f.id === course.id })
-
-  //   if(fav){
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // function isUserStock(stock){
-  //   const isStock = userStocks.find(s => { return s.stock_name === stock.symbol })
-
-  //   if(isStock){
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+    setInterval(getCurrentPrice(), 900000);
+  }, [stocks]);
 
   function createToast() {
     return (
@@ -131,32 +86,36 @@ function StockListPage() {
     }
   }
 
+  function formatId(id){
+    return id.replace('.', '');
+  }
+
   function makePurchasable(id){
-    const cartButton = document.querySelector(`#${id}.make-purchase`);
+    const cartButton = document.querySelector(`#st-${id}.make-purchase`);
     cartButton.setAttribute('hidden', 'true');
 
-    const purchaseInputs = document.querySelector(`#${id}.purchase-inputs`);
+    const purchaseInputs = document.querySelector(`#st-${id}.purchase-inputs`);
     purchaseInputs.removeAttribute('hidden');
   }
 
   function toggleInputs(id){
-    const cartButton = document.querySelector(`#${id}.make-purchase`);
+    const cartButton = document.querySelector(`#st-${id}.make-purchase`);
     cartButton.removeAttribute('hidden');
 
-    const inputs = document.querySelector(`#${id}.purchase-inputs`);
+    const inputs = document.querySelector(`#st-${id}.purchase-inputs`);
     inputs.setAttribute('hidden', 'true');
 
     setTotal(0);
   }
 
-  function purchaseStocks(id){
-    const purchaseInputs = document.querySelector(`#${id}.purchase-inputs`);
+  function purchaseStocks(formattedId, id){
+    const purchaseInputs = document.querySelector(`#st-${formattedId}.purchase-inputs`);
     purchaseInputs.setAttribute('hidden', 'true');
 
-    const cartButton = document.querySelector('.make-purchase');
+    const cartButton = document.querySelector(`#st-${formattedId}.make-purchase`);
     cartButton.removeAttribute('hidden');
 
-    const quantity = purchaseInputs.querySelector('#quantity').value;
+    const quantity = purchaseInputs.querySelector(`#st-${formattedId}-quantity`).value;
 
     axios.post(`/invest/purchase-stocks/${id}/${quantity}`)
     .then(response => {
@@ -164,12 +123,13 @@ function StockListPage() {
     })
   }
 
-  function makeTotal(sym){
-    const num = document.querySelector('#quantity').value;
-    const currentPrice = stocks.filter(i => sym === i.symbol)[0].current_price;
-    const span = document.querySelector('#total');
+  function makeTotal(formattedId, id){
+    const quantity = document.querySelector(`#st-${formattedId}-quantity`).value;
+    const currentPrice = stocks.filter(i => id === i.symbol)[0].current_price;
+    const span = document.querySelector(`#st-${formattedId}-total`);
 
-    setTotal(currentPrice * num)
+    const tot = currentPrice * quantity;
+    setTotal(tot.toFixed(2));
     span.innerHTML = total;
   }
 
@@ -177,6 +137,7 @@ function StockListPage() {
       <Container className="stock-list" fluid="md">
         <h2>Browse Stocks</h2>
         { toastMessage !== '' ? createToast() : null}
+        <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
         <div className="filter-buttons">
           <Button variant="secondary" size="sm" onClick={() => filterStocks('North America')}>North America</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('South America')}>South America</Button>
@@ -204,17 +165,17 @@ function StockListPage() {
                         <td>{i.exchange_id}</td>
                         <td>{i.symbol}</td>
                         <td><Link to={i.link} target="_blank">{i.company_name}</Link></td>
-                        <td className="current-price">{i.currency_symbol} {i.current_price}</td>
+                        <td className="current-price">{i.current_price !== undefined ? i.currency_symbol : null} {i.current_price !== undefined ? i.current_price : 'Price loading'}</td>
                         <td>{i.currency}</td>
                         <td>{i.market_area}</td>
-                        <td><Button id={i.symbol} className="make-purchase" variant="secondary" size="sm" onClick={() => makePurchasable(i.symbol)}><BsCart /></Button>
-                            <InputGroup id={i.symbol} className="purchase-inputs" hidden={true}>
+                        <td><Button id={`st-${formatId(i.symbol)}`} className="make-purchase" variant="secondary" size="sm" onClick={() => makePurchasable(formatId(i.symbol))}><BsCart /></Button>
+                            <InputGroup id={`st-${formatId(i.symbol)}`} className="purchase-inputs" hidden={true}>
                               <div className="mb-2">
-                                <label htmlFor="quantity">Quantity:</label>
-                                <input type="number" id="quantity" className="form-control" min={1} max={100} defaultValue={1} onChange={() => makeTotal(i.symbol)} />
+                                <label htmlFor={`st-${formatId(i.symbol)}-quantity`}>Quantity:</label>
+                                <input type="number" id={`st-${formatId(i.symbol)}-quantity`} className="form-control" min={1} max={100} defaultValue={1} onChange={() => makeTotal(formatId(i.symbol), i.symbol)} />
                               </div>
-                              <p id="total-expense" className="mb-2">
-                                Total: {i.currency_symbol} <span id="total">{total !== 0 ? total : i.current_price}</span>
+                              <p id={`st-${formatId(i.symbol)}-total-expense`} className="mb-2">
+                                Total: {i.currency_symbol} <span id={`st-${formatId(i.symbol)}-total`}>{total !== 0 ? total : i.current_price}</span>
                                 <OverlayTrigger key="overlay" placement="right" overlay={
                                   <Tooltip id='tooltip-right'>
                                     Actual amount taken for transaction may vary slightly.
@@ -222,15 +183,14 @@ function StockListPage() {
                                   <sup><IoIosInformationCircleOutline /></sup>
                                 </OverlayTrigger>
                               </p>
-                              <Button id={i.symbol} className="purchase-stocks" variant="warning" size="sm" onClick={() => purchaseStocks(i.symbol)}>Purchase</Button>
-                              <Button id={i.symbol} className="purchase-stocks" variant="secondary" size="sm" onClick={() => toggleInputs(i.symbol)}>Close</Button>
+                              <Button id={i.symbol} className="purchase-stocks" variant="warning" size="sm" onClick={() => purchaseStocks(formatId(i.symbol), i.symbol)}>Purchase</Button>
+                              <Button id={i.symbol} className="purchase-stocks" variant="secondary" size="sm" onClick={() => toggleInputs(formatId(i.symbol))}>Close</Button>
                             </InputGroup>
                         </td>
                       </tr>) }
                     </tbody>
                   </Table>
               </Card> : 'No stocks available.'}
-          <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
       </Container>
   )
 }
