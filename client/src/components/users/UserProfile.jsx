@@ -2,6 +2,7 @@ import axios from '../../axiosConfig';
 import { useState, useEffect } from 'react';
 
 import '../../App.css';
+import Container from 'react-bootstrap/Container';
 
 
 function UserProfile() {  
@@ -55,8 +56,8 @@ function UserProfile() {
     const { firstname, lastname, email, username, date_joined, last_login } = userProfile;
 
     return (
-        <div id="user-profile">
-            <h3>User Profile</h3>
+        <Container className="user-profile" fluid="md">
+            <h2>User Profile</h2>
             <div className="container">
                 <label htmlFor="firstname">Firstname:</label>
                 <p type="text" name="firstname" id="firstname" onClick={() => makeEditable('firstname')}>{firstname}</p>
@@ -81,7 +82,7 @@ function UserProfile() {
                 <label htmlFor="last_login">Last login:</label>
                 <p type="text" name="last_login" id="last_login">{last_login}</p>
             </div>
-        </div>
+        </Container>
     );
 }
 
