@@ -1,16 +1,14 @@
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import axios from '../axiosConfig';
+
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+
 import AppLogo from '../assets/logo-no-bg.png';
-
-import '../assets/logo-no-bg.png';
 import '../index.css';
-
-import { useNavigate } from 'react-router-dom';
-import axios from '../axiosConfig';
-import PropTypes from 'prop-types';
-
 
 function NavBar({ title }) {
     const navigate = useNavigate();
@@ -19,10 +17,8 @@ function NavBar({ title }) {
 
     function logout(){
         axios.post('/users/logout')
-        .then((response) => { 
-            console.log(response.data.message)
+        .then(() => { 
             sessionStorage.clear();
-            document.cookie = '';
 
             navigate('/login');
         })
@@ -43,15 +39,15 @@ function NavBar({ title }) {
                     <Nav.Link onClick={() => navigate('/education/courses')}>Browse Courses</Nav.Link>
                     <Nav.Link onClick={() => navigate('/education/courses/learning')}>My Learning</Nav.Link>
                     <Nav.Link onClick={() => navigate('/education/courses/favorites')}>Favorites</Nav.Link>
-                    <NavDropdown title={username} id="nav-dropdown">
-                    <NavDropdown.Item onClick={() => navigate(`/education/userprofile/${userId}`)}>Profile</NavDropdown.Item>
-                    <NavDropdown.Item onClick={() => navigate('/invest')}>
-                        Investments Manager
-                    </NavDropdown.Item>
-                    <NavDropdown.Divider />
-                    <NavDropdown.Item onClick={logout}>
-                        Logout
-                    </NavDropdown.Item>
+                    <NavDropdown title={username} id="nav-dropdown" drop="start">
+                        <NavDropdown.Item onClick={() => navigate(`/education/userprofile/${userId}`)}>Profile</NavDropdown.Item>
+                        <NavDropdown.Item onClick={() => navigate('/invest')}>
+                            Investments Manager
+                        </NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item onClick={logout}>
+                            Logout
+                        </NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
                 </Navbar.Collapse>
@@ -61,7 +57,7 @@ function NavBar({ title }) {
                 <Nav className="menu">
                     <Nav.Link onClick={() => navigate('/invest/stocks')}>Browse Stocks</Nav.Link>
                     <Nav.Link onClick={() => navigate('/invest/portfolio')}>My Portfolio</Nav.Link>
-                    <NavDropdown title={username} id="nav-dropdown">
+                    <NavDropdown title={username} id="nav-dropdown" drop="start">
                     <NavDropdown.Item onClick={() => navigate(`/invest/userprofile/${userId}`)}>Profile</NavDropdown.Item>
                     <NavDropdown.Item onClick={() => navigate('/education')}>
                         Education Center

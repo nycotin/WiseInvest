@@ -1,23 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Navigate } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Navigate } from 'react-router-dom';
 import { getSessionId } from './utility';
-
-import './index.css'
 
 import App from './App.jsx';
 import EntryPage from './pages/EntryPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
+import LoginPage from './pages/users/LoginPage.jsx';
+import RegisterPage from './pages/users/RegisterPage.jsx';
 import ErrorPage from './pages/ErrorPage';
-import RegisterPage from './pages/RegisterPage.jsx';
 import ForkPage from './pages/ForkPage.jsx';
-import EducationPage from './pages/EducationPage.jsx';
-import InvestPage from './pages/InvestPage.jsx';
+import EducationPage from './pages/education/EducationPage.jsx';
+import InvestPage from './pages/invest/InvestPage.jsx';
 import UserProfile from './components/users/UserProfile.jsx';
-import CourseListPage from './pages/CourseListPage.jsx';
-import CoursePage from './pages/CoursePage.jsx';
-import StockListPage from './pages/StockListPage.jsx';
-import PortfolioPage from './pages/PortfolioPage.jsx';
+import CourseListPage from './pages/education/CourseListPage.jsx';
+import CoursePage from './pages/education/CoursePage.jsx';
+import StockListPage from './pages/invest/StockListPage.jsx';
+import PortfolioPage from './pages/invest/PortfolioPage.jsx';
+
+import './index.css';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

@@ -5,9 +5,8 @@ import axios from '../../axiosConfig';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 
-import '../../App.css';
 import '../../index.css';
-
+import '../../educate.css';
 
 function Dashboard() {
   const [userCourses, setUserCourses] = useState([]);

@@ -1,19 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../axiosConfig';
 import PropTypes from 'prop-types';
-
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-
-import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from "react-icons/bs";
+import axios from '../../axiosConfig';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import '../App.css';
-import '../index.css';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
+import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from 'react-icons/bs';
+
+import '../../index.css';
+import '../../educate.css';
 
 function CourseListPage({ page }) {
   const [courses, setCourses] = useState([]);
@@ -188,7 +187,7 @@ function CourseListPage({ page }) {
   )
 }
 
-export default CourseListPage
+export default CourseListPage;
 
 CourseListPage.propTypes = {
   page: PropTypes.string.isRequired

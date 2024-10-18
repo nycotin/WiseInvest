@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from '../axiosConfig';
+import axios from '../../axiosConfig';
 
 import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -14,10 +15,8 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import { BsCart } from "react-icons/bs";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 
-import Container from 'react-bootstrap/Container';
-import '../App.css';
-import '../index.css';
-
+import '../../index.css';
+import '../../invest.css';
 
 function StockListPage() {
   const [stocks, setStocks] = useState([]);

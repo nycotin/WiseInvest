@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from '../axiosConfig';
-import ReactPlayer from 'react-player/lazy'
+import axios from '../../axiosConfig';
 
-import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from "react-icons/bs";
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Badge from 'react-bootstrap/Badge';
 
-import '../App.css';
-import '../index.css';
+import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from 'react-icons/bs';
+import ReactPlayer from 'react-player/lazy'
 
+import '../../index.css';
+import '../../educate.css';
 
 function CoursePage() {
   const { courseId } = useParams();
@@ -243,4 +243,4 @@ function CoursePage() {
   )
 }
 
-export default CoursePage
+export default CoursePage;

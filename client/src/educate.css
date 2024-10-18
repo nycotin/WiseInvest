@@ -36,6 +36,15 @@
   cursor: pointer;
 }
 
+.dashboard {
+  margin-top: 6rem;
+  display: block;
+}
+
+.dashboard h2 {
+  text-align: center;
+}
+
 .dashboard-cards {
   margin-top: 3rem;
   display: flex;
@@ -68,53 +77,9 @@
   margin-top: 0.2rem;
 }
 
-
 .course-list .card:hover,
 .favorites .card:hover,
 .browse-courses .card:hover {
   cursor: pointer;
   border: solid 2px rgb(134, 134, 134);
-}
-
-.invest-dashboard {
-  width: 120%;
-  cursor: default;
-  display: flex;
-  flex-direction: column;
-}
-
-.user-stocks,
-.transactions {
-  padding: 1rem;
-}
-
-.stats {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1rem;
-}
-
-.stats .card {
-  width: 33%;
-  padding: 1rem;
-}
-
-.stats li:hover {
-  cursor: default;
-  border: solid 1px rgb(180, 179, 179);
-}
-
-.stock-list {
-  padding: 1rem;
-}
-
-.purchase-inputs {
-  display: flex;
-  flex-direction: column;
-}
-
-p[id$=total-expense] {
-  font-size: 0.7rem;
-  font-style: italic;
 }

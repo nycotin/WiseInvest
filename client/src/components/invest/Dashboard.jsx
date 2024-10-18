@@ -6,9 +6,8 @@ import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import Table from 'react-bootstrap/Table';
 
-import '../../App.css';
 import '../../index.css';
-
+import '../../invest.css';
 
 function Dashboard() {
   const [stocks, setStocks] = useState([]);

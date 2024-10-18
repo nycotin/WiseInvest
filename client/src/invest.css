@@ -1,0 +1,42 @@
+.invest-dashboard {
+  width: 120%;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-stocks,
+.transactions {
+  padding: 1rem;
+}
+
+.stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.stats .card {
+  width: 33%;
+  padding: 1rem;
+}
+
+.stats li:hover {
+  cursor: default;
+  border: solid 1px rgb(180, 179, 179);
+}
+
+.stock-list {
+  padding: 1rem;
+}
+
+.purchase-inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+p[id$=total-expense] {
+  font-size: 0.7rem;
+  font-style: italic;
+}

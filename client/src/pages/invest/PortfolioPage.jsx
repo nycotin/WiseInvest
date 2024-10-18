@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from '../axiosConfig';
+import axios from '../../axiosConfig';
 
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -8,9 +8,9 @@ import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge';
 
 import Container from 'react-bootstrap/Container';
-import '../App.css';
-import '../index.css';
 
+import '../../index.css';
+import '../../invest.css';
 
 function PortfolioPage() {
   const [stocks, setStocks] = useState([]);

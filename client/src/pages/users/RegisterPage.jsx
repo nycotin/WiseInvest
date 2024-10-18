@@ -1,9 +1,9 @@
-import RegisterForm from '../components/users/RegisterForm.jsx';
+import RegisterForm from '../../components/users/RegisterForm.jsx';
 
 import Container from 'react-bootstrap/esm/Container';
 
-import '../index.css';
-import '../users.css';
+import '../../index.css';
+import '../../users.css';
 
 function RegisterPage () {
     return (
