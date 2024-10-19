@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from '../../axiosConfig';
 
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
+import EducationDashboardButton from '../../components/education/EducationDashboardButton';
+
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
 
 import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from 'react-icons/bs';
 
@@ -65,9 +65,7 @@ function CourseListPage({ page }) {
   function toggleFavorite(course){
     axios.post(`/education/courses/${course.id}/toggle-favorite`)
     .then(response => {
-      console.log(response.data.message);
-
-      if(response.data.action === 'Remove'){
+      if (response.data.action === 'Remove') {
         setUserFavs(userFavs.filter(i => i.id !== course.id));
       } else {
         setUserFavs([...userFavs, course]);
@@ -77,10 +75,8 @@ function CourseListPage({ page }) {
 
   function toggleEnroll(course){
     axios.post(`/education/courses/${course.id}/toggle-enroll`)
-    .then(response => {
-      console.log(response.data.message);
-      
-      if(response.data.action === 'Remove'){
+    .then(response => {   
+      if (response.data.action === 'Remove') {
         setUserCourses(userCourses.filter(i => i.id !== course.id));
       } else {
         course.status = "Enrolled";
@@ -91,8 +87,7 @@ function CourseListPage({ page }) {
 
   function isFav(course){
     const fav = userFavs.find(f => { return f.id === course.id })
-
-    if(fav){
+    if (fav) {
       return true;
     } else {
       return false;
@@ -101,89 +96,82 @@ function CourseListPage({ page }) {
 
   function isEnrolled(course){
     const enrolled = userCourses.find(c => { return c.id === course.id })
-
-    if(enrolled){
+    if (enrolled) {
       return true;
     } else {
       return false;
     }
   }
 
-  function navigateToDashboard(){
-    navigate('/education')
-    const dashboard = document.querySelector('.dashboard');
-    dashboard.style.display = 'block';
+  function HandleCardClick(e, course){
+    
+    //! Add try-catch
+    try {
+      const target = e.target
+      const targetAttribute = target.getAttribute('class')
+
+      if (targetAttribute.startsWith("card")) {
+        console.log('Card was clicked');
+        navigate(`/education/courses/${course.id}`);
+      }
+
+      return;
+    } catch (e) {
+      console.log('Button was clicked');
+    }
   }
 
   let courseList = []
 
-  if(page === 'browse-courses'){
+  if (page === 'browse-courses') {
     courseList = courses.map(course => {
-        return <Col key={courses.indexOf(course)}>
-          <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}} onClick={() => navigate(`/education/courses/${course.id}`)}>
-            <Card.Img variant="top" src={course.cover}/>
-            <Card.Body>
-              <Card.Title>{course.title}</Card.Title>
-              <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
-              <Card.Text>Course items: {course.itemCount}</Card.Text>
-              <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
-                { isFav(course) ? <BsBookmarkFill /> : <BsBookmark /> }
-              </Button>
-              <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
-                { isEnrolled(course) ? <BsClipboard2Fill /> : <BsClipboard2 /> }
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
-    })
-  } else if (page === 'favorites'){
-    courseList = userFavs.map(course => {
-        return <Col key={userFavs.indexOf(course)}>
-          <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}}>
-          <Card.Img variant="top" src={course.cover}/>
-            <Card.Body>
-              <Card.Title>{course.title}</Card.Title>
-              <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
-              <Card.Text>Course items: {course.itemCount}</Card.Text>
-              <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
-                { isFav(course) ? <BsBookmarkFill /> : <BsBookmark /> }
-              </Button>
-              <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
-                { isEnrolled(course) ? <BsClipboard2Fill /> : <BsClipboard2 /> }
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>     
-    })
-  } else {
-    courseList = userCourses.map(course => {
-      return <Col key={userCourses.indexOf(course)}>
-        <Card key={course.id} className="mb-4" style={{ width: '20rem', height: '28rem'}}>
-          <Card.Img variant="top" src={course.cover}/>
-          <Card.Body>
+      return <Card key={course.id} className="m-3" onClick={(e) => HandleCardClick(e, course)}>
+        <Card.Img variant="top" src={course.cover}/>
+        <Card.Body>
           <Card.Title>{course.title}</Card.Title>
           <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
           <Card.Text>Course items: {course.itemCount}</Card.Text>
-          <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
-            { isFav(course) ? <BsBookmarkFill /> : <BsBookmark /> }
-          </Button>
-          <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
-            { isEnrolled(course) ? <BsClipboard2Fill /> : <BsClipboard2 /> }
-          </Button>
-          </Card.Body>
-        </Card>
-      </Col>
+          { isFav(course) ? <Button variant="danger" size="sm" onClick={() => toggleFavorite(course)}><BsBookmarkFill /></Button> : <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}><BsBookmark /></Button> }
+          { isEnrolled(course) ? <Button variant="success" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2Fill /></Button> : <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2 /></Button> }
+        </Card.Body>
+      </Card>
+    })
+  } else if (page === 'favorites'){
+    courseList = userFavs.map(course => {
+      return <Card key={course.id} className="m-3" onClick={() => navigate(`/education/courses/${course.id}`)}>
+        <Card.Img variant="top" src={course.cover}/>
+        <Card.Body>
+          <Card.Title>{course.title}</Card.Title>
+          <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
+          <Card.Text>Course items: {course.itemCount}</Card.Text>
+          { isFav(course) ? <Button variant="danger" size="sm" onClick={() => toggleFavorite(course)}><BsBookmarkFill /></Button> : <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}><BsBookmark /></Button> }
+          { isEnrolled(course) ? <Button variant="success" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2Fill /></Button> : <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2 /></Button> }
+        </Card.Body>
+      </Card>    
+    })
+  } else {
+    courseList = userCourses.map(course => {
+      return <Card key={course.id} className="m-3" onClick={() => navigate(`/education/courses/${course.id}`)}>
+        <Card.Img variant="top" src={course.cover}/>
+        <Card.Body>
+          <Card.Title>{course.title}</Card.Title>
+          <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
+          <Card.Text>Course items: {course.itemCount}</Card.Text>
+          { isFav(course) ? <Button variant="danger" size="sm" onClick={() => toggleFavorite(course)}><BsBookmarkFill /></Button> : <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}><BsBookmark /></Button> }
+          { isEnrolled(course) ? <Button variant="success" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2Fill /></Button> : <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2 /></Button> }
+        </Card.Body>
+      </Card>
     })
   }
 
   return (
-      <Container className="course-list" fluid="md">
-        <h2>{ formatTitle }</h2>
-          <Row>
-            {courseList.length !== 0 ? courseList : <Container>No courses.</Container> }
-          </Row>
-          <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
-      </Container>
+    <Container className="course-list" fluid="md">
+      <h2>{ formatTitle }</h2>
+        <EducationDashboardButton />
+        <Container id="course-cards">
+          { courseList.length !== 0 ? courseList : <Container>No courses.</Container> }
+        </Container>
+    </Container>
   )
 }
 

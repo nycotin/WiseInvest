@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../../axiosConfig';
 
-import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 
 import '../../index.css';
@@ -28,7 +29,7 @@ function Dashboard() {
     function getPortfolio(){
       axios.get('/invest/get-portfolio')
       .then(response => {
-        if(response.data.portfolio_data){
+        if (response.data.portfolio_data) {
           setPortfolio(response.data.portfolio_data);
         } else {
           setPortfolio([]);
@@ -39,7 +40,7 @@ function Dashboard() {
     function getTransactionHistory(){
       axios.get('/invest/get-transactions')
       .then(response => {
-        if(response.data.transactions_history){
+        if (response.data.transactions_history) {
           setTransactions(response.data.transactions_history);
         } else {
           setTransactions([]);
@@ -97,9 +98,9 @@ function Dashboard() {
 
   return (
     <>
-        <div className="dashboard" style={{ display: 'block' }}>
+        <Container className="dashboard" style={{ display: 'block' }}>
             <h2>Dashboard</h2>
-            <div className="invest-dashboard">
+            <Container id="invest-dashboard">
               <Card className="user-stocks">
                 <Card.Title>My Stocks</Card.Title>
                 { portfolio.length !== 0 ?
@@ -121,20 +122,20 @@ function Dashboard() {
                   </Table>
                   : 'No stocks.' }
               </Card>
-              <div className="stats">
-                <Card className="increased-since-purchase">
-                  <Card.Title>Increased <sub><Badge bg="success">{ filterStocks('up').length }</Badge></sub></Card.Title>
-                  { filterStocks('up').length !== 0 ? filterStocks('up').map(i => <li key={i.stock_symbol}>{getStock(i.stock_symbol).company_name}</li>) : 'No stocks.' }
-                </Card>
-                <Card className="decreased-since-purchase">
-                  <Card.Title>Decreased <sub><Badge bg="danger">{ filterStocks('down').length }</Badge></sub></Card.Title>
-                  { filterStocks('down').length !== 0 ? filterStocks('down').map(i => <li key={i.stock_symbol}>{getStock(i.stock_symbol).company_name}</li>) : 'No stocks.' }
-                </Card>
-                <Card className="stable-since-purchase">
-                  <Card.Title>Stable <sub><Badge bg="warning">{ filterStocks('stable').length }</Badge></sub></Card.Title>
-                  { filterStocks('stable').length !== 0 ? filterStocks('stable').map(i => <li key={i.stock_symbol}>{getStock(i.stock_symbol).company_name}</li>) : 'No stocks.' }
-                </Card>
-              </div>
+            <Container className="stats">
+              <Card className="increased-since-purchase">
+                <Card.Title>Increased <sub><Badge bg="success">{ filterStocks('up').length }</Badge></sub></Card.Title>
+                { filterStocks('up').length !== 0 ? filterStocks('up').map(i => <li key={i.stock_symbol}>{getStock(i.stock_symbol).company_name}</li>) : 'No stocks.' }
+              </Card>
+              <Card className="decreased-since-purchase">
+                <Card.Title>Decreased <sub><Badge bg="danger">{ filterStocks('down').length }</Badge></sub></Card.Title>
+                { filterStocks('down').length !== 0 ? filterStocks('down').map(i => <li key={i.stock_symbol}>{getStock(i.stock_symbol).company_name}</li>) : 'No stocks.' }
+              </Card>
+              <Card className="stable-since-purchase">
+                <Card.Title>Stable <sub><Badge bg="warning">{ filterStocks('stable').length }</Badge></sub></Card.Title>
+                { filterStocks('stable').length !== 0 ? filterStocks('stable').map(i => <li key={i.stock_symbol}>{getStock(i.stock_symbol).company_name}</li>) : 'No stocks.' }
+              </Card>
+            </Container>
             <Card className="transactions">
               <Card.Title>Transaction History</Card.Title>
               <Table striped bordered>
@@ -160,8 +161,8 @@ function Dashboard() {
                 </tbody>
               </Table>
             </Card>
-            </div>
-        </div>
+            </Container>
+        </Container>
     </>
   )
 }

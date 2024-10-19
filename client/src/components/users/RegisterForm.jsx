@@ -43,8 +43,8 @@ function RegisterForm() {
         'confirmation': confirmation
     })
     .then(response => {
-      sessionStorage.setItem('userId', response.data.user_id)
-      sessionStorage.setItem('username', response.data.username)
+      sessionStorage.setItem('userId', response.data.user_id);
+      sessionStorage.setItem('username', response.data.username);
 
       return navigate('/fork');
     })

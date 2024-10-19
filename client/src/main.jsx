@@ -4,18 +4,18 @@ import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, N
 import { getSessionId } from './utility';
 
 import App from './App.jsx';
-import EntryPage from './pages/EntryPage.jsx';
-import LoginPage from './pages/users/LoginPage.jsx';
-import RegisterPage from './pages/users/RegisterPage.jsx';
-import ErrorPage from './pages/ErrorPage';
-import ForkPage from './pages/ForkPage.jsx';
-import EducationPage from './pages/education/EducationPage.jsx';
-import InvestPage from './pages/invest/InvestPage.jsx';
-import UserProfile from './components/users/UserProfile.jsx';
 import CourseListPage from './pages/education/CourseListPage.jsx';
 import CoursePage from './pages/education/CoursePage.jsx';
-import StockListPage from './pages/invest/StockListPage.jsx';
+import EducationPage from './pages/education/EducationPage.jsx';
+import EntryPage from './pages/EntryPage.jsx';
+import ErrorPage from './pages/ErrorPage';
+import ForkPage from './pages/ForkPage.jsx';
+import InvestPage from './pages/invest/InvestPage.jsx';
+import LoginPage from './pages/users/LoginPage.jsx';
 import PortfolioPage from './pages/invest/PortfolioPage.jsx';
+import RegisterPage from './pages/users/RegisterPage.jsx';
+import StockListPage from './pages/invest/StockListPage.jsx';
+import UserProfile from './components/users/UserProfile.jsx';
 
 import './index.css';
 
@@ -47,9 +47,9 @@ export const router = createBrowserRouter(
           errorElement={<ErrorPage />} 
         />
           <Route
-              element={getSessionId() !== '' ? <EducationPage /> : <Navigate to='/login' />}
-              path='/education'
-              errorElement={<ErrorPage />}
+            element={getSessionId() !== '' ? <EducationPage /> : <Navigate to='/login' />}
+            path='/education'
+            errorElement={<ErrorPage />}
           >
             <Route
               element={<CourseListPage {...{'page': 'browse-courses'}} />}

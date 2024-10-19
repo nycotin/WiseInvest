@@ -11,8 +11,8 @@ import '../../index.css';
 import '../../users.css';
 
 function LoginForm() {
-  let [validated, setValidated] = useState(false);
-  let [msg, setMsg] = useState('');
+  const [validated, setValidated] = useState(false);
+  const [msg, setMsg] = useState('');
   const navigate = useNavigate();
 
   function LoginUser() {
@@ -24,10 +24,10 @@ function LoginForm() {
         'password': password
     })
     .then(response => {
-      sessionStorage.setItem('userId', response.data.user_id)
-      sessionStorage.setItem('username', response.data.username)
+      sessionStorage.setItem('userId', response.data.user_id);
+      sessionStorage.setItem('username', response.data.username);
 
-      navigate('/fork');
+      return navigate('/fork');
     })
     .catch(error => {
       if (error.response){

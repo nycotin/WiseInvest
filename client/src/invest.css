@@ -1,12 +1,16 @@
-.invest-dashboard {
-  width: 120%;
+/* Dashboard */
+#invest-dashboard {
+  width: 100%;
   cursor: default;
+  margin-top: 3rem;
   display: flex;
   flex-direction: column;
 }
 
+.all-stocks,
 .user-stocks,
-.transactions {
+.transactions,
+.stats {
   padding: 1rem;
 }
 
@@ -14,7 +18,6 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 1rem;
 }
 
 .stats .card {
@@ -22,21 +25,71 @@
   padding: 1rem;
 }
 
-.stats li:hover {
-  cursor: default;
-  border: solid 1px rgb(180, 179, 179);
-}
 
-.stock-list {
-  padding: 1rem;
-}
-
+/* Stock List */
+/* Hidden Purchase Input Group */
 .purchase-inputs {
+  font-size: smaller;
   display: flex;
   flex-direction: column;
+}
+
+.quantity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.purchase-inputs input {
+  width: 50%;
+  height: 0%;
+}
+
+.purchase-stocks {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+}
+
+button.purchase-stocks {
+  border-radius: 0;
+  border-top-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 }
 
 p[id$=total-expense] {
   font-size: 0.7rem;
   font-style: italic;
+  padding: 0.5rem;
+}
+
+
+
+/* Responsiveness */
+@media (max-width: 1000px) {
+  table {
+    font-size: smaller;
+    width: 60%;
+  }
+
+  .mic,
+  .currency,
+  .market,
+  .growth-per {
+    display: none;
+  }
+
+  .purchase-inputs {
+    width: 80%;
+  }
+
+  .purchase-inputs button {
+    font-size: smaller;
+  }
+  
+  .user-stocks,
+  .all-stocks {
+    padding: 0.5rem;
+  }
 }
