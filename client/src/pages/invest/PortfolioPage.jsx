@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from '../axiosConfig';
+import { Link } from 'react-router-dom';
+import axios from '../../axiosConfig';
 
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
+import InvestDashboardButton from '../../components/invest/InvestDashboardButton';
+// import FilterButtons from '../../components/invest/FilterButtons';
+
 import Badge from 'react-bootstrap/Badge';
-
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
-import '../App.css';
-import '../index.css';
+import Table from 'react-bootstrap/Table';
 
+import '../../index.css';
+import '../../invest.css';
 
 function PortfolioPage() {
   const [stocks, setStocks] = useState([]);
   const [filteredStocks, setFilteredStocks] = useState([]);
   const [portfolio, setPortfolio] = useState([]);
-
-  const navigate = useNavigate();
 
   useEffect(() => {  
     const dashboard = document.querySelector('.dashboard');
@@ -45,12 +45,6 @@ function PortfolioPage() {
     getStocks();
     getPortfolio();
   }, [])
-
-  function navigateToDashboard(){
-    navigate('/invest')
-    const dashboard = document.querySelector('.dashboard');
-    dashboard.style.display = 'block';
-  }
 
   function filterStocks(str){
     if (str !== "all") {
@@ -118,11 +112,14 @@ function PortfolioPage() {
     return data;
   }
 
+  // let props = { stocks: stocks, setFiltereedStocks: setFilteredStocks}
+
   return (
       <Container className="portfolio" fluid="md">
         <h2>My Portfolio</h2>
-        <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
-        <div className="filter-buttons">
+        <InvestDashboardButton />
+        <Container id="filter-buttons" className="my-3">
+          <Button variant="secondary" size="sm" onClick={() => filterStocks('all')}>All Markets</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('North America')}>North America</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('South America')}>South America</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('Europe')}>Europe</Button>
@@ -130,40 +127,39 @@ function PortfolioPage() {
           <Button variant="secondary" size="sm" onClick={() => filterStocks('Africa')}>Africa</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('Asia')}>Asia</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('Oceania')}>Oceania</Button>
-          <Button variant="secondary" size="sm" onClick={() => filterStocks('all')}>All Markets</Button>
-        </div>
+        </Container>
             { filteredStocks.length !== 0 ? <Card className="user-stocks">
                   <Table striped bordered hover>
                     <thead>
                       <tr>
-                        <th>Exchange MIC</th>
-                        <th>Stock Symbol</th>
-                        <th>Company Name</th>
-                        <th>Quantity</th>
-                        <th>Investment</th>
-                        <th>Valuation</th>
-                        <th>Currency</th>
-                        <th>Market Area</th>
-                        <th>Growth</th>
-                        <th>Growth %</th>
+                        <th className="mic">Exchange MIC</th>
+                        <th className="symbol">Stock Symbol</th>
+                        <th className="company">Company Name</th>
+                        <th className="quantity">Quantity</th>
+                        <th className="investment">Investment</th>
+                        <th className="valuation">Valuation</th>
+                        <th className="currency">Currency</th>
+                        <th className="market">Market Area</th>
+                        <th className="growth">Growth</th>
+                        <th className="growth-per">Growth %</th>
                       </tr>
                     </thead>
                     <tbody>
                       { filteredStocks.map(i => <tr key={i.stock_symbol}>
-                        <td>{getMIC(i.stock_symbol)}</td>
-                        <td>{i.stock_symbol}</td>
-                        <td><Link to={getLink(i.stock_symbol)} target="_blank">{getCompanyName(i.stock_symbol)}</Link></td>
-                        <td>{i.quantity}</td>
-                        <td>{getCurrencySymbol(i.stock_symbol)} {i.total_investment}</td>
-                        <td>{getCurrencySymbol(i.stock_symbol)} {i.total_value}</td>
-                        <td>{i.currency}</td>
-                        <td>{getMarketArea(i.stock_symbol)}</td>
-                        <td>
+                        <td className="mic">{getMIC(i.stock_symbol)}</td>
+                        <td className="symbol">{i.stock_symbol}</td>
+                        <td className="company"><Link to={getLink(i.stock_symbol)} target="_blank">{getCompanyName(i.stock_symbol)}</Link></td>
+                        <td className="quantity">{i.quantity}</td>
+                        <td className="investment">{getCurrencySymbol(i.stock_symbol)} {i.total_investment}</td>
+                        <td className="valuation">{getCurrencySymbol(i.stock_symbol)} {i.total_value}</td>
+                        <td className="currency">{i.currency}</td>
+                        <td className="market">{getMarketArea(i.stock_symbol)}</td>
+                        <td className="growth">
                           {calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge> : null}
                           {calculateGrowth(i.total_investment, i.total_value).dir === "down" ? <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge> : null}
                           {calculateGrowth(i.total_investment, i.total_value).dir === "stable" ? <Badge bg="warning">{calculateGrowth(i.total_investment, i.total_value).movement}{getCurrencySymbol(i.stock_symbol)}</Badge> : null}
                         </td>
-                        <td>
+                        <td className="growth-per">
                           {calculateGrowth(i.total_investment, i.total_value).dir === "up" ? <Badge bg="success">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge> : null}
                           {calculateGrowth(i.total_investment, i.total_value).dir === "down" ? <Badge bg="danger">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge> : null}
                           {calculateGrowth(i.total_investment, i.total_value).dir === "stable" ? <Badge bg="warning">{calculateGrowth(i.total_investment, i.total_value).percent}</Badge> : null}
@@ -171,7 +167,7 @@ function PortfolioPage() {
                       </tr>) }
                     </tbody>
                   </Table>
-              </Card> : 'No stocks available.'}
+              </Card> : <Container>No stocks available.</Container>}
       </Container>
   )
 }

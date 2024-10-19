@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../axiosConfig';
 
-import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
 
-import '../../App.css';
 import '../../index.css';
-
+import '../../educate.css';
 
 function Dashboard() {
   const [userCourses, setUserCourses] = useState([]);
@@ -52,9 +52,9 @@ function Dashboard() {
 
   return (
     <>
-        <div className="dashboard" style={{ display: 'block' }}>
+        <Container className="dashboard" style={{ display: 'block' }}>
             <h2>Dashboard</h2>
-            <div className="dashboard-cards">
+            <Container id="education-dashboard">
               <Card className="not-started-courses">
                 <Card.Title onClick={() => navigate('/education/courses/learning')}>Not Started <sub><Badge bg="secondary">{notStartedCourses.length}</Badge></sub></Card.Title>
                 { notStartedCourses.length !== 0 ? notStartedCourses.map(i => <li key={i.id} onClick={() => navigate(`/education/courses/${i.id}`)}>{i.title}</li> ) : 'No courses in progress.' }
@@ -71,8 +71,8 @@ function Dashboard() {
                 <Card.Title onClick={() => navigate('/education/courses/favorites')}>Favorites <sub><Badge bg="danger">{userFavs.length}</Badge></sub></Card.Title>
                 { userFavs.length !== 0 ? userFavs.map(i => <li key={i.id} onClick={() => navigate(`/education/courses/${i.id}`)}>{i.title}</li> ) : 'No favorite courses.' }
               </Card>
-            </div>
-        </div>
+            </Container>
+        </Container>
     </>
   )
 }

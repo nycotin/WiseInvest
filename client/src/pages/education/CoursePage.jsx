@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from '../axiosConfig';
+import { useParams } from 'react-router-dom';
+import axios from '../../axiosConfig';
+
+import EducationDashboardButton from '../../components/education/EducationDashboardButton';
+import BackToCourseButton from '../../components/education/BackToCourseButton';
+
+import Badge from 'react-bootstrap/Badge';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/esm/Container';
+import Row from 'react-bootstrap/Row';
+
+import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from 'react-icons/bs';
 import ReactPlayer from 'react-player/lazy'
 
-import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from "react-icons/bs";
-import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Badge from 'react-bootstrap/Badge';
-
-import '../App.css';
-import '../index.css';
-
+import '../../index.css';
+import '../../educate.css';
 
 function CoursePage() {
   const { courseId } = useParams();
@@ -22,8 +26,6 @@ function CoursePage() {
   const [learningStatus, setLearningStatus] = useState('');
   const [userCourses, setUserCourses] = useState([]);
   const [userFavs, setUserFavs] = useState([]);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const dashboard = document.querySelector('.dashboard')
@@ -41,7 +43,7 @@ function CoursePage() {
     function getUserCourses(){
         axios.get('/education/courses/learning')
         .then(response => {
-          if(response.data.userLearning){
+          if (response.data.userLearning) {
             setUserCourses(response.data.userLearning);
           } else {
             setUserCourses([]);
@@ -52,7 +54,7 @@ function CoursePage() {
     function getUserFavs(){
       axios.get('/education/courses/favorites')
       .then(response => {
-        if(response.data.userFavs){
+        if (response.data.userFavs) {
           setUserFavs(response.data.userFavs);
         } else {
           setUserCourses([]);
@@ -70,7 +72,7 @@ function CoursePage() {
     .then(response => {
       console.log(response.data.message);
 
-      if(response.data.action === 'Remove'){
+      if (response.data.action === 'Remove') {
         setUserFavs(userFavs.filter(i => i.id !== course.id));
       } else {
         setUserFavs([...userFavs, course]);
@@ -83,7 +85,7 @@ function CoursePage() {
     .then(response => {
       console.log(response.data.message);
       
-      if(response.data.action === 'Remove'){
+      if (response.data.action === 'Remove') {
         setUserCourses(userCourses.filter(i => i.id !== course.id));
         setLearningStatus(null);
       } else {
@@ -96,7 +98,7 @@ function CoursePage() {
   function isFav(course){
     const fav = userFavs.find(f => { return f.id === course.id })
 
-    if(fav){
+    if (fav) {
       return true;
     } else {
       return false;
@@ -106,17 +108,11 @@ function CoursePage() {
   function isEnrolled(course){
     const enrolled = userCourses.find(c => { return c.id === course.id })
 
-    if(enrolled){
+    if (enrolled) {
       return true;
     } else {
       return false;
     }
-  }
-
-  function navigateToDashboard(){
-    navigate('/education')
-    const dashboard = document.querySelector('.dashboard');
-    dashboard.style.display = 'block';
   }
 
   function playVideo(pos){
@@ -132,11 +128,11 @@ function CoursePage() {
   }
 
   function createStatusButton(){
-    if (learningStatus === 'Enrolled'){
+    if (learningStatus === 'Enrolled') {
       return (
         <Button variant="info" size="sm" onClick={editCourseStatus}>Start Course</Button>
       )
-    } else if (learningStatus === 'In Progress'){
+    } else if (learningStatus === 'In Progress') {
       return (
         <Button variant="success" size="sm" onClick={editCourseStatus}>Completed?</Button>
       )
@@ -146,15 +142,15 @@ function CoursePage() {
   }
 
   function createBadge(){
-    if (learningStatus === 'Enrolled'){
+    if (learningStatus === 'Enrolled') {
       return (
         <sub><Badge bg="secondary">{learningStatus}</Badge></sub>
       )
-    } else if (learningStatus === 'In Progress'){
+    } else if (learningStatus === 'In Progress') {
       return (
         <sub><Badge bg="primary">{learningStatus}</Badge></sub>
       )
-    } else if (learningStatus === 'Completed'){
+    } else if (learningStatus === 'Completed') {
       return (
         <sub><Badge bg="success">{learningStatus}</Badge></sub>
       )
@@ -165,14 +161,14 @@ function CoursePage() {
 
   const playlist = courseItems.map(item => {
     if (item.position === currentItem){
-      return <Card key={item.id} className="mb-2" style={{ width: '20rem', backgroundColor: 'lightgray' }} onClick={() => playVideo(item.position)}>
+      return <Card key={item.id} className="selected" onClick={() => playVideo(item.position)}>
               <Card.Img className="thumbnail" variant="top" src={item.thumbnail}/>
               <Card.Body>
                 <Card.Text>{item.position + 1}. {item.title}</Card.Text>
               </Card.Body>
             </Card>
     } else {
-      return <Card key={item.id} className="mb-2" style={{ width: '20rem', backgroundColor: 'white' }} onClick={() => playVideo(item.position)}>
+      return <Card key={item.id} onClick={() => playVideo(item.position)}>
                 <Card.Img className="thumbnail" variant="top" src={item.thumbnail}/>
                 <Card.Body>
                   <Card.Text>{item.position + 1}. {item.title}</Card.Text>
@@ -182,24 +178,18 @@ function CoursePage() {
     })
   
   const courseDetails = course.map(course => {
-    return <Card key={courseId} className="course-details" style={{ width: '100%'}} md={8}>
+    return <Card key={courseId} className="course-details" md={8}>
           <Card.Title>{course.title}
             { createBadge() !== null ? createBadge() : null }
           </Card.Title>
           <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
           <Card.Subtitle>Course items: {course.itemCount}</Card.Subtitle>
-          <Card.Subtitle className="mt-2">
-            <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}>
-              { isFav(course) ? <BsBookmarkFill /> : <BsBookmark /> }
-            </Button>
-            <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}>
-              { isEnrolled(course) ? <BsClipboard2Fill /> : <BsClipboard2 /> }
-            </Button>
+          <Card.Subtitle>
+            { isFav(course) ? <Button variant="danger" size="sm" onClick={() => toggleFavorite(course)}><BsBookmarkFill /></Button> : <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}><BsBookmark /></Button> }
+            { isEnrolled(course) ? <Button variant="success" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2Fill /></Button> : <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2 /></Button> }
           </Card.Subtitle>
           <Card.Text>{course.description}</Card.Text>
-          <Card.Subtitle>
-            { createStatusButton() !== null ? createStatusButton() : null }
-          </Card.Subtitle>
+          { createStatusButton() !== null ? <Card.Subtitle>{createStatusButton()}</Card.Subtitle> : null }
       </Card>
   })
   
@@ -221,26 +211,29 @@ function CoursePage() {
   })
 
   return (
-    <>
-      <Card key={courseId} className="course" style={{ width: '100%'}}>
+    <Container id="course-page">
+      <Container>
+        <BackToCourseButton />
+        <EducationDashboardButton />
+      </Container>
+      <Card key={courseId} className="course">
         <Col>
           <Row>
-            <Col className="course-details" style={{ width: '100%'}}>
+            <Col className="course-details">
               {courseDetails}
             </Col>
           </Row>
           <Row className="item-details">
             {itemDetails}
-            <Col className="playlist ml-1" md={4}>
+            <Col className="playlist">
               <h4>Playlist items</h4>
               {playlist}
             </Col>
           </Row>
        </Col>          
       </Card>
-      <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
-    </>
+    </Container>
   )
 }
 
-export default CoursePage
+export default CoursePage;

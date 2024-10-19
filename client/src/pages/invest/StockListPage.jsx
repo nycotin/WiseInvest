@@ -1,31 +1,30 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from '../axiosConfig';
+import { Link } from 'react-router-dom';
+import axios from '../../axiosConfig';
 
-import Card from 'react-bootstrap/Card';
+import InvestDashboardButton from '../../components/invest/InvestDashboardButton';
+
 import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
+import Card from 'react-bootstrap/Card';
+import Container from 'react-bootstrap/Container';
 import InputGroup from 'react-bootstrap/InputGroup';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Table from 'react-bootstrap/Table';
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-import { BsCart } from "react-icons/bs";
-import { IoIosInformationCircleOutline } from "react-icons/io";
+import { BsCart } from 'react-icons/bs';
+import { IoIosInformationCircleOutline } from 'react-icons/io';
 
-import Container from 'react-bootstrap/Container';
-import '../App.css';
-import '../index.css';
-
+import '../../index.css';
+import '../../invest.css';
 
 function StockListPage() {
   const [stocks, setStocks] = useState([]);
   const [filteredStocks, setFilteredStocks] = useState([]);
   const [toastMessage, setToastMessage] = useState("");
   const [total, setTotal] = useState(0);
-
-  const navigate = useNavigate();
 
   useEffect(() => {  
     const dashboard = document.querySelector('.dashboard');
@@ -70,12 +69,6 @@ function StockListPage() {
         </Toast>
       </ToastContainer>
     );
-  }
-
-  function navigateToDashboard(){
-    navigate('/invest')
-    const dashboard = document.querySelector('.dashboard');
-    dashboard.style.display = 'block';
   }
 
   function filterStocks(str){
@@ -137,8 +130,9 @@ function StockListPage() {
       <Container className="stock-list" fluid="md">
         <h2>Browse Stocks</h2>
         { toastMessage !== '' ? createToast() : null}
-        <Button variant="primary" size="sm" onClick={navigateToDashboard}>Back to Dashboard</Button>
-        <div className="filter-buttons">
+        <InvestDashboardButton />
+        <Container id="filter-buttons" className="my-3">
+          <Button variant="secondary" size="sm" onClick={() => filterStocks('all')}>All Markets</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('North America')}>North America</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('South America')}>South America</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('Europe')}>Europe</Button>
@@ -146,51 +140,53 @@ function StockListPage() {
           <Button variant="secondary" size="sm" onClick={() => filterStocks('Africa')}>Africa</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('Asia')}>Asia</Button>
           <Button variant="secondary" size="sm" onClick={() => filterStocks('Oceania')}>Oceania</Button>
-          <Button variant="secondary" size="sm" onClick={() => filterStocks('all')}>All Markets</Button>
-        </div>
+        </Container>
             { filteredStocks.length !== 0 ? <Card className="all-stocks">
                   <Table striped bordered hover>
                     <thead>
                       <tr>
-                        <th>Exchange MIC</th>
-                        <th>Stock Symbol</th>
-                        <th>Company Name</th>
-                        <th>Current Price</th>
-                        <th>Currency</th>
-                        <th>Market Area</th>
+                        <th className="mic">Exchange MIC</th>
+                        <th className="symbol">Stock Symbol</th>
+                        <th className="company">Company Name</th>
+                        <th className="current-price">Current Price</th>
+                        <th className="currency">Currency</th>
+                        <th className="market">Market Area</th>
                       </tr>
                     </thead>
                     <tbody>
                       { filteredStocks.map(i => <tr key={i.symbol}>
-                        <td>{i.exchange_id}</td>
-                        <td>{i.symbol}</td>
-                        <td><Link to={i.link} target="_blank">{i.company_name}</Link></td>
+                        <td className="mic">{i.exchange_id}</td>
+                        <td className="symbol">{i.symbol}</td>
+                        <td className="company"><Link to={i.link} target="_blank">{i.company_name}</Link></td>
                         <td className="current-price">{i.current_price !== undefined ? i.currency_symbol : null} {i.current_price !== undefined ? i.current_price : 'Price loading'}</td>
-                        <td>{i.currency}</td>
-                        <td>{i.market_area}</td>
+                        <td className="currency">{i.currency}</td>
+                        <td className="market">{i.market_area}</td>
                         <td><Button id={`st-${formatId(i.symbol)}`} className="make-purchase" variant="secondary" size="sm" onClick={() => makePurchasable(formatId(i.symbol))}><BsCart /></Button>
                             <InputGroup id={`st-${formatId(i.symbol)}`} className="purchase-inputs" hidden={true}>
-                              <div className="mb-2">
-                                <label htmlFor={`st-${formatId(i.symbol)}-quantity`}>Quantity:</label>
-                                <input type="number" id={`st-${formatId(i.symbol)}-quantity`} className="form-control" min={1} max={100} defaultValue={1} onChange={() => makeTotal(formatId(i.symbol), i.symbol)} />
-                              </div>
-                              <p id={`st-${formatId(i.symbol)}-total-expense`} className="mb-2">
-                                Total: {i.currency_symbol} <span id={`st-${formatId(i.symbol)}-total`}>{total !== 0 ? total : i.current_price}</span>
-                                <OverlayTrigger key="overlay" placement="right" overlay={
-                                  <Tooltip id='tooltip-right'>
-                                    Actual amount taken for transaction may vary slightly.
-                                  </Tooltip> }>
-                                  <sup><IoIosInformationCircleOutline /></sup>
-                                </OverlayTrigger>
-                              </p>
-                              <Button id={i.symbol} className="purchase-stocks" variant="warning" size="sm" onClick={() => purchaseStocks(formatId(i.symbol), i.symbol)}>Purchase</Button>
-                              <Button id={i.symbol} className="purchase-stocks" variant="secondary" size="sm" onClick={() => toggleInputs(formatId(i.symbol))}>Close</Button>
+                              <Container className="quantity mb-2">
+                                <label htmlFor={`st-${formatId(i.symbol)}-quantity`}>Quantity:</label>                                <input type="number" id={`st-${formatId(i.symbol)}-quantity`} className="form-control" min={1} max={100} defaultValue={1} onChange={() => makeTotal(formatId(i.symbol), i.symbol)} />
+                              </Container>
+                              <Container className="total-expense">
+                                <p id={`st-${formatId(i.symbol)}-total-expense`} className="mb-2">
+                                  Total: {i.currency_symbol} <span id={`st-${formatId(i.symbol)}-total`}>{total !== 0 ? total : i.current_price}</span>
+                                  <OverlayTrigger key="overlay" placement="right" overlay={
+                                    <Tooltip id='tooltip-right'>
+                                      Actual amount taken for transaction may vary slightly.
+                                    </Tooltip> }>
+                                    <sup><IoIosInformationCircleOutline /></sup>
+                                  </OverlayTrigger>
+                                </p>
+                              </Container>
+                              <Container className="purchase-stocks">
+                                <Button id={i.symbol} className="purchase-stocks" variant="warning" size="sm" onClick={() => purchaseStocks(formatId(i.symbol), i.symbol)}>Purchase</Button>
+                                <Button id={i.symbol} className="purchase-stocks" variant="secondary" size="sm" onClick={() => toggleInputs(formatId(i.symbol))}>Close</Button>
+                              </Container>
                             </InputGroup>
                         </td>
                       </tr>) }
                     </tbody>
                   </Table>
-              </Card> : 'No stocks available.'}
+              </Card> : <Container>No stocks available.</Container>}
       </Container>
   )
 }

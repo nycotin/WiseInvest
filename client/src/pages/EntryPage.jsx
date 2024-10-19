@@ -1,14 +1,17 @@
-import AppLogo from '../assets/logo-no-bg.png';
-import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 
-import '../App.css';
+import AppLogo from '../assets/logo-no-bg.png';
+
+import Button from 'react-bootstrap/Button';
+
+import '../index.css';
+import '../users.css';
 
 function EntryPage () {
     const navigate = useNavigate();
 
     return (
-        <div className="entry-page">
+        <div id="entry-page">
             <h1>WiseInvest</h1>
             <img src={AppLogo} alt="Logo" />
             <div className="buttons">
@@ -19,4 +22,4 @@ function EntryPage () {
     )
 }
 
-export default EntryPage
+export default EntryPage;

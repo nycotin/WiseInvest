@@ -1,10 +1,15 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+
+import axios from '../../axiosConfig';
+
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from '../../axiosConfig';
+import Container from 'react-bootstrap/Container';
 
+import '../../index.css';
+import '../../users.css';
 
 function RegisterForm() {
   const [validated, setValidated] = useState(false);
@@ -38,8 +43,8 @@ function RegisterForm() {
         'confirmation': confirmation
     })
     .then(response => {
-      sessionStorage.setItem('userId', response.data.user_id)
-      sessionStorage.setItem('username', response.data.username)
+      sessionStorage.setItem('userId', response.data.user_id);
+      sessionStorage.setItem('username', response.data.username);
 
       return navigate('/fork');
     })
@@ -49,7 +54,7 @@ function RegisterForm() {
   }
 
   return (
-    <>
+    <Container className="mt-2">
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Label>First name:</Form.Label>
@@ -92,14 +97,14 @@ function RegisterForm() {
         <Button type="submit">Register</Button>
       </Form>
 
-      <div className="msg">
+      <Container className="msg mt-2">
         {msg ? msg : null}
-      </div>
+      </Container>
 
-      <div className="link">
-          Already registered? <Link to="/login">Log in here!</Link>
-      </div>
-    </>
+      <Container className="link mt-2">
+          Already registered? <Link to='/login'>Log in here!</Link>
+      </Container>
+    </Container>
   );
 }
 

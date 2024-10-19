@@ -5,12 +5,16 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
 }
 
 a {
@@ -18,51 +22,164 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
+/* Entry Page */
+#entry-page {
+  background-color: rgb(196, 194, 194);
+  text-align: center;
+  width: 40%;
+  margin: 2rem auto 3rem auto;
+  padding: 2rem;
+  border-radius: 1.5rem;
   display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  flex-direction: column;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+#entry-page img {
+  width: 50%;
+  margin: auto;
+}
+
+.buttons {
+  width: 30%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* Navbar */
+nav {
+  width: 100%;
+  justify-content: space-evenly;
+  background-color: rgb(201, 199, 199);
+}
+
+nav h2 {
+  text-align: center;
+}
+
+.brand.container img {
+  width: 10%;
+}
+
+.brand.container {
+  width: 33%;
+  margin-left: 2rem;;
+}
+
+.title.container {
+  width: 33%;
+  justify-content: center;
+}
+
+.menu.container {
+  width: 33%;
+}
+
+#basic-navbar-nav {
+  margin-right: 2rem;
+  justify-content: right;
+}
+
+
+/* All pages */
+.user-profile h2,
+.dashboard h2,
+.course-list h2,
+.stock-list h2,
+.portfolio h2 {
+  text-align: center;
+  margin-top: 8rem;
+  margin-bottom: 3rem;
+}
+
+.user-profile,
+.dashboard,
+.course-list,
+.stock-list,
+.portfolio {
+  margin-bottom: 3rem;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  margin: 0.2rem;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+.dashboard {
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.dashboard li {
+  list-style-type: none;
+  border: solid 1px rgb(180, 179, 179);
+  border-radius: 0.375rem;
+  padding: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+
+/* Responsiveness */
+@media (max-width: 1400px) {
+  .menu {
+    font-size: smaller;
   }
-  a:hover {
-    color: #747bff;
+}
+
+@media (max-width: 1200px) {
+  #entry-page {
+    width: 50%;
   }
+}
+
+@media (max-width: 1000px) {
+  .navbar {
+    flex-wrap: nowrap;
+  }
+
+  .dropdown-menu.show {
+    font-size: smaller;
+    width: 80%;
+  }
+
+  .menu.container {
+    flex-direction: row-reverse;
+    margin-right: 2rem;
+  }
+
+  h2 {
+    font-size: medium;
+  }
+
   button {
-    background-color: #f9f9f9;
+    size: 10%;
   }
+
+  button.navbar-toggler.collapsed {
+    justify-items: end;
+  }
+}
+
+@media (max-width: 800px) {
+  #entry-page {
+    width: 70%;
+  }
+
+  .title.container h2,
+  .navbar-brand {
+    font-size: large;
+  }
+
+}
+
+@media (max-width: 600px) {
+  .title.container h2 {
+    font-size: medium;
+  }
+
 }

@@ -21,7 +21,7 @@ def login_view(request):
     if request.method == "POST":
         data = json.loads(request.body)
 
-        print(get_token(request))
+        # print(get_token(request))
 
         user = authenticate(request, username=data["username"], password=data["password"])
 
@@ -36,8 +36,6 @@ def login_view(request):
 
 
 def logout_view(request):
-    print(request.headers)
-    print(get_token(request))
     logout(request)
     return JsonResponse({ "message": "Logged out." }, status=200)
 
@@ -70,7 +68,7 @@ def user_profile(request):
     user_info = User.objects.get(pk=request.user.id)
 
     date = datetime.datetime.strftime(user_info.date_joined, '%d/%m/%y')
-    login = datetime.datetime.strftime(user_info.date_joined, '%d/%m/%y at %H:%M')
+    login = datetime.datetime.strftime(user_info.last_login, '%d/%m/%y at %H:%M')
 
     user = { "firstname": user_info.firstname, "lastname": user_info.lastname, "email": user_info.email, "username" : user_info.username, "date_joined": date, "last_login": login }
 
