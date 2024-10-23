@@ -2,7 +2,8 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from 'react-bootstrap/Button';
 
-import '../../index.css';
+import '../../styles/index.css';
+import '../../styles/educate.css';
 
 function BackToCourseButton(){
     const navigate = useNavigate();

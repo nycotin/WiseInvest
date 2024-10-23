@@ -27,7 +27,7 @@
 
 
 /* Stock List */
-/* Hidden Purchase Input Group */
+/* Purchase Input Group */
 .purchase-inputs {
   font-size: smaller;
   display: flex;
@@ -62,6 +62,17 @@ p[id$=total-expense] {
   font-size: 0.7rem;
   font-style: italic;
   padding: 0.5rem;
+}
+
+.toast-container {
+  margin-right: 15px;
+  position: fixed;
+  background-color: greenyellow;
+  color: green;
+}
+
+.toast-header {
+  color: green;
 }
 
 

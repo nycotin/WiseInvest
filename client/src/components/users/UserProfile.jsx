@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-
-import axios from '../../axiosConfig';
+import axios from '../../utils/axiosConfig';
 
 import Container from 'react-bootstrap/Container';
 
-import '../../index.css';
-import '../../users.css';
+import '../../styles/index.css';
+import '../../styles/users.css';
 
 function UserProfile() {  
     const [userProfile, setUserProfile] = useState([])

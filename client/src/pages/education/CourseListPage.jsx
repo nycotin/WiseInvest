@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from '../../axiosConfig';
+import axios from '../../utils/axiosConfig';
 
-import EducationDashboardButton from '../../components/education/EducationDashboardButton';
+import BackToDashboardButton from '../../components/BackToDashboardButton';
 
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -11,8 +11,8 @@ import Container from 'react-bootstrap/Container';
 
 import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from 'react-icons/bs';
 
-import '../../index.css';
-import '../../educate.css';
+import '../../styles/index.css';
+import '../../styles/educate.css';
 
 function CourseListPage({ page }) {
   const [courses, setCourses] = useState([]);
@@ -105,7 +105,6 @@ function CourseListPage({ page }) {
 
   function HandleCardClick(e, course){
     
-    //! Add try-catch
     try {
       const target = e.target
       const targetAttribute = target.getAttribute('class')
@@ -167,7 +166,7 @@ function CourseListPage({ page }) {
   return (
     <Container className="course-list" fluid="md">
       <h2>{ formatTitle }</h2>
-        <EducationDashboardButton />
+        <BackToDashboardButton app='education' />
         <Container id="course-cards">
           { courseList.length !== 0 ? courseList : <Container>No courses.</Container> }
         </Container>

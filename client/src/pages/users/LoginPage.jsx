@@ -2,8 +2,8 @@ import LoginForm from '../../components/users/LoginForm.jsx';
 
 import Container from 'react-bootstrap/esm/Container';
 
-import '../../index.css';
-import '../../users.css';
+import '../../styles/index.css';
+import '../../styles/users.css';
 
 function LoginPage () {
     return (

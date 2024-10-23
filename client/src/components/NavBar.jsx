@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import axios from '../axiosConfig';
+import axios from '../utils/axiosConfig.js';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -8,7 +8,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import AppLogo from '../assets/logo-no-bg.png';
-import '../index.css';
+import '../styles/index.css';
 
 function NavBar({ title }) {
     const navigate = useNavigate();

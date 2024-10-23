@@ -1,19 +1,20 @@
 import { useRouteError } from 'react-router-dom';
 
-import '../index.css';
+import Container from 'react-bootstrap/Container';
+
+import '../styles/index.css';
 
 function ErrorPage() {
   const error = useRouteError();
-  console.error(error);
 
   return (
-    <div id="error-page">
-      <h1>Oops!</h1>
+    <Container id="error-page">
+      <h2>Oops!</h2>
       <p>Sorry, an unexpected error has occurred.</p>
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
-    </div>
+    </Container>
   );
 }
 

@@ -1,19 +1,58 @@
 import { Outlet } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from '../../utils/axiosConfig';
 
-import Dashboard from "../../components/invest/Dashboard";
-import NavBar from "../../components/NavBar"
+import Dashboard from '../../components/invest/Dashboard';
+import NavBar from '../../components/NavBar';
 
-import '../../index.css';
-import '../../invest.css';
+import '../../styles/index.css';
+import '../../styles/invest.css';
 
 function InvestPage() {
-  const title = { 'title': 'Investments Manager'}
+  const [stocks, setStocks] = useState([]);
+  const [portfolio, setPortfolio] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
-    return (
+  useEffect(() => {  
+    function getStocks(){
+        axios.get('/invest/get-stocks')
+        .then(response => {
+            setStocks(response.data.stocks);
+        });
+    }
+
+    function getPortfolio(){
+      axios.get('/invest/get-portfolio')
+      .then(response => {
+        if (response.data.portfolio_data) {
+          setPortfolio(response.data.portfolio_data);
+        } else {
+          setPortfolio([]);
+        }
+      });
+    }
+
+    function getTransactionHistory(){
+      axios.get('/invest/get-transactions')
+      .then(response => {
+        if (response.data.transactions_history) {
+          setTransactions(response.data.transactions_history);
+        } else {
+          setTransactions([]);
+        }
+      });
+    }
+
+    getStocks();
+    getPortfolio();
+    getTransactionHistory();
+  }, [])
+
+  return (
     <>
-        <NavBar { ...title } />
-        <Dashboard />
-        <Outlet />
+        <NavBar title='Investments Manager' />
+        <Dashboard transactions={transactions} portfolio={portfolio} />
+        <Outlet context={[stocks, portfolio]} />
     </>
   )
 }

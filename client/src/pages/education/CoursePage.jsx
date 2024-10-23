@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from '../../axiosConfig';
+import axios from '../../utils/axiosConfig';
 
-import EducationDashboardButton from '../../components/education/EducationDashboardButton';
+import BackToDashboardButton from '../../components/BackToDashboardButton';
 import BackToCourseButton from '../../components/education/BackToCourseButton';
 
 import Badge from 'react-bootstrap/Badge';
@@ -15,8 +15,8 @@ import Row from 'react-bootstrap/Row';
 import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from 'react-icons/bs';
 import ReactPlayer from 'react-player/lazy'
 
-import '../../index.css';
-import '../../educate.css';
+import '../../styles/index.css';
+import '../../styles/educate.css';
 
 function CoursePage() {
   const { courseId } = useParams();
@@ -214,7 +214,7 @@ function CoursePage() {
     <Container id="course-page">
       <Container>
         <BackToCourseButton />
-        <EducationDashboardButton />
+        <BackToDashboardButton app='education' />
       </Container>
       <Card key={courseId} className="course">
         <Col>
