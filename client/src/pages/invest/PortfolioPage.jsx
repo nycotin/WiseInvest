@@ -19,9 +19,6 @@ function PortfolioPage() {
   const [filteredStocks, setFilteredStocks] = useState(portfolio);
 
   useEffect(() => {  
-    const dashboard = document.querySelector('.dashboard');
-    dashboard.style.display = 'none';
-
     setFilteredStocks(portfolio);
 
   }, [portfolio])

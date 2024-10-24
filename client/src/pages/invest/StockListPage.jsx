@@ -21,11 +21,7 @@ function StockListPage() {
   const [toastMessage, setToastMessage] = useState('');
 
   useEffect(() => {  
-    const dashboard = document.querySelector('.dashboard');
-    dashboard.style.display = 'none';
-
     setToastMessage('');
-
     setFilteredStocks(stocks);
 
     function getCurrentPrice(){

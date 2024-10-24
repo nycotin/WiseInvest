@@ -10,8 +10,6 @@ function BackToDashboardButton({ app }){
 
     function navigateToDashboard(app){
         navigate(`/${app}`);
-        const dashboard = document.querySelector('.dashboard');
-        dashboard.style.display = 'block';
     }
     
     return (

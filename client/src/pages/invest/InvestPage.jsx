@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import axios from '../../utils/axiosConfig';
 
 import Dashboard from '../../components/invest/Dashboard';
@@ -12,6 +12,8 @@ function InvestPage() {
   const [stocks, setStocks] = useState([]);
   const [portfolio, setPortfolio] = useState([]);
   const [transactions, setTransactions] = useState([]);
+
+  const location = useLocation().pathname;
 
   useEffect(() => {  
     function getStocks(){
@@ -51,7 +53,7 @@ function InvestPage() {
   return (
     <>
         <NavBar title='Investments Manager' />
-        <Dashboard transactions={transactions} portfolio={portfolio} />
+        { location === '/invest' ? <Dashboard transactions={transactions} portfolio={portfolio} /> : null }
         <Outlet context={[stocks, portfolio]} />
     </>
   )
