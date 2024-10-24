@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../../utils/axiosConfig';
+import PropTypes from 'prop-types';
 
 import Badge from 'react-bootstrap/Badge';
 import Card from 'react-bootstrap/Card';
@@ -9,42 +8,8 @@ import Container from 'react-bootstrap/Container';
 import '../../styles/index.css';
 import '../../styles/educate.css';
 
-function Dashboard() {
-  const [userCourses, setUserCourses] = useState([]);
-  const [userFavs, setUserFavs] = useState([]);
-
+function Dashboard({ userCourses, userFavs }) {
   const navigate = useNavigate();
-
-  useEffect(() => {  
-    const dashboard = document.querySelector('.dashboard');
-    dashboard.style.display = 'block';
-
-    function getUserCourses(){
-        axios.get('/education/courses/learning')
-        .then(response => {
-          if(response.data.userLearning){
-            setUserCourses(response.data.userLearning);
-          } else {
-            setUserCourses([]);
-          }
-        });
-      }
-
-    function getUserFavs(){
-      axios.get('/education/courses/favorites')
-      .then(response => {
-        if(response.data.userFavs){
-          setUserFavs(response.data.userFavs);
-        } else {
-          setUserCourses([]);
-        }
-      });
-    }
-
-    getUserCourses();
-    getUserFavs();
-  }, [])
-
 
   const notStartedCourses = userCourses.filter(i => i.status === 'Enrolled')
   const completedCourses = userCourses.filter(i => i.status === 'Completed')
@@ -76,3 +41,8 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+Dashboard.propTypes = {
+  userCourses: PropTypes.array.isRequired,
+  userFavs: PropTypes.array.isRequired
+};

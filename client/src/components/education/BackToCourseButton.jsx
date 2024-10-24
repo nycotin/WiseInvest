@@ -10,8 +10,6 @@ function BackToCourseButton(){
 
     function navigateToDashboard(){
         navigate('/education/courses')
-        const dashboard = document.querySelector('.dashboard');
-        dashboard.style.display = 'block';
     }
     
     return (

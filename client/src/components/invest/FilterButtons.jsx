@@ -7,7 +7,6 @@ import '../../styles/index.css';
 import '../../styles/invest.css';
 
 function FilterButtons({ stocks, setFilteredStocks }) {
-
   const market_areas = ['All Markets', 'North America', 'South America', 'Europe', 'Middle East', 'Africa', 'Asia', 'Oceania'];
 
   function filterStocks(str){

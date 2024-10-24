@@ -56,31 +56,32 @@ function StockListPage() {
       { toastMessage !== '' ? createToast() : null}
       <BackToDashboardButton app='invest' />
       <FilterButtons stocks={stocks} setFilteredStocks={setFilteredStocks} />
-      { filteredStocks.length !== 0 ? <Card className="all-stocks">
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th className="mic">Exchange MIC</th>
-                  <th className="symbol">Stock Symbol</th>
-                  <th className="company">Company Name</th>
-                  <th className="current-price">Current Price</th>
-                  <th className="currency">Currency</th>
-                  <th className="market">Market Area</th>
-                </tr>
-              </thead>
-              <tbody>
-                { filteredStocks.map(i => <tr key={i.symbol}>
-                  <td className="mic">{i.exchange_id}</td>
-                  <td className="symbol">{i.symbol}</td>
-                  <td className="company"><Link to={i.link} target="_blank">{i.company_name}</Link></td>
-                  <td className="current-price">{i.current_price !== undefined ? i.currency_symbol : null} {i.current_price !== undefined ? i.current_price : 'Price loading'}</td>
-                  <td className="currency">{i.currency}</td>
-                  <td className="market">{i.market_area}</td>
-                  <td><PurchaseForm stock={i} setToastMessage={setToastMessage} />
-                  </td>
-                </tr>) }
-              </tbody>
-            </Table>
+      { filteredStocks.length !== 0 ? 
+        <Card className="all-stocks">
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th className="mic">Exchange MIC</th>
+                <th className="symbol">Stock Symbol</th>
+                <th className="company">Company Name</th>
+                <th className="current-price">Current Price</th>
+                <th className="currency">Currency</th>
+                <th className="market">Market Area</th>
+              </tr>
+            </thead>
+            <tbody>
+              { filteredStocks.map(i => <tr key={i.symbol}>
+                <td className="mic">{i.exchange_id}</td>
+                <td className="symbol">{i.symbol}</td>
+                <td className="company"><Link to={i.link} target="_blank">{i.company_name}</Link></td>
+                <td className="current-price">{i.current_price !== undefined ? i.currency_symbol : null} {i.current_price !== undefined ? i.current_price : 'Price loading'}</td>
+                <td className="currency">{i.currency}</td>
+                <td className="market">{i.market_area}</td>
+                <td><PurchaseForm stock={i} setToastMessage={setToastMessage} />
+                </td>
+              </tr>) }
+            </tbody>
+          </Table>
         </Card> : <Container>No stocks available.</Container> }
     </Container>
   )

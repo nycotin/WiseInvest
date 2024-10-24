@@ -24,6 +24,9 @@ export function getCsrfToken(){
 // Education
 
 
+
+
+
 // Invest
 export function calculateGrowth(inv, val){
     const data = {

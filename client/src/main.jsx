@@ -51,17 +51,17 @@ export const router = createBrowserRouter(
             errorElement={<ErrorPage />}
           >
             <Route
-              element={<CourseListPage {...{'page': 'browse-courses'}} />}
+              element={<CourseListPage pageTitle={'Browse Courses'} />}
               path='/education/courses'
               errorElement={<ErrorPage />}
             />
             <Route
-              element={<CourseListPage {...{'page': 'favorites'}} />}
+              element={<CourseListPage pageTitle={'Favorites'} />}
               path='/education/courses/favorites'
               errorElement={<ErrorPage />}
             />
             <Route
-              element={<CourseListPage {...{ 'page':'learning' }} />}
+              element={<CourseListPage pageTitle={'Learning'} />}
               path='/education/courses/learning'
               errorElement={<ErrorPage />}
             />
