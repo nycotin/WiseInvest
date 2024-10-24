@@ -54,6 +54,7 @@ function EducationPage() {
     <>
         <NavBar title='Education Center' />
         { location === '/education' ? <Dashboard userCourses={userCourses} userFavs={userFavs} /> : null }
+        { location === '/education/' ? <Dashboard userCourses={userCourses} userFavs={userFavs} /> : null }
         <Outlet context={[ courses, userCourses, setUserCourses, userFavs, setUserFavs ]} />
     </>
   )

@@ -54,6 +54,7 @@ function InvestPage() {
     <>
         <NavBar title='Investments Manager' />
         { location === '/invest' ? <Dashboard transactions={transactions} portfolio={portfolio} /> : null }
+        { location === '/invest/' ? <Dashboard transactions={transactions} portfolio={portfolio} /> : null }
         <Outlet context={[stocks, portfolio]} />
     </>
   )
