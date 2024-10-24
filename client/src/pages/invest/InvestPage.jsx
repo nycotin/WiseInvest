@@ -1,5 +1,5 @@
-import { Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import axios from '../../utils/axiosConfig';
 
 import Dashboard from '../../components/invest/Dashboard';

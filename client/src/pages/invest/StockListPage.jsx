@@ -24,7 +24,7 @@ function StockListPage() {
     const dashboard = document.querySelector('.dashboard');
     dashboard.style.display = 'none';
 
-    setToastMessage("");
+    setToastMessage('');
 
     setFilteredStocks(stocks);
 
@@ -38,8 +38,6 @@ function StockListPage() {
     }
 
     getCurrentPrice();
-
-    setInterval(getCurrentPrice(), 900000);
 
   }, [stocks])
 

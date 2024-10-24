@@ -1,4 +1,5 @@
 from django.db import models
+
 from users.models import User
 
 # Create your models here.
@@ -14,7 +15,6 @@ class Course(models.Model):
     player = models.CharField(max_length=500)
     cover =  models.URLField(max_length=50)
 
-
 class CourseItem(models.Model):
     id = models.AutoField(primary_key=True)
     courseId = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -25,17 +25,10 @@ class CourseItem(models.Model):
     thumbnail = models.URLField(max_length=50)
     publishedAt = models.DateTimeField()
 
-
-# video url sample
-# playlist = https://youtube.com/playlist?list={playlistId}
-# playlistVideo = 'https://www.youtube.com/watch?v={itemId}&list={playlistId}&index={position}'
-
-
 class Favorite(models.Model):
     id = models.AutoField(primary_key=True)
     userId = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     favorite_courses = models.ManyToManyField(Course, related_name='fav_courses')
-
 
 class Learning(models.Model):
     STATUSES = {
