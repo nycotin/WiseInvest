@@ -4,7 +4,7 @@ export function getSessionId(){
         const sessionId = document.cookie.split('; ').find(c => c.startsWith('sessionid=')).split('=')[1];
         return sessionId;
     } catch(error) {
-        return ''
+        return '';
     }
 }
 
@@ -14,17 +14,9 @@ export function getCsrfToken(){
         console.log(csrftoken)
         return csrftoken;
     } catch(error) {
-        return ''
+        return '';
     }
 }
-
-// All apps
-
-
-// Education
-
-
-
 
 
 // Invest
