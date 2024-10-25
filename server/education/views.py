@@ -1,23 +1,12 @@
-import json
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Course, CourseItem, Favorite, Learning
 from users.models import User
 
 # Create your views here.
-
-def index(request):
-    
-    return HttpResponse(200)
-
 
 @login_required
 def get_courses(request):
@@ -35,7 +24,7 @@ def get_course_details(request, courseId):
     if request.method == "GET":
         user = User.objects.get(pk=request.user.id)
         course = list(Course.objects.filter(pk=courseId).values())
-        courseItems = list(CourseItem.objects.filter(courseId=courseId).values())
+        course_items = list(CourseItem.objects.filter(courseId=courseId).values())
         
         learning = Learning.objects.filter(uid=user, enrolled_course__pk=courseId)
         status = ""
@@ -44,7 +33,7 @@ def get_course_details(request, courseId):
         else:
             status = None
 
-        return JsonResponse({ "course": course, "courseItems": courseItems, "status": status }, status=200)
+        return JsonResponse({ "course": course[0], "courseItems": course_items, "status": status }, status=200)
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 

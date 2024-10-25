@@ -4,8 +4,8 @@ import AppLogo from '../assets/logo-no-bg.png';
 
 import Button from 'react-bootstrap/Button';
 
-import '../index.css';
-import '../users.css';
+import '../styles/index.css';
+// import '../styles/users.css';
 
 function EntryPage () {
     const navigate = useNavigate();

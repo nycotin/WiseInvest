@@ -1,16 +1,12 @@
-import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.http import HttpResponse, JsonResponse
-from django.urls import reverse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.middleware.csrf import get_token
-import datetime
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+import datetime
+import json
 
 from .models import User
 
@@ -96,7 +92,7 @@ def update_user_profile(request):
             
             user.save()
 
-            return JsonResponse({ "message": "User profile successfully updated" }, status=200)        
+            return JsonResponse({ "message": "User profile successfully updated!" }, status=200)        
         else:
             return JsonResponse({ "message": "No changes." }, status=200)
         

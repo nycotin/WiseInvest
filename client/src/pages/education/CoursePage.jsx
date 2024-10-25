@@ -1,36 +1,31 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from '../../axiosConfig';
+import { useParams, useOutletContext } from 'react-router-dom';
+import axios from '../../utils/axiosConfig';
 
-import EducationDashboardButton from '../../components/education/EducationDashboardButton';
+import BackToDashboardButton from '../../components/BackToDashboardButton';
 import BackToCourseButton from '../../components/education/BackToCourseButton';
+import PlaylistItem from '../../components/education/PlaylistItem';
+import CourseDetails from '../../components/education/CourseDetails';
 
-import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/Row';
 
-import { BsBookmark, BsBookmarkFill, BsClipboard2, BsClipboard2Fill } from 'react-icons/bs';
-import ReactPlayer from 'react-player/lazy'
+import ReactPlayer from 'react-player/lazy';
 
-import '../../index.css';
-import '../../educate.css';
+import '../../styles/index.css';
+import '../../styles/educate.css';
 
 function CoursePage() {
   const { courseId } = useParams();
-  const [course, setCourse] = useState([]);
+  const [, userCourses, setUserCourses, userFavs, setUserFavs ] = useOutletContext();
+  const [course, setCourse] = useState({});
   const [courseItems, setCourseItems] = useState([]);
   const [currentItem, setCurrentItem] = useState(0);
   const [learningStatus, setLearningStatus] = useState('');
-  const [userCourses, setUserCourses] = useState([]);
-  const [userFavs, setUserFavs] = useState([]);
-
+ 
   useEffect(() => {
-    const dashboard = document.querySelector('.dashboard')
-    dashboard.style.display = 'none';
-
     function getCourseDetails(){
       axios.get(`education/courses/${courseId}`)
       .then(response => {
@@ -40,194 +35,41 @@ function CoursePage() {
       });
     }
 
-    function getUserCourses(){
-        axios.get('/education/courses/learning')
-        .then(response => {
-          if (response.data.userLearning) {
-            setUserCourses(response.data.userLearning);
-          } else {
-            setUserCourses([]);
-          }
-        });
-      }
-
-    function getUserFavs(){
-      axios.get('/education/courses/favorites')
-      .then(response => {
-        if (response.data.userFavs) {
-          setUserFavs(response.data.userFavs);
-        } else {
-          setUserCourses([]);
-        }
-      });
-    }
-
     getCourseDetails();
-    getUserCourses();
-    getUserFavs();
   }, [courseId])
-
-  function toggleFavorite(course){
-    axios.post(`/education/courses/${course.id}/toggle-favorite`)
-    .then(response => {
-      console.log(response.data.message);
-
-      if (response.data.action === 'Remove') {
-        setUserFavs(userFavs.filter(i => i.id !== course.id));
-      } else {
-        setUserFavs([...userFavs, course]);
-      }
-    });
-  }
-
-  function toggleEnroll(course){
-    axios.post(`/education/courses/${course.id}/toggle-enroll`)
-    .then(response => {
-      console.log(response.data.message);
-      
-      if (response.data.action === 'Remove') {
-        setUserCourses(userCourses.filter(i => i.id !== course.id));
-        setLearningStatus(null);
-      } else {
-        setUserCourses([...userCourses, course]);
-        setLearningStatus('Enrolled');
-      }
-    });
-  }
-
-  function isFav(course){
-    const fav = userFavs.find(f => { return f.id === course.id })
-
-    if (fav) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  function isEnrolled(course){
-    const enrolled = userCourses.find(c => { return c.id === course.id })
-
-    if (enrolled) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  function playVideo(pos){
-    setCurrentItem(pos);
-  }
-
-  function editCourseStatus(){
-    axios.put(`/education/courses/${courseId}/edit-status`)
-    .then(response => {
-      console.log(response.data.message)
-      setLearningStatus(response.data.status)
-    })
-  }
-
-  function createStatusButton(){
-    if (learningStatus === 'Enrolled') {
-      return (
-        <Button variant="info" size="sm" onClick={editCourseStatus}>Start Course</Button>
-      )
-    } else if (learningStatus === 'In Progress') {
-      return (
-        <Button variant="success" size="sm" onClick={editCourseStatus}>Completed?</Button>
-      )
-    } else {
-      return null
-    }
-  }
-
-  function createBadge(){
-    if (learningStatus === 'Enrolled') {
-      return (
-        <sub><Badge bg="secondary">{learningStatus}</Badge></sub>
-      )
-    } else if (learningStatus === 'In Progress') {
-      return (
-        <sub><Badge bg="primary">{learningStatus}</Badge></sub>
-      )
-    } else if (learningStatus === 'Completed') {
-      return (
-        <sub><Badge bg="success">{learningStatus}</Badge></sub>
-      )
-    } else {
-      return null
-    }
-  }
-
-  const playlist = courseItems.map(item => {
-    if (item.position === currentItem){
-      return <Card key={item.id} className="selected" onClick={() => playVideo(item.position)}>
-              <Card.Img className="thumbnail" variant="top" src={item.thumbnail}/>
-              <Card.Body>
-                <Card.Text>{item.position + 1}. {item.title}</Card.Text>
-              </Card.Body>
-            </Card>
-    } else {
-      return <Card key={item.id} onClick={() => playVideo(item.position)}>
-                <Card.Img className="thumbnail" variant="top" src={item.thumbnail}/>
-                <Card.Body>
-                  <Card.Text>{item.position + 1}. {item.title}</Card.Text>
-                </Card.Body>
-              </Card>
-      }
-    })
-  
-  const courseDetails = course.map(course => {
-    return <Card key={courseId} className="course-details" md={8}>
-          <Card.Title>{course.title}
-            { createBadge() !== null ? createBadge() : null }
-          </Card.Title>
-          <Card.Subtitle>By {course.createdBy}</Card.Subtitle>
-          <Card.Subtitle>Course items: {course.itemCount}</Card.Subtitle>
-          <Card.Subtitle>
-            { isFav(course) ? <Button variant="danger" size="sm" onClick={() => toggleFavorite(course)}><BsBookmarkFill /></Button> : <Button variant="secondary" size="sm" onClick={() => toggleFavorite(course)}><BsBookmark /></Button> }
-            { isEnrolled(course) ? <Button variant="success" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2Fill /></Button> : <Button variant="warning" size="sm" onClick={() => toggleEnroll(course)}><BsClipboard2 /></Button> }
-          </Card.Subtitle>
-          <Card.Text>{course.description}</Card.Text>
-          { createStatusButton() !== null ? <Card.Subtitle>{createStatusButton()}</Card.Subtitle> : null }
-      </Card>
-  })
-  
-  const item = courseItems.filter(i => i.position === currentItem);
-
-  const itemDetails = item.map(item => {
-    const { id, title, itemId, description } = item;
-    let url = `https://www.youtube.com/watch?v=${itemId}`;
-
-    return <Col key={id} className="item" md={8}>
-      <Row className="player mb-4">
-        <ReactPlayer url={url} width='100%' />
-      </Row>
-      <Row>
-        <Card.Title>{title}</Card.Title>
-        <Card.Text>{description}</Card.Text>
-      </Row>
-    </Col>
-  })
 
   return (
     <Container id="course-page">
       <Container>
         <BackToCourseButton />
-        <EducationDashboardButton />
+        <BackToDashboardButton app='education' />
       </Container>
-      <Card key={courseId} className="course">
+      <Card className="course">
         <Col>
           <Row>
             <Col className="course-details">
-              {courseDetails}
+              <CourseDetails course={course} userFavs={userFavs} setUserFavs={setUserFavs} userCourses={userCourses} setUserCourses={setUserCourses} learningStatus={learningStatus} setLearningStatus={setLearningStatus} />
             </Col>
           </Row>
           <Row className="item-details">
-            {itemDetails}
+            <Col className="item" md={8}>
+              { courseItems.filter(i => i.position === currentItem).map(item => { 
+                return (
+                  <>
+                    <Row key={item.itemId} className="player mb-4">
+                    <ReactPlayer url={`https://www.youtube.com/watch?v=${item.itemId}`} width='100%' />
+                    </Row>
+                    <Row>
+                      <Card.Title>{item.title}</Card.Title>
+                      <Card.Text>{item.description}</Card.Text>
+                    </Row>
+                  </>
+                )
+              })}
+            </Col>
             <Col className="playlist">
               <h4>Playlist items</h4>
-              {playlist}
+              { courseItems.map(i => <PlaylistItem key={i.id} item={i} currentItem={currentItem} setCurrentItem={setCurrentItem} />) }
             </Col>
           </Row>
        </Col>          

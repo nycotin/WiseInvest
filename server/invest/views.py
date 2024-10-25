@@ -1,46 +1,18 @@
-import json
-import requests
-import yfinance as yf
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
-from django.urls import reverse
-from django.db.models import Count, Sum
+from django.http import HttpResponse, JsonResponse
+from django.db.models import Sum
+
+import yfinance as yf
 
 from .models import StockExchange, Stock, Transaction
 from users.models import User
 
 # Create your views here.
 
-
-def index(request):
-    
-    return HttpResponse(200)
-
-
-# @login_required
+@login_required
 def get_stocks(request):
     if request.method == "GET":
-        # all_symbols = Stock.objects.all().values("symbol")
-        # symbols_list = [ item["symbol"] for item in all_symbols ]
-
-        # all_stocks = []
         all_stocks = list(Stock.objects.all().values())
-
-        # print(all_stocks)
-
-        # for symbol in symbols_list:
-        #     # Get current price of all stocks in DB
-        #     current_stock_price = yf.Ticker(symbol).info.get("currentPrice")
-        #     stock = list(Stock.objects.filter(symbol=symbol).values())
-        #     new_stock = stock[0]
-
-        #     new_stock["currentPrice"] = current_stock_price
-
-        #     all_stocks.append(stock)
 
         return JsonResponse({ "message": "Request was successful", "stocks": all_stocks }, status=200)
         
@@ -48,11 +20,16 @@ def get_stocks(request):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
-# @login_required
+@login_required
 def get_transactions(request):
     if request.method == "GET":
         user = User.objects.get(pk=request.user.id)
         transactions_history = list(Transaction.objects.filter(user=user).values().order_by("-purchased_on"))
+
+        for i in transactions_history:
+            db_stock_data = Stock.objects.get(symbol=i["stock_id"])
+            i["company_name"] = db_stock_data.company_name
+            i["currency_symbol"] = db_stock_data.currency_symbol
 
         return JsonResponse({ "message": "Request was successful", "transactions_history": transactions_history }, status=200)
 
@@ -60,7 +37,7 @@ def get_transactions(request):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
-# @login_required
+@login_required
 def get_portfolio(request):
     if request.method == "GET":
         # Get user stocks via grouping transactions based on stock symbol
@@ -72,8 +49,14 @@ def get_portfolio(request):
         portfolio_data = []
 
         for i in grouped_stocks:
+            db_stock_data = Stock.objects.get(symbol=i["stock"])
             new_data = {}
-            new_data["stock_symbol"] = i["stock"]
+            new_data["symbol"] = i["stock"]
+            new_data["company_name"] = db_stock_data.company_name
+            new_data["exchange"] = db_stock_data.exchange_id
+            new_data["currency"] = db_stock_data.currency
+            new_data["currency_symbol"] = db_stock_data.currency_symbol
+            new_data["market_area"] = db_stock_data.market_area
             new_data["quantity"] = i["quantity"]
             new_data["total_investment"] = float("{:.2f}".format(i["total_investment"]))
 
@@ -85,7 +68,7 @@ def get_portfolio(request):
             new_data["currency"] = current_stock_data.get("financialCurrency")
 
             portfolio_data.append(new_data)
-
+        
         return JsonResponse({ "message": "Request was successful", "portfolio_data": portfolio_data }, status=200)
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
@@ -109,7 +92,7 @@ def purchase_stocks(request, stock_symbol, qty):
         new_transaction = Transaction(user=user, stock=stock, price_on_purchase=stock_price, quantity=qty)
         new_transaction.save()
 
-        return JsonResponse({ "message": f"Successfully purchased {qty} stock(s) for {stock_symbol}."}, status=200)
+        return JsonResponse({ "message": f"Successfully purchased {qty} stock(s) for {stock.company_name}."}, status=200)
     else:
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 

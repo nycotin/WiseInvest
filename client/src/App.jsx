@@ -1,9 +1,9 @@
 import { Outlet } from 'react-router-dom';
 
-import './index.css'
-import './users.css'
-import './educate.css'
-import './invest.css'
+import './styles/index.css'
+import './styles/users.css'
+import './styles/educate.css'
+import './styles/invest.css'
 
 function App() {
   return (

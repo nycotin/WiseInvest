@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
-import axios from '../../axiosConfig';
+import axios from '../../utils/axiosConfig';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/esm/Container';
 
-import '../../index.css';
-import '../../users.css';
+import '../../styles/index.css';
+import '../../styles/users.css';
 
 function LoginForm() {
   const [validated, setValidated] = useState(false);

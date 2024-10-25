@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getCsrfToken } from './utility';
+import { getCsrfToken } from './functions';
 
 const instance = axios.create({
     baseURL: 'http://localhost:8000/api',

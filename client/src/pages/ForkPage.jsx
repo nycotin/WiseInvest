@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 
-import '../index.css';
+import '../styles/index.css';
 
-function ForkPage () {
+function ForkPage() {
     const navigate = useNavigate()
 
     return (

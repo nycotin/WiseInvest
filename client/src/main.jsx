@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Navigate } from 'react-router-dom';
-import { getSessionId } from './utility';
+import { getSessionId } from './utils/functions';
 
 import App from './App.jsx';
 import CourseListPage from './pages/education/CourseListPage.jsx';
@@ -17,12 +17,11 @@ import RegisterPage from './pages/users/RegisterPage.jsx';
 import StockListPage from './pages/invest/StockListPage.jsx';
 import UserProfile from './components/users/UserProfile.jsx';
 
-import './index.css';
+import './styles/index.css';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
-      path='/'
       element={<App />}
       errorElement={<ErrorPage />} 
     >
@@ -52,17 +51,17 @@ export const router = createBrowserRouter(
             errorElement={<ErrorPage />}
           >
             <Route
-              element={<CourseListPage {...{'page': 'browse-courses'}} />}
+              element={<CourseListPage pageTitle={'Browse Courses'} />}
               path='/education/courses'
               errorElement={<ErrorPage />}
             />
             <Route
-              element={<CourseListPage {...{'page': 'favorites'}} />}
+              element={<CourseListPage pageTitle={'Favorites'} />}
               path='/education/courses/favorites'
               errorElement={<ErrorPage />}
             />
             <Route
-              element={<CourseListPage {...{ 'page':'learning' }} />}
+              element={<CourseListPage pageTitle={'Learning'} />}
               path='/education/courses/learning'
               errorElement={<ErrorPage />}
             />
@@ -81,7 +80,7 @@ export const router = createBrowserRouter(
             element={getSessionId() !== '' ? <InvestPage /> : <Navigate to='/login' />}
             path='/invest'
             errorElement={<ErrorPage />}
-          >
+            >
             <Route
               element={<StockListPage />}
               path='/invest/stocks'
