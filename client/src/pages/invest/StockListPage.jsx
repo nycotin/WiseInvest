@@ -5,12 +5,11 @@ import axios from '../../utils/axiosConfig';
 import BackToDashboardButton from '../../components/BackToDashboardButton';
 import FilterButtons from '../../components/invest/FilterButtons';
 import PurchaseForm from '../../components/invest/purchaseForm';
+import ToastMessage from '../../components/ToastMessage';
 
 import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
-import Toast from 'react-bootstrap/Toast';
-import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import '../../styles/index.css';
 import '../../styles/invest.css';
@@ -37,23 +36,10 @@ function StockListPage() {
 
   }, [stocks])
 
-  function createToast() {
-    return (
-      <ToastContainer position='middle-end'>
-        <Toast onClose={() => setToastMessage('')}>
-        <Toast.Header>
-          <strong className="me-auto">Purchase successful!</strong>
-        </Toast.Header>
-          <Toast.Body>{toastMessage}</Toast.Body>
-        </Toast>
-      </ToastContainer>
-    );
-  }
-
   return (
     <Container className="stock-list" fluid="md">
       <h2>Browse Stocks</h2>
-      { toastMessage !== '' ? createToast() : null}
+      { toastMessage !== '' ? <ToastMessage toastMessage={toastMessage} setToastMessage={setToastMessage}/> : null}
       <BackToDashboardButton app='invest' />
       <FilterButtons stocks={stocks} setFilteredStocks={setFilteredStocks} />
       { filteredStocks.length !== 0 ? 

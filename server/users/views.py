@@ -92,7 +92,7 @@ def update_user_profile(request):
             
             user.save()
 
-            return JsonResponse({ "message": "User profile successfully updated" }, status=200)        
+            return JsonResponse({ "message": "User profile successfully updated!" }, status=200)        
         else:
             return JsonResponse({ "message": "No changes." }, status=200)
         
