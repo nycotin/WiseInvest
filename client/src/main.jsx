@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Navigate } from 'react-router-dom';
-import { getSessionId } from './utils/functions';
+import Cookies from 'js-cookie';
 
 import App from './App.jsx';
 import CourseListPage from './pages/education/CourseListPage.jsx';
@@ -41,12 +41,12 @@ export const router = createBrowserRouter(
         errorElement={<ErrorPage />} 
       />
         <Route
-          element={getSessionId() !== '' ? <ForkPage /> : <Navigate to='/login' />}
+          element={<ForkPage />}
           path='/fork'
           errorElement={<ErrorPage />} 
         />
           <Route
-            element={getSessionId() !== '' ? <EducationPage /> : <Navigate to='/login' />}
+            element={Cookies.get('sessionid') !== undefined ? <EducationPage /> : <Navigate to='/login' />}
             path='/education'
             errorElement={<ErrorPage />}
           >
@@ -77,7 +77,7 @@ export const router = createBrowserRouter(
             />
           </Route>
           <Route
-            element={getSessionId() !== '' ? <InvestPage /> : <Navigate to='/login' />}
+            element={Cookies.get('sessionid') !== undefined ? <InvestPage /> : <Navigate to='/login' />}
             path='/invest'
             errorElement={<ErrorPage />}
             >

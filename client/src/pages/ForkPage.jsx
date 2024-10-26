@@ -6,7 +6,7 @@ import Container from 'react-bootstrap/Container';
 import '../styles/index.css';
 
 function ForkPage() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     return (
         <Container id="fork-page">
