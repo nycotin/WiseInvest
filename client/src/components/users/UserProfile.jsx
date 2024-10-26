@@ -11,7 +11,7 @@ import '../../styles/index.css';
 import '../../styles/users.css';
 
 function UserProfile() {
-    const inputs = [{'name': 'firstname', 'type': 'text', 'state': false}, {'name': 'lastname', 'type': 'text', 'state': false}, {'name': 'email', 'type': 'email', 'state': false}, {'name': 'username', 'type': 'text', 'state': false}];
+    const inputs = [{'name': 'firstname', 'type': 'text', 'state': false}, {'name': 'lastname', 'type': 'text', 'state': false}, {'name': 'email', 'type': 'email', 'state': false}];
     const [userProfile, setUserProfile] = useState({});
     const [isEditable, setIsEditable] = useState(inputs);
     const [toastMessage, setToastMessage] = useState('');
@@ -83,6 +83,10 @@ function UserProfile() {
                 <h2>User Profile</h2>
                 <Container id="user-info">
                     { inputs.map(c => createInput(c.name, c.type)) }
+                    <Container key='username'>
+                        <label htmlFor='username'>Username:</label>
+                        <p key='username'>{userProfile['username']}</p>
+                    </Container>
                     <Container key='date_joined'>
                         <label htmlFor='date_joined'>Date joined:</label>
                         <p key='date_joined'>{userProfile['date_joined']}</p>

@@ -74,7 +74,6 @@ def get_portfolio(request):
         return JsonResponse({ "message": "Invalid request method." }, status=400)
 
 
-
 def get_current_price(request, stock_symbol):
     stock = yf.Ticker(stock_symbol)
     stock_price = stock.info.get("currentPrice")

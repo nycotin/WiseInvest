@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
 from .models import Course, CourseItem, Favorite, Learning
 from users.models import User
@@ -11,7 +10,6 @@ from users.models import User
 @login_required
 def get_courses(request):
     if request.method == "GET":
-        data = Course.objects.all()
         courses = list(Course.objects.values())
 
         return JsonResponse({ "courses": courses }, status=200)
