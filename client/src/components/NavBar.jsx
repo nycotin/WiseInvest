@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from '../utils/axiosConfig.js';
+import Cookies from 'js-cookie';
 
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -19,6 +20,7 @@ function NavBar({ title }) {
         axios.post('/users/logout')
         .then(() => { 
             sessionStorage.clear();
+            Cookies.remove('csrftoken');
 
             navigate('/login');
         })
