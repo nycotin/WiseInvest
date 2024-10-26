@@ -25,53 +25,50 @@ function UserProfile() {
         });
     }, []);
 
-    function makeEditable(e, str){
-        const newInputs = [...isEditable];
-
-        newInputs.map((i) => {
-            if (i.name === str){
-                i.state = true;
+    function makeEditable(e){
+        setIsEditable(inputs.map((item) => {
+            if (item.name === e.target.name) {
+                return { ...item, state: true };
             } else {
-                return i;
+                return item;
             }
-        })
+        }));
 
-        setIsEditable(newInputs);
         e.target.focus();
     }
 
-    function handleEdit(e, str){
-        const newInputs = [...isEditable];
-
-        newInputs.map((i) => {
-            if (i.name === str){
-                i.state = false;
+    function handleEdit(e){
+        setIsEditable(inputs.map((item) => {
+            if (item.name === e.target.name) {
+                return { ...item, state: false };
             } else {
-                return i;
+                return item;
             }
-        })
+        }));
 
         axios.put('/users/userprofile/edit', {
-            field_id: str,
+            field_id: e.target.name,
             new_value: e.target.value
         })
         .then(response => setToastMessage(response.data.message))
         .catch(error => console.log(error.response.data.message))
 
-        const newProfile = userProfile;
-        newProfile[str] = e.target.value;
 
-        setIsEditable(newInputs);
-        setUserProfile(newProfile);
+        setUserProfile((newProfile) => {
+            return { 
+                ...newProfile,
+                [e.target.name]: e.target.value,
+            };
+        });
     }
 
     function createInput(str, type){
         return (
             <Container key={str}>
-                <label htmlFor={str}>{`${str[0].toUpperCase() + str.slice(1).replace('_', ' ')}:`}</label>
+                <label htmlFor={str}>{`${str[0].toUpperCase() + str.slice(1)}:`}</label>
                 { isEditable.find((i) => i.name === str).state ? 
-                <input type={type} name={str} id={str} className="editable form-control" defaultValue={userProfile[str]} autoFocus onBlur={(e) => handleEdit(e, str)} /> : 
-                <p name={str} id={str} className="editable" onClick={(e) => makeEditable(e, str)}>{userProfile[str]}</p> }
+                <input type={type} name={str} id={str} className="editable form-control" defaultValue={userProfile[str]} autoFocus onBlur={(e) => handleEdit(e)} /> : 
+                <p name={str} id={str} className="editable" onClick={(e) => makeEditable(e)}>{userProfile[str]}</p> }
             </Container>
         )
     }

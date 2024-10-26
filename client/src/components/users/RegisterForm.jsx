@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from '../../utils/axiosConfig';
+import Cookies from 'js-cookie';
 
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -11,72 +12,81 @@ import '../../styles/index.css';
 import '../../styles/users.css';
 
 function RegisterForm() {
+  const [formData, setFormData] = useState({ firstname: '', lastname: '', email: '', username: '', password: '', confirmation: '' });
   const [validated, setValidated] = useState(false);
   const [msg, setMsg] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    event.preventDefault();
-    event.stopPropagation();
+  function updateFormData(e){
+    setFormData((newFormData) => {
+      return { 
+        ...newFormData,
+        [e.target.name]: e.target.value,
+      };
+    })
+  }
+  
+  function handleSubmit(e){
+    const form = e.currentTarget;
+    e.preventDefault();
+    e.stopPropagation();
     if (form.checkValidity() === true) {
       setValidated(true);
-      RegisterUser();
+      registerUser();
     }
-  };
+  }
 
-  function RegisterUser() {
-    const fname = document.querySelector('#firstname').value;
-    const lname = document.querySelector('#lastname').value;
-    const email = document.querySelector('#email').value;
-    const username = document.querySelector('#username').value;
-    const password = document.querySelector('#password').value;
-    const confirmation = document.querySelector('#confirmation').value;
-        
+  function registerUser() { 
     axios.post('/users/register', {
-        'firstname': fname,
-        'lastname': lname,
-        'email': email,
-        'username': username,
-        'password': password,
-        'confirmation': confirmation
+        'firstname': formData.firstname,
+        'lastname': formData.lastname,
+        'email': formData.email,
+        'username': formData.username,
+        'password': formData.password,
+        'confirmation': formData.confirmation
     })
     .then(response => {
       sessionStorage.setItem('userId', response.data.user_id);
       sessionStorage.setItem('username', response.data.username);
+      sessionStorage.setItem('sessionId', Cookies.get('sessionid'));
+      sessionStorage.setItem('csrftoken', Cookies.get('csrftoken'));
 
-      return navigate('/fork');
+      navigate('/fork');
     })
     .catch(error => {
-      setMsg(error.response.data.message);
+      if (error.response){
+        setMsg(error.response.data.message);
+      } else if (error.request){
+        setMsg(error.message);
+      }
     });
   }
 
   return (
     <Container className="mt-2">
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)}>
           <Form.Group className="mb-3">
             <Form.Label>First name:</Form.Label>
-            <Form.Control type="text" id="firstname" placeholder="First name" required />
+            <Form.Control type="text" id="firstname" name="firstname" placeholder="First name" required onChange={(e) => updateFormData(e)} />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Last name:</Form.Label>
-            <Form.Control type="text" id="lastname" placeholder="Last name" required />
+            <Form.Control type="text" id="lastname" name="lastname" placeholder="Last name" required />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Email:</Form.Label>
-            <Form.Control type="email" id="email" placeholder="Email" required />
+            <Form.Control type="email" id="email" name="lastname" placeholder="email" required />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Username:</Form.Label>
             <InputGroup hasValidation>
-              <Form.Control type="text" id="username" placeholder="Username" required />
+              <Form.Control type="text" id="username" name="username" placeholder="Username" required />
               <Form.Control.Feedback type="invalid">
                 Please choose a username.
               </Form.Control.Feedback>
@@ -85,12 +95,12 @@ function RegisterForm() {
 
           <Form.Group className="mb-3">
             <Form.Label>Password:</Form.Label>
-            <Form.Control type="password" id="password" placeholder="Password" required/>
+            <Form.Control type="password" id="password" name="password" placeholder="Password" required/>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Confirm Password:</Form.Label>
-            <Form.Control type="password" id="confirmation" placeholder="Confirm password" required/>
+            <Form.Control type="password" id="confirmation"  name="confirmation" placeholder="Confirm password" required/>
           </Form.Group>
 
         <Button type="submit">Register</Button>
