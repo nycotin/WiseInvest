@@ -6,6 +6,7 @@ import './styles/educate.css'
 import './styles/invest.css'
 
 function App() {
+
   return (
       <div id="app">
         <Outlet />
