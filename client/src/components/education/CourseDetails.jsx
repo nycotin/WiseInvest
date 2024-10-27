@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 import '../../styles/index.css';
-import '../../styles/educate.css';
+import '../../styles/education.css';
 
 function CourseDetails({ course, userFavs, setUserFavs, userCourses, setUserCourses, learningStatus, setLearningStatus }) {
   const { title, description, createdBy, itemCount } = course;

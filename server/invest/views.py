@@ -17,7 +17,7 @@ def get_stocks(request):
         return JsonResponse({ "message": "Request was successful", "stocks": all_stocks }, status=200)
         
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
@@ -34,7 +34,7 @@ def get_transactions(request):
         return JsonResponse({ "message": "Request was successful", "transactions_history": transactions_history }, status=200)
 
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
@@ -71,9 +71,10 @@ def get_portfolio(request):
         
         return JsonResponse({ "message": "Request was successful", "portfolio_data": portfolio_data }, status=200)
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
+@login_required
 def get_current_price(request, stock_symbol):
     stock = yf.Ticker(stock_symbol)
     stock_price = stock.info.get("currentPrice")
@@ -81,6 +82,7 @@ def get_current_price(request, stock_symbol):
     return JsonResponse({ "current_price": float("{:.2f}".format(stock_price)) }, status=200)
 
 
+@login_required
 def purchase_stocks(request, stock_symbol, qty):
     if request.method == "POST":
         user = User.objects.get(pk=request.user.id)
@@ -93,7 +95,7 @@ def purchase_stocks(request, stock_symbol, qty):
 
         return JsonResponse({ "message": f"Successfully purchased {qty} stock(s) for {stock.company_name}."}, status=200)
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 

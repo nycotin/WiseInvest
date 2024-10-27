@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { BsClipboard2, BsClipboard2Fill } from 'react-icons/bs';
 
 import '../../styles/index.css';
-import '../../styles/educate.css';
+import '../../styles/education.css';
 
 function ToggleEnrollButton({ course, userCourses, setUserCourses, setLearningStatus }) {
   const [isEnrolled, setIsEnrolled] = useState();

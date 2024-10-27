@@ -15,7 +15,7 @@ import Row from 'react-bootstrap/Row';
 import ReactPlayer from 'react-player/lazy';
 
 import '../../styles/index.css';
-import '../../styles/educate.css';
+import '../../styles/education.css';
 
 function CoursePage() {
   const { courseId } = useParams();

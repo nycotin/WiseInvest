@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 
 import '../../styles/index.css';
-import '../../styles/educate.css';
+import '../../styles/education.css';
 
 function ToggleFavButton({ course, userFavs, setUserFavs }) {
   const [isFav, setIsFav] = useState();

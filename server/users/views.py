@@ -2,8 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt
 
 import datetime
 import json
@@ -26,12 +25,16 @@ def login_view(request):
             return JsonResponse({ "message": "Invalid credentials." }, status=403)
 
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=401)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
+@login_required
 def logout_view(request):
-    logout(request)
-    return JsonResponse({ "message": "Logged out." }, status=200)
+    if request.method == "POST":
+        logout(request)
+        return JsonResponse({ "message": "Logged out." }, status=200)
+    else:
+      return JsonResponse({ "message": "Invalid request method." }, status=405)  
 
 
 @csrf_exempt
@@ -54,23 +57,25 @@ def register_view(request):
             return JsonResponse({ "message": "Invalid username." }, status=400)
 
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=401)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
-def user_profile(request):
-    user_info = User.objects.get(pk=request.user.id)
+def get_user_profile(request):
+    if request.method == "GET":
+        user_info = User.objects.get(pk=request.user.id)
 
-    date = datetime.datetime.strftime(user_info.date_joined, '%d/%m/%y')
-    login = datetime.datetime.strftime(user_info.last_login, '%d/%m/%y at %H:%M')
+        date = datetime.datetime.strftime(user_info.date_joined, '%d/%m/%y')
+        login = datetime.datetime.strftime(user_info.last_login, '%d/%m/%y at %H:%M')
 
-    user = { "firstname": user_info.firstname, "lastname": user_info.lastname, "email": user_info.email, "username" : user_info.username, "date_joined": date, "last_login": login }
+        user = { "firstname": user_info.firstname, "lastname": user_info.lastname, "email": user_info.email, "username" : user_info.username, "date_joined": date, "last_login": login }
 
-    return JsonResponse({ "user": user }, status=200)
-
+        return JsonResponse({ "user": user }, status=200)
+    else:
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 @login_required
-def update_user_profile(request):
+def edit_user_profile(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         field_id = data["field_id"]
@@ -95,4 +100,4 @@ def update_user_profile(request):
             return JsonResponse({ "message": "No changes." }, status=200)
         
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=401)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)

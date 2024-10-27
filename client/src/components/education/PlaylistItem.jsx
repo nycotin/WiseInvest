@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 
 import '../../styles/index.css';
-import '../../styles/educate.css';
+import '../../styles/education.css';
 
 function PlaylistItem({ item, currentItem, setCurrentItem }) {
   const [isClicked, setIsClicked] = useState(false);

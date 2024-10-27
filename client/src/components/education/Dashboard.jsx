@@ -6,7 +6,7 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 
 import '../../styles/index.css';
-import '../../styles/educate.css';
+import '../../styles/education.css';
 
 function Dashboard({ userCourses, userFavs }) {
   const navigate = useNavigate();

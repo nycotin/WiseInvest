@@ -19,7 +19,6 @@ class Stock(models.Model):
     link = models.URLField(max_length=200)
     market_area = models.CharField(max_length=20)
 
-
 class Transaction(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)

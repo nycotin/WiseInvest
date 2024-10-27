@@ -19,7 +19,7 @@ function UserProfile() {
     const location = useLocation().pathname;
 
     useEffect(() => {
-        axios.get('/users/userprofile')
+        axios.get('/users/get-userprofile')
         .then(response => {
             setUserProfile(response.data.user);
         });
@@ -46,7 +46,7 @@ function UserProfile() {
             }
         }));
 
-        axios.put('/users/userprofile/edit', {
+        axios.put('/users/edit-userprofile', {
             field_id: e.target.name,
             new_value: e.target.value
         })

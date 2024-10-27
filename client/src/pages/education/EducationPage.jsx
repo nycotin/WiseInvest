@@ -6,7 +6,7 @@ import NavBar from '../../components/NavBar';
 import Dashboard from '../../components/education/Dashboard';
 
 import '../../styles/index.css';
-import '../../styles/educate.css';
+import '../../styles/education.css';
 
 function EducationPage() {
   const [courses, setCourses] = useState([]);
@@ -17,7 +17,7 @@ function EducationPage() {
 
   useEffect(() => {  
     function getUserCourses(){
-        axios.get('/education/courses/learning')
+        axios.get('/education/courses/get-learning')
         .then(response => {
           if(response.data.userLearning){
             setUserCourses(response.data.userLearning);
@@ -28,7 +28,7 @@ function EducationPage() {
       }
 
     function getUserFavs(){
-      axios.get('/education/courses/favorites')
+      axios.get('/education/courses/get-favorites')
       .then(response => {
         if(response.data.userFavs){
           setUserFavs(response.data.userFavs);

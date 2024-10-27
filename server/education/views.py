@@ -14,7 +14,7 @@ def get_courses(request):
 
         return JsonResponse({ "courses": courses }, status=200)
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
@@ -33,7 +33,7 @@ def get_course_details(request, courseId):
 
         return JsonResponse({ "course": course[0], "courseItems": course_items, "status": status }, status=200)
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
@@ -64,7 +64,7 @@ def toggle_favorite(request, courseId):
         
         return JsonResponse({ "message": "Course added to favorite.", "action": "Add" }, status=200)
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
@@ -84,7 +84,7 @@ def toggle_enroll(request, courseId):
             enroll_to_course.save()
             return JsonResponse({ "message": "Course added to Learning.", "action": "Add" }, status=200)
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
@@ -99,7 +99,7 @@ def get_user_favorites(request):
 
         return JsonResponse({ "userFavs": user_favs }, status=200)
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
@@ -120,7 +120,7 @@ def get_user_learning(request):
 
         return JsonResponse({ "userLearning": courses }, status=200)
     else:
-        return JsonResponse({ "message": "Invalid request method." }, status=400)
+        return JsonResponse({ "message": "Invalid request method." }, status=405)
 
 
 @login_required
@@ -140,7 +140,7 @@ def edit_course_status(request, courseId):
         return JsonResponse({ "message": f"Course status changed to {learning.status}.", "status": f"{learning.status}" }, status=200)
         
     else:
-       return JsonResponse({ "message": "Invalid request method." }, status=400) 
+       return JsonResponse({ "message": "Invalid request method." }, status=405) 
 
 
 

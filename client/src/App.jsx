@@ -2,7 +2,7 @@ import { Outlet } from 'react-router-dom';
 
 import './styles/index.css'
 import './styles/users.css'
-import './styles/educate.css'
+import './styles/education.css'
 import './styles/invest.css'
 
 function App() {

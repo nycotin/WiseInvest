@@ -10,7 +10,7 @@ import Card from 'react-bootstrap/Card';
 import Container from 'react-bootstrap/Container';
 
 import '../../styles/index.css';
-import '../../styles/educate.css';
+import '../../styles/education.css';
 
 function CourseListPage({ pageTitle }) {
   const [ courses, userCourses, setUserCourses, userFavs, setUserFavs ] = useOutletContext();
