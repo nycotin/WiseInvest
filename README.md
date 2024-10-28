@@ -5,10 +5,8 @@ The Education Center is tailored for beginners, offering a curated list of cours
 
 Once users feel confident, they can apply their knowledge in the Investment Manager. Here, they can purchase stocks, monitor their investments, and view detailed insights in the portfolio dashboard, which displays stock performance over time and a record of all transactions. WiseInvest seamlessly integrates learning with practice, offering users a complete solution for smart investing.
 
-
 ## Distinctiveness and Complexity
 WiseInvest stands out as an all-in-one financial platform, designed with a multi-faceted structure to support both learning and investment. Built using the JavaScript framework, React, WiseInvest ensures a seamless user experience with dynamic interactions across its various sections. What truly sets the app apart is its Investment Manager feature, which includes real-time updates through calls to an external API (Yahoo Finance), providing users with the latest stock prices to make timely, informed decisions. This integration of live data with an intuitive learning and investing experience makes WiseInvest a comprehensive and complex solution for aspiring and seasoned investors alike.
-
 
 ## How to run the app
 ### React Client
@@ -22,11 +20,13 @@ Run the following command in the terminal to start the React client:
 1. `pip install`
 2. `python managy.py runserver localhost:8000`
 
-
 ## App structure and tech stack
 The WiseInvest app is served by endpoints written and managed in Django. The idea of rendering the client/front-end via Django server has been avoided and the decision of using the JavaScript framework React was made to comply with a more modern way of building apps that often keeps client and server separated. This brings the technical complexity of the app to a higher level, though reducing the use of Django to endpoints of different APIs (education, invest, users).
 The base path holds the Django server and its usual structure, though it includes an addtional folder for the React client to keep the two parts separated and the entire app more organized.
 
+The Django server uses the `yfinance` framework to request data from the Yahoo Finance API.
+
+On the React client side, styles were added through React Bootstrap and CSS. The axios framework has been used for asynchronous requests to the Django server.
 
 ### Django Server - Walkthough on Structure
 The Django server is made of three apps: Users, Education and Invest.
@@ -37,10 +37,10 @@ The Users app is very simple and mainly contains the models and views concerning
 All views, excluding the login and register one, are protected by the @login_required decorator.
 
 * users/models.py
-    * `User`: This file contains only one model that takes advantage of the Django built-in AbstractUser to store the most common user information, which will be displayed in the "UserProfile" client component.
+    * `User`: This file contains only one model that takes advantage of the Django built-in AbstractUser to store the most common user information, which will be displayed on the `<UserProfile />` client component.
 * users/views.py
     * `login_view()`
-        * Login view that uses Django's built-in authentication method. This view is not proteced by CRSF token validation using the @csrf_token decorator, as users will be assigned a token only after the login.
+        * Login view that uses Django's built-in authentication method. This view is not protected by CRSF token validation using the @csrf_token decorator, as users will be assigned a token only after the login.
     * `register_view()`
         * Register view that uses Django's built-in authentication method. It automatically triggers the user's login. This view also uses the @csrf_token decorator to skip CSRF token validation, as users will be assigned a token only after the login.
     * `logout_view()`
@@ -48,7 +48,7 @@ All views, excluding the login and register one, are protected by the @login_req
     * `user_profile()`
         * This view provides the consumer with a JSON object containing all information on the currently logged in user. Date and time (stored in the database in ISO format) are converted to a more readable format. If the request method doesn't match the expected one, a 405 error will be thrown. Lastly, this view is protected by the @login_required decorator.
     * `edit_user_profile()`
-        * This view gives the user the possibility of changing their data (first and last name, email). Whether there are changes to the existing data or not, the server will provide a message about the status of the update accordingly. If the request method doesn't match the expected one, a 401 error will be thrown. This view is also protected by the @login_required decorator.
+        * This view gives the user the possibility of changing their data (first and last name, email). Whether there are changes to the existing data or not, the server will provide a message about the status of the update accordingly. If the request method doesn't match the expected one, a 405 error will be thrown. This view is also protected by the @login_required decorator.
 
 ##### Education
 The Education app entails more models and views, making it definitely more complex than the previous app. It serves one of the core sections of the app, the "Education Center". The information on the two courses that have been already imported to the database where extracted separately thanks to the Google YouTube API, these are meant to be samples for display the component on the client side.
@@ -63,9 +63,9 @@ All views will throw an error if the request method doesn't match the expected o
     * `Learning`: This model is similar to the above, but shows a one-to-one relationship between the User and a Course they have enrolled in (both ForeignKeys). This was made to also have an additional field to display the "status" of the learning (Enrolled, In Progress, Completed). For the User reference, the User model from the Users app has been imported here as well.
 * education/views.py
     * `get_courses()`
-        * This view provides the client with a list of all courses that exist in the database. This data will be displayed in the course list and the course page.
+        * This view provides the client with a list of all courses that exist in the database. This data will be displayed on the `<CourseListPage />` and `<CoursePage />`.
     * `get_course_details()`
-        * This view provides the client with a list of all courses that exist in the database with the additional insertion of the course status and the list of items that are part of the course. This data will mostly be used for displaying specific information on the course page.
+        * This view provides the client with a list of all courses that exist in the database with the additional insertion of the course status and the list of items that are part of the course. This data will mostly be used for displaying specific information on the `<CoursePage />`.
     * `toggle_favorite()` / `toggle_enroll()`
         * These views will add/remove a course to the user's Favorites or Learning list. They are conceived as "toggle", which makes them more flexible to use. They are called by the button components on client-side that enable/disable the "favorite" or "enrolled" status.
     * `get_user_favorites()` / `get_user_learning()`
@@ -79,28 +79,26 @@ The Invest app serves the other core sections of the app, the "Investment Manage
 CSRF token validation is enabled in all views and login is required (with @login_required decorator) in order to make requests to the Invest views.
 All views will throw an error if the request method doesn't match the expected one.
 
-* education/models.py
+* invest/models.py
     * `StockExchange`: This model contains the information about the most important and known stock exchanges.
     * `Stock`: This model contains the information on the stocks. It refers to its Exchange via ForeignKey.
     * `Transaction`: This model is meant to create a relation between a user and a stock (both ForeignKeys) whenever a user purchases a stock. It includes relevant field like the quantity, the date of purchase and the stock price on purchase (to correctly calculating the total investment). The save method has been modified to calculate the "total expense" by multiplying the price and the quantity.
-* education/views.py
+* invest/views.py
     * `get_stocks()`
-        * This view provides the client with a list of all stocks that exist in the database. This data will be displayed in the stock list page.
+        * This view provides the client with a list of all stocks that exist in the database. This data will be displayed in the `<StockListPage />`.
     * `get_transactions()`
-        * This view provides the client with a list of all puchases made by the user. This data will be used for displaying specific information on the dashboard page.
+        * This view provides the client with a list of all puchases made by the user. This data will be used for displaying specific information on the `<Dashboard />`.
     * `get_portfolio()`
-        * These views provides a JSON object that includes all relevant information needed for displaying the portfolio page.
+        * These views provides a JSON object that includes all relevant information needed for displaying the `<PortfolioPage />`.
     * `get_current_price()`
-        * This view makes a call via the `yfinance` API to only retrieve the current price of the specified stock symbol. This call will be used in the sotck list page.
+        * This view makes a call via the `yfinance` API to only retrieve the current price of the specified stock symbol. This call will be used in the `<StockListPage />`.
     * `purchase_stocks()`
         * This view is called from the stock list page and simulates the purchase of one or more stocks. This will create a new Transaction instance in the database.
 
-
 ### React Client - Walkthough on Structure
 The React client presents a folder structure similar to the Django server. Pages and components are grouped based on the Django app they are serving for a more organized folder structure.
-React Router has been used for structuring the routes and paths client and creating the urls to the pages. This is shown in the `main.jsx` file that basically contains trhe whole router configuration of the client.
+React Router has been used for structuring the routes and paths of the client and creating the urls to the pages. This is shown in the `main.jsx` file that basically contains trhe whole router configuration of the client.
 The `App.jsx` file generates a high-level/prent component that holds all the other Page Components. In this files, they are all bundled in the `<Outlet/>` Component.
-
 
 #### Assets/
 This folder includes .png files with the App Logo.
@@ -117,7 +115,7 @@ This folder includes all components that are used to build different page compon
     * `ToggleFavButton.jsx`: This component renders a button with an `onClick` event listener that toggles the marking a course as favorite. It contains a React Icon that is changed accoringly. It is used in the `<CourseListPage />` and `<CoursePage />`.
 * invest/
     * `Dashboard.jsx`: This components renders a dashboard for the Investments Manager. It contains for cards which an overview of three categories: 'My Stocks' , with a table of the user's purchased stocks; an overview of cards of 'Increased', 'Descreased' and 'Stable' stocks. The stocks are grouped via filtering the `portfolio` prop passed along and have a link to their respective page on Yahoo Finance; at the bottmon a table with the user's 'Transactions' is visible. The `<Dashboard />` is used in the main `<InvestPage />` at the `/invest` route.
-    * `FilterButtons.jsx`: This component renders a container with buttons, each with an `onClick` event listener that filters the users stocks accroding to the market area. It is used in the `<StockListtPage />` and `<Portfolio />`.
+    * `FilterButtons.jsx`: This component renders a container with buttons, each with an `onClick` event listener that filters the users' stocks accroding to the market area. It is used in the `<StockListtPage />` and `<Portfolio />`.
     * `PurchaseForm.jsx`: This component renders a group of elements with conditional rendering. Per default, only a button with a cart icon is displayed, but when clicked it will re-render into an number input with label and a paragrph that keeps the count of the amount of stocks the user wants to buy. When the purchase button is clicked, a POST request is sent to the server. It is used for each stock row in the table of the `<StockListtPage />`.
 * users/
     * `LoginForm.jsx`: This component renders a login form. When the login button is clicked, a POST request is sent to the server and the user is redirected to the `<ForkPage />`. It is used in the `<LoginPage />` at the `/login` route.
@@ -141,9 +139,9 @@ This folder includes all page components connected to a specific route as config
 * users/
     * `LoginPage.jsx`: This page component at `/login` route displays the `<LoginForm />`.
     * `RegisterPage.jsx`: This page component at `/register` route displays the `<RegisterForm />`.
-* `EntryPage.jsx`: This page component at base route `/`  renders a container with the App Logo and two buttons to navigate the user to either the `<LoginPage />` or `<RegisterPage />`.
+* `EntryPage.jsx`: This page component at base route `/` renders a container with the App Logo and two buttons to navigate the user to either the `<LoginPage />` or `<RegisterPage />`.
 * `ErrorPage.jsx`: This page component is set as `errorElement` to all routes and renders a container with the error message.
-* `ForkPage.jsx`: This page component at base route `/fork`  renders a container with two buttons to navigate the user to either the `<EducationPage />` or `<InvestPage />`.
+* `ForkPage.jsx`: This page component at base route `/fork` renders a container with two buttons to navigate the user to either the `<EducationPage />` or `<InvestPage />`.
 
 #### Styles
 This folder contains .css files with the styles used by the app.
@@ -155,7 +153,6 @@ This folder contains .css files with the styles used by the app.
 
 Each file contains style specific to the section they carry the name of. The `index.css` has style that are applicable to all app sections.
 
-
 #### Utils
 This folder contains .js files with functions and configuration used by the app.
 
@@ -163,9 +160,8 @@ This folder contains .js files with functions and configuration used by the app.
 * `functions.js`: This file contains the `calculateGrowth()`, ``grouspStocks()` and `formatDate()` functions used in the `<Dashboard />` and `<Portfolio />` coponents.
 
 ## Challenges
-* CSRF validation between Django server and React client.
-* React
-
+* CSRF validation between Django server and React client: It was very complex to find the right settings on Django side and on React (via axios) to allow POST requests without removing the CSRF validation on server side (which would be the best choice for security reasons). 
+* React: It is a grea framework, but a lot of research on how to best structure the client had to be made. A lot of refactoring was necessary after the first draft of the client.
 
 ## Note on future improvements
 The app is to be understood as a prototype of a more complex project. It is clear that additionl features on both main sections would make the app more complete. Below some of the features that have been identified as valuable to enhance the user experience and flexibility of the app.
@@ -181,8 +177,3 @@ Investment Manager:
 * integration with payment methods.
 
 These features, as much as they are important to the further development of the app, have been deemed as not necessary to illustrate the concept at the base of the project and therefore, excluded for the time being.
-
-
-
---- ADD SHORT CHAPTER ON TECHNOLOGY USED:   
--- React Bootstrap, CSS, ReactIcons, axios, js-cookies
