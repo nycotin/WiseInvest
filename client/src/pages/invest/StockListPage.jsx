@@ -63,8 +63,7 @@ function StockListPage() {
                 <td className="current-price">{i.current_price !== undefined ? i.currency_symbol : null} {i.current_price !== undefined ? i.current_price : 'Price loading'}</td>
                 <td className="currency">{i.currency}</td>
                 <td className="market">{i.market_area}</td>
-                <td><PurchaseForm stock={i} setToastMessage={setToastMessage} />
-                </td>
+                <td>{i.current_price !== undefined ? <PurchaseForm stock={i} setToastMessage={setToastMessage} /> : null}</td>
               </tr>) }
             </tbody>
           </Table>
