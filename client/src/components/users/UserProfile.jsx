@@ -27,7 +27,7 @@ function UserProfile() {
 
     function makeEditable(e){
         setIsEditable(inputs.map((item) => {
-            if (item.name === e.target.name) {
+            if (item.name === e.target.id) {
                 return { ...item, state: true };
             } else {
                 return item;
@@ -39,7 +39,7 @@ function UserProfile() {
 
     function handleEdit(e){
         setIsEditable(inputs.map((item) => {
-            if (item.name === e.target.name) {
+            if (item.name === e.target.id) {
                 return { ...item, state: false };
             } else {
                 return item;
@@ -47,12 +47,11 @@ function UserProfile() {
         }));
 
         axios.put('/users/edit-userprofile', {
-            field_id: e.target.name,
+            field_id: e.target.id,
             new_value: e.target.value
         })
         .then(response => setToastMessage(response.data.message))
         .catch(error => console.log(error.response.data.message))
-
 
         setUserProfile((newProfile) => {
             return { 
