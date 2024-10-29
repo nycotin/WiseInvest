@@ -58,10 +58,9 @@ button.purchase-stocks {
   border-bottom-right-radius: 1rem;
 }
 
-p[id$=total-expense] {
+.total-expense p {
   font-size: 0.7rem;
   font-style: italic;
-  padding: 0.5rem;
 }
 
 .toast-container {
