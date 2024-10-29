@@ -59,7 +59,7 @@ function PurchaseForm({ stock, setToastMessage }) {
           </Container>
           <Container className="purchase-stocks">
             <Button className="purchase-stocks" variant="warning" size="sm" onClick={() => purchaseStocks(stock.symbol)}>Purchase</Button>
-            <Button className="purchase-stocks" variant="secondary" size="sm" onClick={() => setIsClicked(false)}>Close</Button>
+            <Button className="purchase-stocks" variant="secondary" size="sm" onClick={() => { setIsClicked(false); setTotal(0) }}>Close</Button>
           </Container>
         </InputGroup> 
       }
