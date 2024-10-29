@@ -73,20 +73,20 @@ function RegisterForm() {
 
           <Form.Group className="mb-3">
             <Form.Label>Last name:</Form.Label>
-            <Form.Control type="text" id="lastname" name="lastname" placeholder="Last name" required />
+            <Form.Control type="text" id="lastname" name="lastname" placeholder="Last name" required onChange={(e) => updateFormData(e)} />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Email:</Form.Label>
-            <Form.Control type="email" id="email" name="lastname" placeholder="email" required />
+            <Form.Control type="email" id="email" name="email" placeholder="Email" required onChange={(e) => updateFormData(e)} />
             <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Username:</Form.Label>
             <InputGroup hasValidation>
-              <Form.Control type="text" id="username" name="username" placeholder="Username" required />
+              <Form.Control type="text" id="username" name="username" placeholder="Username" required onChange={(e) => updateFormData(e)} />
               <Form.Control.Feedback type="invalid">
                 Please choose a username.
               </Form.Control.Feedback>
@@ -95,12 +95,12 @@ function RegisterForm() {
 
           <Form.Group className="mb-3">
             <Form.Label>Password:</Form.Label>
-            <Form.Control type="password" id="password" name="password" placeholder="Password" required/>
+            <Form.Control type="password" id="password" name="password" placeholder="Password" required onChange={(e) => updateFormData(e)} />
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Confirm Password:</Form.Label>
-            <Form.Control type="password" id="confirmation"  name="confirmation" placeholder="Confirm password" required/>
+            <Form.Control type="password" id="confirmation"  name="confirmation" placeholder="Confirm password" required onChange={(e) => updateFormData(e)} />
           </Form.Group>
 
         <Button type="submit">Register</Button>

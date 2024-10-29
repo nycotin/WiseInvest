@@ -77,7 +77,6 @@ function LoginForm() {
             Please insert a password.
           </Form.Control.Feedback>
         </Form.Group>
-        <input type="text" name="csrfmiddlewaretoken" hidden/>
         <Button variant="primary" type="submit">Log In</Button>
       </Form>
 
