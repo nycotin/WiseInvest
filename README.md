@@ -18,7 +18,7 @@ Run the following command in the terminal to start the React client:
 ### Django Server
 Run the following command in the terminal to start the React client:
 1. `pip install`
-2. `python managy.py runserver localhost:8000`
+2. `python manage.py runserver localhost:8000`
 
 ## App structure and tech stack
 The WiseInvest app is served by endpoints written and managed in Django. The idea of rendering the client/front-end via Django server has been avoided and the decision of using the JavaScript framework React was made to comply with a more modern way of building apps that often keeps client and server separated. This brings the technical complexity of the app to a higher level, though reducing the use of Django to endpoints of different APIs (education, invest, users).
