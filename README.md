@@ -5,9 +5,6 @@ The Education Center is tailored for beginners, offering a curated list of cours
 
 Once users feel confident, they can apply their knowledge in the Investment Manager. Here, they can purchase stocks, monitor their investments, and view detailed insights in the portfolio dashboard, which displays stock performance over time and a record of all transactions. WiseInvest seamlessly integrates learning with practice, offering users a complete solution for smart investing.
 
-## Distinctiveness and Complexity
-WiseInvest stands out as an all-in-one financial platform, designed with a multi-faceted structure to support both learning and investment. Built using the JavaScript framework, React, WiseInvest ensures a seamless user experience with dynamic interactions across its various sections. What truly sets the app apart is its Investment Manager feature, which includes real-time updates through calls to an external API (Yahoo Finance), providing users with the latest stock prices to make timely, informed decisions. This integration of live data with an intuitive learning and investing experience makes WiseInvest a comprehensive and complex solution for aspiring and seasoned investors alike.
-
 ## How to run the app
 ### React Client
 Run the following command in the terminal to start the React client:
